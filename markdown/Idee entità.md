@@ -1,0 +1,6 @@
+- Persona
+- Astronave
+- Registro ingressi/uscite
+- Area porto (carico/scarico, manutenzione, ecc)
+- Pianeta/Porto/Provenienza
+- Aree stazione (dove vanno gli arrivati dalle navi)
