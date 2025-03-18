@@ -4,3 +4,4 @@
 - Area porto (carico/scarico, manutenzione, ecc)
 - Pianeta/Porto/Provenienza
 - Aree stazione (dove vanno gli arrivati dalle navi)
+- "mestiere"/"fazione" (impero, ribellione, cacciatore di taglie, ecc.)
