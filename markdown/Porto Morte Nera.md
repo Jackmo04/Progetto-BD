@@ -1,4 +1,5 @@
 L'obbiettivo del progetto è realizzare una applicazione di gestione delle entrate ed uscite dal porto interplanetare della Morte Nera (dal film "Star Wars").
+
 Un'Astronave (Targa, Nome, Modello), per poter entrare nel porto, deve registrarsi attraverso l'applicazione e dichiarare gli Astronauti a bordo (Nome, Cognome, ...) lo scopo del viaggio (merci, trasporto passeggeri, ...) e il Pianeta di provenienza.
 Ogni astronave ha UN astronauta capitano, il quale è il solo che può decidere quando atterrare o decollare con la propria astronave e, conseguentemente, richiedere il permesso di entrata o uscita dal porto.
 Gli amministratori del porto possono accettare o meno le Richieste di entrata e di uscita delle astronavi e, in caso di approvazione, decidere in quale Area esse debbano attraccare.
