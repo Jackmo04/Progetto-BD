@@ -1,10 +1,11 @@
-package db_lab.model;
+package porto.model;
 
-import db_lab.data.Product;
-import db_lab.data.ProductPreview;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
+
+import porto.data.Product;
+import porto.data.ProductPreview;
 
 public interface Model {
     Optional<Product> find(int productCode);

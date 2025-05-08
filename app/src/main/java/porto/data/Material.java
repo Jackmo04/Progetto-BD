@@ -1,4 +1,4 @@
-package db_lab.data;
+package porto.data;
 
 import java.sql.Connection;
 import java.util.HashMap;

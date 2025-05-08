@@ -1,9 +1,10 @@
-package db_lab;
+package porto;
 
-import db_lab.data.DAOException;
-import db_lab.data.DAOUtils;
-import db_lab.model.Model;
 import java.sql.SQLException;
+
+import porto.data.DAOException;
+import porto.data.DAOUtils;
+import porto.model.Model;
 
 public final class App {
 

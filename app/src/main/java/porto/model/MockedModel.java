@@ -1,15 +1,16 @@
-package db_lab.model;
+package porto.model;
 
-import db_lab.data.Material;
-import db_lab.data.Product;
-import db_lab.data.ProductPreview;
-import db_lab.data.Tag;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import porto.data.Material;
+import porto.data.Product;
+import porto.data.ProductPreview;
+import porto.data.Tag;
 
 // This is a mocked implementation that uses an in-memory map of products
 // instead of connecting to a database.

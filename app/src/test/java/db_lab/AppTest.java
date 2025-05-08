@@ -5,11 +5,6 @@ package db_lab;
 
 import static org.assertj.core.api.Assertions.*;
 
-import db_lab.data.DAOUtils;
-import db_lab.data.Material;
-import db_lab.data.Product;
-import db_lab.data.ProductPreview;
-import db_lab.data.Tag;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
@@ -19,6 +14,12 @@ import java.util.Set;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import porto.data.DAOUtils;
+import porto.data.Material;
+import porto.data.Product;
+import porto.data.ProductPreview;
+import porto.data.Tag;
 
 public final class AppTest {
 

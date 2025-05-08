@@ -1,7 +1,5 @@
-package db_lab;
+package porto;
 
-import db_lab.data.Product;
-import db_lab.data.ProductPreview;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -21,6 +19,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+
+import porto.data.Product;
+import porto.data.ProductPreview;
 
 public final class View {
 

@@ -1,4 +1,4 @@
-package db_lab.data;
+package porto.data;
 
 public final class Queries {
 

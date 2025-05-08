@@ -1,9 +1,10 @@
-package db_lab;
+package porto;
 
-import db_lab.data.DAOException;
-import db_lab.data.ProductPreview;
-import db_lab.model.Model;
 import java.util.Objects;
+
+import porto.data.DAOException;
+import porto.data.ProductPreview;
+import porto.model.Model;
 
 // The controller provides a holistic description of how the outside world can
 // interact with our application: each public method is written as
