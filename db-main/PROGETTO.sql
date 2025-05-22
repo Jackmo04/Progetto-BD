@@ -113,7 +113,7 @@ create table TIPOLOGIA_CARICO (
 
 create table TIPOLOGIA_VIAGGIO (
      CodTipoViaggio INTEGER not null auto_increment,
-     Nome varchar(15) not null,
+     Nome varchar(30) not null,
      constraint ID_TIPOLOGIA_VIAGGIO_ID primary key (CodTipoViaggio));
 
 
@@ -122,7 +122,7 @@ create table TIPOLOGIA_VIAGGIO (
 
 alter table ASTRONAVE add constraint REF_ASTRO_POSTE_FK
      foreign key (CodArea, NumeroPosto)
-     references POSTEGGIO;
+     references POSTEGGIO(CodArea, NumeroPosto);
 
 alter table ASTRONAVE add constraint REF_ASTRO_POSTE_CHK
      check((CodArea is not null and NumeroPosto is not null)
@@ -130,63 +130,63 @@ alter table ASTRONAVE add constraint REF_ASTRO_POSTE_CHK
 
 alter table ASTRONAVE add constraint REF_ASTRO_MODEL_FK
      foreign key (CodModello)
-     references MODELLO;
+     references MODELLO(CodModello);
 
 alter table ASTRONAVE add constraint REF_ASTRO_PERSO_FK
      foreign key (CUICapitano)
-     references PERSONA;
+     references PERSONA(CUI);
 
 alter table CARICO add constraint REF_CARIC_TIPOL
      foreign key (Tipologia)
-     references TIPOLOGIA_CARICO;
+     references TIPOLOGIA_CARICO(CodTipoCarico);
 
 alter table CARICO add constraint REF_CARIC_RICHI_FK
      foreign key (CodRichiesta)
-     references RICHIESTA;
+     references RICHIESTA(CodRichiesta);
 
 alter table EQUIPAGGIO add constraint REF_EQUIP_PERSO
      foreign key (CUIAstronauta)
-     references PERSONA;
+     references PERSONA(CUI);
 
 alter table EQUIPAGGIO add constraint REF_EQUIP_ASTRO_FK
      foreign key (TargaAstronave)
-     references ASTRONAVE;
+     references ASTRONAVE(Targa);
 
 alter table MODELLO add constraint REF_MODEL_DIMEN_FK
      foreign key (DimensioneArea)
-     references DIMENSIONE_PREZZO;
+     references DIMENSIONE_PREZZO(Superficie);
 
 alter table PERSONA add constraint REF_PERSO_CELLA_FK
      foreign key (NumCella)
-     references CELLA;
+     references CELLA(NumCella);
 
 alter table PERSONA add constraint REF_PERSO_PIANE_FK
      foreign key (PianetaNascita)
-     references PIANETA;
+     references PIANETA(CodPianeta);
 
 alter table POSTEGGIO add constraint REF_POSTE_AREA_
      foreign key (CodArea)
-     references AREA_ATTRACCO;
+     references AREA_ATTRACCO(CodArea);
 
 alter table RICHIESTA add constraint REF_RICHI_ASTRO_FK
      foreign key (TargaAstronave)
-     references ASTRONAVE;
+     references ASTRONAVE(Targa);
 
 alter table RICHIESTA add constraint REF_RICHI_TIPOL_FK
      foreign key (Scopo)
-     references TIPOLOGIA_VIAGGIO;
+     references TIPOLOGIA_VIAGGIO(CodTipoViaggio);
 
 alter table RICHIESTA add constraint REF_RICHI_PIANE_1_FK
      foreign key (PianetaProvenienza)
-     references PIANETA;
+     references PIANETA(CodPianeta);
 
 alter table RICHIESTA add constraint REF_RICHI_PIANE_FK
      foreign key (PianetaDestinazione)
-     references PIANETA;
+     references PIANETA(CodPianeta);
 
 alter table RICHIESTA add constraint REF_RICHI_PERSO_FK
      foreign key (GestitaDa)
-     references PERSONA;
+     references PERSONA(CUI);
 
 alter table RICHIESTA add constraint COEX_RICHIESTA
      check((Esito is not null and DataEsito is not null and GestitaDa is not null)
