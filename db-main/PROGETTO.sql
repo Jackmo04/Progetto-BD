@@ -33,7 +33,7 @@ create table ASTRONAVE (
      Nome varchar(20) not null,
      CodArea INTEGER,
      NumeroPosto INTEGER,
-     CodModello char(5) not null,
+     CodModello char(6) not null,
      CUICapitano char(20) not null,
      constraint ID_ASTRONAVE_ID primary key (Targa));
 
@@ -59,7 +59,7 @@ create table EQUIPAGGIO (
      constraint ID_EQUIPAGGIO_ID primary key (CUIAstronauta, TargaAstronave));
 
 create table MODELLO (
-     CodModello char(5) not null,
+     CodModello char(6) not null,
      Nome varchar(20) not null,
      DimensioneArea int not null,
      constraint ID_MODELLO_ID primary key (CodModello));
