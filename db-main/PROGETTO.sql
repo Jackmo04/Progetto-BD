@@ -11,10 +11,10 @@
 
 -- Database Section
 -- ________________ 
-DROP DATABASE IF EXISTS Porto;
+DROP DATABASE IF EXISTS PortoMorteNera;
 
-create database Porto;
-use Porto;
+create database PortoMorteNera;
+use PortoMorteNera;
 
 -- DBSpace Section
 -- _______________
@@ -326,10 +326,10 @@ INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato
 ('KNBOBI370825C', 'O.Kenobi', 'Obi-Wan', 'Kenobi', 'Umano', '1937-08-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'CORU001'),
 ('MULDRT600322D', 'D.Maul', 'Darth', 'Maul', 'Zabrak', '1960-03-22', FALSE, 'Imperiale', 'Capitano', NULL, 'DANT010'),
 ('TRKMFF220306M', 'G.Tarkin', 'Moff', 'Tarkin', 'Umano', '1922-03-06', FALSE, 'Imperiale', 'Admin', NULL, 'MUST007'),
-('STRMTR0000000', 'Trooper0', 'Stormtrooper', '00000', 'Clone', '', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
-('STRMTR0000001', 'Trooper1', 'Stormtrooper', '00001', 'Clone', '', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
-('STRMTR0000002', 'Trooper2', 'Stormtrooper', '00002', 'Clone', '', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
-('STRMTR0000003', 'Trooper3', 'Stormtrooper', '00003', 'Clone', '', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0');
+('STRMTR0000000', 'Trooper0', 'Stormtrooper', '00000', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
+('STRMTR0000001', 'Trooper1', 'Stormtrooper', '00001', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
+('STRMTR0000002', 'Trooper2', 'Stormtrooper', '00002', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
+('STRMTR0000003', 'Trooper3', 'Stormtrooper', '00003', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0');
 
 INSERT INTO AREA_ATTRACCO (CodArea, Nome) VALUES
 (1, 'Alpha'),
