@@ -209,7 +209,30 @@ order by r.DataOra desc;
 /*
 	A2 -- Valutare una richiesta pendente
 */
+update richiesta 
+set esito = 'R', dataEsito = date(now()), gestitaDa = 'PLPSHV201204N'
+where CodRichiesta = 3;
 
+-- Se accettata:
+update astronave
+set codArea = 4, numeroPosto = 2
+where targa = (select targaAstronave
+			   from richiesta r
+               where r.codRichiesta = 3
+               and r.esito = 'A');
+
+/* Java
+update richiesta 
+set esito = ?, dataEsito = date(now()), gestitaDa = ?
+where CodRichiesta = ?;
+
+update astronave
+set codArea = ?, numeroPosto = ?
+where targa = (select targaAstronave
+			   from richiesta r
+               where r.codRichiesta = ?
+               and r.esito = 'A');
+*/
 
 -- _____________________________________________
 /*
@@ -221,7 +244,10 @@ order by r.DataOra desc;
 /*
 	A4 -- Visualizzare il numero di persone presenti nel porto attualmente
 */
-
+select count(distinct p.CUI) as `Astronauti in porto`
+from astronave a, equipaggio e, persona p
+where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = a.Targa) or (p.CUI = a.CUICapitano))
+and a.numeroPosto is not null;
 
 -- _____________________________________________
 /*
@@ -233,7 +259,10 @@ order by r.DataOra desc;
 /*  
 	A6 -- Visualizzare posteggi liberi attualmente
 */
-
+select p.*
+from posteggio p 
+where (p.codArea, p.numeroPosto) not in (select a.codArea, a.numeroPosto
+										 from astronave a);
 
 -- _____________________________________________
 /*

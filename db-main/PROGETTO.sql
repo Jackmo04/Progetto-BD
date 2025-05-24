@@ -24,33 +24,34 @@ use PortoMorteNera;
 -- _____________ 
 
 create table AREA_ATTRACCO (
-     CodArea INTEGER not null auto_increment,
+     CodArea int not null auto_increment,
      Nome varchar(15) not null,
      constraint ID_AREA_ATTRACCO_ID primary key (CodArea));
 
 create table ASTRONAVE (
      Targa char(8) not null,
      Nome varchar(20) not null,
-     CodArea INTEGER,
-     NumeroPosto INTEGER,
+     CodArea int,
+     NumeroPosto int,
      CodModello char(6) not null,
      CUICapitano char(20) not null,
-     constraint ID_ASTRONAVE_ID primary key (Targa));
+     constraint ID_ASTRONAVE_ID primary key (Targa),
+     constraint UNIQ_POSTEGGIO unique (CodArea, NumeroPosto));
 
 create table CARICO (
-     Tipologia INTEGER not null auto_increment,
-     Quantita INTEGER not null,
-     CodRichiesta INTEGER not null,
+     Tipologia int not null auto_increment,
+     Quantita int not null,
+     CodRichiesta int not null,
      constraint ID_CARICO_ID primary key (Tipologia, CodRichiesta));
 
 create table CELLA (
-     NumCella INTEGER not null auto_increment,
-     Capienza INTEGER not null check ( Capienza > 0 ),
+     NumCella int not null auto_increment,
+     Capienza int not null check (Capienza > 0),
      constraint ID_CELLA_ID primary key (NumCella));
 
 create table DIMENSIONE_PREZZO (
-     Superficie INTEGER not null check ( Superficie > 0),
-     Prezzo numeric(6,2) not null check ( Prezzo >= 0),
+     Superficie int not null check (Superficie > 0),
+     Prezzo numeric(6,2) not null check (Prezzo >= 0),
      constraint ID_DIMENSIONE_PREZZO_ID primary key (Superficie));
 
 create table EQUIPAGGIO (
@@ -71,10 +72,10 @@ create table PERSONA (
      Cognome varchar(25) not null,
      Razza varchar(20) not null,
      DataNascita date not null,
-     Ricercato boolean not null,
-     Ideologia varchar(10) not null check ( Ideologia in ('Ribelle' , 'Imperiale' , 'Neutrale' )),
-     Ruolo varchar(15) not null check (Ruolo in ( 'Astronauta' , 'Capitano' , 'Admin')),
-     NumCella INTEGER,
+     Ricercato boolean not null default false,
+     Ideologia enum('Ribelle', 'Imperiale', 'Neutrale') not null default 'Neutrale',
+     Ruolo enum('Astronauta', 'Capitano', 'Admin') not null default 'Astronauta',
+     NumCella int,
      PianetaNascita char(20) not null,
      constraint ID_PERSONA_ID primary key (CUI),
      constraint SID_PERSONA_ID unique (Username));
@@ -85,34 +86,34 @@ create table PIANETA (
      constraint ID_PIANETA_ID primary key (CodPianeta));
 
 create table POSTEGGIO (
-     CodArea INTEGER not null,
-     NumeroPosto INTEGER not null,
+     CodArea int not null,
+     NumeroPosto int not null,
      constraint ID_POSTEGGIO_ID primary key (CodArea, NumeroPosto));
 
 create table RICHIESTA (
-     CodRichiesta INTEGER not null auto_increment,
-     EntrataUscita char(1) not null check ( EntrataUscita in ( 'E' , 'U')),
+     CodRichiesta int not null auto_increment,
+     EntrataUscita enum('E', 'U') not null,
      DataOra datetime not null,
      Descrizione varchar(50) not null,
-     CostoTotale numeric(6,2) not null check ( CostoTotale >= 0),
-     Esito char(1) check (Esito in ( 'A' , 'R')),
+     CostoTotale numeric(6,2) not null check (CostoTotale >= 0),
+     Esito enum('A', 'R'),
      DataEsito date,
      TargaAstronave char(10) not null,
-     Scopo INTEGER not null,
+     Scopo int not null,
      PianetaProvenienza char(20) not null,
      PianetaDestinazione char(20) not null,
      GestitaDa char(20),
      constraint ID_RICHIESTA_ID primary key (CodRichiesta));
 
 create table TIPOLOGIA_CARICO (
-     CodTipoCarico INTEGER not null auto_increment,
+     CodTipoCarico int not null auto_increment,
      Nome varchar(15) not null,
      Descrizione varchar(30) not null,
-     CostoUnitario numeric(6,2) not null check ( CostoUnitario >= 0),
+     CostoUnitario numeric(6,2) not null check (CostoUnitario >= 0),
      constraint ID_TIPOLOGIA_CARICO_ID primary key (CodTipoCarico));
 
 create table TIPOLOGIA_VIAGGIO (
-     CodTipoViaggio INTEGER not null auto_increment,
+     CodTipoViaggio int not null auto_increment,
      Nome varchar(30) not null,
      constraint ID_TIPOLOGIA_VIAGGIO_ID primary key (CodTipoViaggio));
 
@@ -192,7 +193,6 @@ alter table RICHIESTA add constraint COEX_RICHIESTA
      check((Esito is not null and DataEsito is not null and GestitaDa is not null)
            or (Esito is null and DataEsito is null and GestitaDa is null)); 
 
-
 -- Index Section
 -- _____________ 
 
@@ -238,9 +238,6 @@ create index REF_MODEL_DIMEN_IND
 create unique index ID_PERSONA_IND
      on PERSONA (CUI);
 
-create unique index SID_PERSONA_IND
-     on PERSONA (Username);
-
 create index REF_PERSO_CELLA_IND
      on PERSONA (NumCella);
 
@@ -276,6 +273,12 @@ create unique index ID_TIPOLOGIA_CARICO_IND
 
 create unique index ID_TIPOLOGIA_VIAGGIO_IND
      on TIPOLOGIA_VIAGGIO (CodTipoViaggio);
+     
+-- Views Section
+-- _____________
+
+create view RichiestePendenti as
+select * from Richiesta where Esito is null;
 
 -- Insertions Section
 -- _____________ 
