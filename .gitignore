@@ -1,5 +1,10 @@
+# Ignora Obsidian cache
 .obsidian/
+
+# Ignora Gradle build e binari
 .gradle/
 build/
 bin/
+
+# Ignora VSCode workspace configs
 .vscode/
