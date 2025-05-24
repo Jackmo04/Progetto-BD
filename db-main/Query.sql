@@ -1,13 +1,27 @@
-USE Porto;
+USE PortoMorteNera;
+
 /*3.2.1 – Principali operazioni Astronauti Semplici */
 /*S1 Creare un nuovo account persona registrando tutti i propri dati nell’applicazione.*/
 INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
 ('SKWLKE510925T', 'L.Skywalker', 'Luke', 'Skywalker', 'Umano', '1951-09-25', FALSE, 'Neutrale', 'Astronauta', NULL, 'TATO002');
+
 /*Java mode
 INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
 (?, ?, ?, ?, ?, ?, FALSE, 'Neutrale', 'Astronauta', NULL, ?);
 */
+
 /*S2 Accedere al proprio account tramite il CUI o il proprio username e visualizzare le astronavi a cui si appartiene*/
+select distinct n.targa, n.nome
+from astronave n, persona p, equipaggio e
+where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = n.Targa) or (p.CUI = n.CUICapitano))
+and p.CUI = 'STRMTR0000001';
+
+/* Java
+select distinct n.targa, n.nome
+from astronave n, persona p, equipaggio e
+where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = n.Targa) or (p.CUI = n.CUICapitano))
+and p.CUI = ?;
+*/
 
 /*S3 Visualizzare il posteggio della propria nave e l’area di attracco all’interno del porto ,
 operazione effettuabile solo se la nave è attraccata*/
@@ -24,6 +38,25 @@ and Targa = ?;
 */
 
 /*S4 Visualizzare l’ultima richiesta effettuata dalla nave a cui siamo registrati*/
+select r.*
+from richiesta r, persona p, equipaggio e, astronave n
+where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = n.Targa) or (p.CUI = n.CUICapitano))
+and r.TargaAstronave = n.Targa
+and p.CUI = 'SLOHAN420713C'
+and n.Targa = 'MFALC001'
+order by r.DataOra desc
+limit 1;
+
+/* Java
+select r.*
+from richiesta r, persona p, equipaggio e, astronave n
+where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = n.Targa) or (p.CUI = n.CUICapitano))
+and r.TargaAstronave = n.Targa
+and p.CUI = ?
+and n.Targa = ?
+order by r.DataOra desc
+limit 1;
+*/
 
 /*S5 Visualizzare le informazioni dettagliate di una richiesta.*/
 
