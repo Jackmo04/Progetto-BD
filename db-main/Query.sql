@@ -1,11 +1,27 @@
 USE Porto;
 /*3.2.1 – Principali operazioni Astronauti Semplici */
 /*S1 Creare un nuovo account persona registrando tutti i propri dati nell’applicazione.*/
-
+INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
+('SKWLKE510925T', 'L.Skywalker', 'Luke', 'Skywalker', 'Umano', '1951-09-25', FALSE, 'Neutrale', 'Astronauta', NULL, 'TATO002');
+/*Java mode
+INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
+(?, ?, ?, ?, ?, ?, FALSE, 'Neutrale', 'Astronauta', NULL, ?);
+*/
 /*S2 Accedere al proprio account tramite il CUI o il proprio username e visualizzare le astronavi a cui si appartiene*/
 
 /*S3 Visualizzare il posteggio della propria nave e l’area di attracco all’interno del porto ,
 operazione effettuabile solo se la nave è attraccata*/
+SELECT ast.NumeroPosto , ar.Nome as 'Nome Area'
+from astronave ast , area_attracco ar
+where ast.CodArea = ar.CodArea
+and Targa = 'TIEF0005';
+
+/*Java mode
+SELECT ast.NumeroPosto , ar.Nome as 'Nome Area'
+from astronave ast , area_attracco ar
+where ast.CodArea = ar.CodArea
+and Targa = ?;
+*/
 
 /*S4 Visualizzare l’ultima richiesta effettuata dalla nave a cui siamo registrati*/
 
