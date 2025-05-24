@@ -157,19 +157,47 @@ and e.TargaAstronave = ? ;
 	C4 -- Richiedere accesso al porto
 */
 insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
-('U', 'PippoPluto2', 1500.00, 'TIEF0005', 3, 'DTHSTR0', 'NABO004');
+('E', 'PippoPluto2', 1500.00, 'TIEF0005', 3, 'NABO004', 'DTHSTR0');
 
 /* Java
 insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
-('U', ?, ?, ?, ?, 'DTHSTR0', ?);
+('U', ?, ?, ?, ?, ?, 'DTHSTR0');
 */
-
 -- _____________________________________________
 /*
 	C5 -- Richiedere uscita dal porto
 */
 
+insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
+('U', 'PippoPluto2', 0, 'TIEF0005', 3, 'DTHSTR0', 'NABO004');
 
+create or REPLACE view ultimaRichiesta as
+select r.CodRichiesta
+		from richiesta r
+        order by r.CodRichiesta desc
+        limit 1;
+
+INSERT INTO CARICHI (Tipologia, Quantita, CodRichiesta) VALUES
+(1, 3, ultimaRichiesta);
+
+-- Costo di una richiesta
+-- create or REPLACE view Costorichiesta as
+select (c.Quantita * tc.CostoUnitario + dp.Prezzo ) as costo
+from richiesta r , carico c , tipologia_carico tc , astronave ast , modello m , dimensione_prezzo dp
+where r.CodRichiesta = c.CodRichiesta
+and c.Tipologia = tc.CodTipoCarico
+and r.TargaAstronave = ast.Targa
+and ast.CodModello = m.CodModello
+and m.DimensioneArea = dp.Superficie
+and r.CodRichiesta = (select * from ultimarichiesta);
+
+Update richiesta
+set CostoTotale = ( select  (select 
+
+/* Java
+insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
+('U', ?, ?, ?, ?, 'DTHSTR0', ?);
+*/
 -- _____________________________________________
 /*
 	C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave, il
@@ -197,13 +225,28 @@ order by r.DataOra desc;
 /*
 	C7 -- Visualizzare il costo di una richiesta di accesso o uscita.
 */
+-- rapido per vedere solo il costo
+select r.CostoTotale
+from richiesta r
+where r.CodRichiesta = 1;
+
+-- calcolo costo di una richiesta , usabile per scrivere il costo totale
+select ( select 
 
 
 -- _____________________________________________
 /*
 	A1 -- Visualizzare tutte le richieste pendenti
 */
+select r.*
+from richiesta r
+where r.Esito IS NULL;
 
+/*java
+select r.*
+from richiesta r
+where r.Esito IS NULL;
+*/
 
 -- _____________________________________________
 /*
