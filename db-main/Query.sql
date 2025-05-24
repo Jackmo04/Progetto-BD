@@ -1,4 +1,5 @@
-USE Porto;
+-- VALUTARE QUERY PER PRENDERE I DATI TIPO I CUI , MODELLI NAVE
+USE portomortenera;
 /*3.2.1 – Principali operazioni Astronauti Semplici */
 /*S1 Creare un nuovo account persona registrando tutti i propri dati nell’applicazione.*/
 INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
@@ -11,10 +12,10 @@ INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato
 
 /*S3 Visualizzare il posteggio della propria nave e l’area di attracco all’interno del porto ,
 operazione effettuabile solo se la nave è attraccata*/
-SELECT ast.NumeroPosto , ar.Nome as 'Nome Area'
-from astronave ast , area_attracco ar
-where ast.CodArea = ar.CodArea
-and Targa = 'TIEF0005';
+SELECT ast.NumeroPosto , ar.Nome AS 'Nome Area'
+FROM astronave ast , area_attracco ar
+WHERE ast.CodArea = ar.CodArea
+AND Targa = 'TIEF0005';
 
 /*Java mode
 SELECT ast.NumeroPosto , ar.Nome as 'Nome Area'
@@ -25,15 +26,62 @@ and Targa = ?;
 
 /*S4 Visualizzare l’ultima richiesta effettuata dalla nave a cui siamo registrati*/
 
+
 /*S5 Visualizzare le informazioni dettagliate di una richiesta.*/
+
+select distinct r.CodRichiesta , r.EntrataUscita , r.DataOra , r.Descrizione , r.CostoTotale
+, r.Esito , r.TargaAstronave ,  tv.Nome as TipologiaViaggio,
+pnt1.Nome as PianetaDestinazione , pnt2.Nome as PianetaDestinazione,
+c.Quantita , tc.Nome , tc.Descrizione
+from richiesta r , persona p , tipologia_viaggio tv ,
+pianeta pnt1 , pianeta pnt2 , carico c , tipologia_carico tc
+where pnt1.CodPianeta = r.PianetaDestinazione
+and pnt2.CodPianeta = r.PianetaProvenienza
+and r.Scopo = tv.CodTipoViaggio
+and r.CodRichiesta = c.CodRichiesta
+and c.Tipologia = tc.CodTipoCarico
+and r.CodRichiesta = 1;
+
+/* Java mode
+select distinct r.CodRichiesta , r.EntrataUscita , r.DataOra , r.Descrizione , r.CostoTotale
+, r.Esito , r.TargaAstronave ,  tv.Nome as TipologiaViaggio,
+pnt1.Nome as PianetaDestinazione , pnt2.Nome as PianetaDestinazione,
+c.Quantita , tc.Nome , tc.Descrizione
+from richiesta r , persona p , tipologia_viaggio tv ,
+pianeta pnt1 , pianeta pnt2 , carico c , tipologia_carico tc
+where pnt1.CodPianeta = r.PianetaDestinazione
+and pnt2.CodPianeta = r.PianetaProvenienza
+and r.Scopo = tv.CodTipoViaggio
+and r.CodRichiesta = c.CodRichiesta
+and c.Tipologia = tc.CodTipoCarico
+and r.CodRichiesta = ? ; */
 
 /* Principali operazioni Capitani */
 
 /*C1 Registrare la propria nave all'applicazione. */
 
+INSERT INTO ASTRONAVE (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitano) VALUES
+('MFALC001', 'Millennium Falcon', 2, 1, 'MF0002', 'SLOHAN420713C');
+
+/*
+INSERT INTO ASTRONAVE (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitano) VALUES
+(?, ?, NULL, NULL, ? , ?);
+*/
+
 /*C2 Aggiungere o rimuovere membri all’equipaggio di una nave */
 
 /*C3 Visualizzare tutti i dati dei membri del proprio equipaggio*/
+select p.*
+from persona p , equipaggio e
+where p.CUI = e.CUIAstronauta
+and e.TargaAstronave = 'MFALC001';
+
+/*Java mode 
+select p.*
+from persona p , equipaggio e
+where p.CUI = e.CUIAstronauta
+and e.TargaAstronave = ? ;
+*/
 
 /*C4 Richiedere accesso al porto*/
 
