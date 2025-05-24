@@ -13,8 +13,8 @@
 -- ________________ 
 DROP DATABASE IF EXISTS PortoMorteNera;
 
-create database PortoMorteNera;
-use PortoMorteNera;
+CREATE DATABASE PortoMorteNera;
+USE PortoMorteNera;
 
 -- DBSpace Section
 -- _______________
@@ -23,262 +23,264 @@ use PortoMorteNera;
 -- Tables Section
 -- _____________ 
 
-create table AREE_ATTRACCO (
-     CodArea int not null auto_increment,
-     Nome varchar(15) not null,
-     constraint ID_AREE_ATTRACCO_ID primary key (CodArea));
+CREATE TABLE AREE_ATTRACCO (
+     CodArea INT NOT NULL AUTO_INCREMENT,
+     Nome VARCHAR(15) NOT NULL,
+     CONSTRAINT ID_AREE_ATTRACCO_ID PRIMARY KEY (CodArea));
 
-create table ASTRONAVI (
-     Targa char(8) not null,
-     Nome varchar(20) not null,
-     CodArea int,
-     NumeroPosto int,
-     CodModello char(6) not null,
-     CUICapitano char(20) not null,
-     constraint ID_ASTRONAVI_ID primary key (Targa),
-     constraint UNIQ_POSTEGGIO unique (CodArea, NumeroPosto));
+CREATE TABLE ASTRONAVI (
+     Targa CHAR(8) NOT NULL,
+     Nome VARCHAR(20) NOT NULL,
+     CodArea INT,
+     NumeroPosto INT,
+     CodModello CHAR(6) NOT NULL,
+     CUICapitano CHAR(20) NOT NULL,
+     CONSTRAINT ID_ASTRONAVI_ID PRIMARY KEY (Targa),
+     CONSTRAINT UNIQ_POSTEGGIO UNIQUE (CodArea, NumeroPosto));
 
-create table CARICHI (
-     Tipologia int not null auto_increment,
-     Quantita int not null,
-     CodRichiesta int not null,
-     constraint ID_CARICHI_ID primary key (Tipologia, CodRichiesta));
+CREATE TABLE CARICHI (
+     Tipologia INT NOT NULL AUTO_INCREMENT,
+     Quantita INT NOT NULL,
+     CodRichiesta INT NOT NULL,
+     CONSTRAINT ID_CARICHI_ID PRIMARY KEY (Tipologia, CodRichiesta));
 
-create table CELLE (
-     NumCella int not null auto_increment,
-     Capienza int not null check (Capienza > 0),
-     constraint ID_CELLE_ID primary key (NumCella));
+CREATE TABLE CELLE (
+     NumCella INT NOT NULL AUTO_INCREMENT,
+     Capienza INT NOT NULL CHECK (Capienza > 0),
+     CONSTRAINT ID_CELLE_ID PRIMARY KEY (NumCella));
 
-create table DIMENSIONI_PREZZI (
-     Superficie int not null check (Superficie > 0),
-     Prezzo numeric(6,2) not null check (Prezzo >= 0),
-     constraint ID_DIMENSIONI_PREZZI_ID primary key (Superficie));
+CREATE TABLE DIMENSIONI_PREZZI (
+     Superficie INT NOT NULL CHECK (Superficie > 0),
+     Prezzo NUMERIC(6,2) NOT NULL CHECK (Prezzo >= 0),
+     CONSTRAINT ID_DIMENSIONI_PREZZI_ID PRIMARY KEY (Superficie));
 
-create table EQUIPAGGI (
-     TargaAstronave char(10) not null,
-     CUIAstronauta char(20) not null,
-     constraint ID_EQUIPAGGI_ID primary key (CUIAstronauta, TargaAstronave));
+CREATE TABLE EQUIPAGGI (
+     TargaAstronave CHAR(10) NOT NULL,
+     CUIAstronauta CHAR(20) NOT NULL,
+     CONSTRAINT ID_EQUIPAGGI_ID PRIMARY KEY (CUIAstronauta, TargaAstronave));
 
-create table MODELLI (
-     CodModello char(6) not null,
-     Nome varchar(20) not null,
-     DimensioneArea int not null,
-     constraint ID_MODELLI_ID primary key (CodModello));
+CREATE TABLE MODELLI (
+     CodModello CHAR(6) NOT NULL,
+     Nome VARCHAR(20) NOT NULL,
+     DimensioneArea INT NOT NULL,
+     CONSTRAINT ID_MODELLI_ID PRIMARY KEY (CodModello));
 
-create table PERSONE (
-     CUI char(13) not null,
-     Username varchar(20) not null,
-     Nome varchar(25) not null,
-     Cognome varchar(25) not null,
-     Razza varchar(20) not null,
-     DataNascita date not null,
-     Ricercato boolean not null default false,
-     Ideologia enum('Ribelle', 'Imperiale', 'Neutrale') not null default 'Neutrale',
-     Ruolo enum('Astronauta', 'Capitano', 'Admin') not null default 'Astronauta',
-     NumCella int,
-     PianetaNascita char(20) not null,
-     constraint ID_PERSONE_ID primary key (CUI),
-     constraint SID_PERSONE_ID unique (Username));
+CREATE TABLE PERSONE (
+     CUI CHAR(13) NOT NULL,
+     Username VARCHAR(20) NOT NULL,
+     Nome VARCHAR(25) NOT NULL,
+     Cognome VARCHAR(25) NOT NULL,
+     Razza VARCHAR(20) NOT NULL,
+     DataNascita DATE NOT NULL,
+     Ricercato BOOLEAN NOT NULL DEFAULT FALSE,
+     Ideologia ENUM('Ribelle', 'Imperiale', 'Neutrale') NOT NULL DEFAULT 'Neutrale',
+     Ruolo ENUM('Astronauta', 'Capitano', 'Admin') NOT NULL DEFAULT 'Astronauta',
+     NumCella INT,
+     PianetaNascita CHAR(20) NOT NULL,
+     CONSTRAINT ID_PERSONE_ID PRIMARY KEY (CUI),
+     CONSTRAINT SID_PERSONE_ID UNIQUE (Username));
 
-create table PIANETI (
-     CodPianeta char(10) not null,
-     Nome varchar(25) not null,
-     constraint ID_PIANETI_ID primary key (CodPianeta));
+CREATE TABLE PIANETI (
+     CodPianeta CHAR(10) NOT NULL,
+     Nome VARCHAR(25) NOT NULL,
+     CONSTRAINT ID_PIANETI_ID PRIMARY KEY (CodPianeta));
 
-create table POSTEGGI (
-     CodArea int not null,
-     NumeroPosto int not null,
-     constraint ID_POSTEGGI_ID primary key (CodArea, NumeroPosto));
+CREATE TABLE POSTEGGI (
+     CodArea INT NOT NULL,
+     NumeroPosto INT NOT NULL,
+     CONSTRAINT ID_POSTEGGI_ID PRIMARY KEY (CodArea, NumeroPosto));
 
-create table RICHIESTE (
-     CodRichiesta int not null auto_increment,
-     EntrataUscita enum('E', 'U') not null,
-     DataOra datetime not null default now(),
-     Descrizione varchar(50) not null,
-     CostoTotale numeric(6,2) not null check (CostoTotale >= 0),
-     Esito enum('A', 'R'),
-     DataEsito date,
-     TargaAstronave char(10) not null,
-     Scopo int not null,
-     PianetaProvenienza char(20) not null,
-     PianetaDestinazione char(20) not null,
-     GestitaDa char(20),
-     constraint ID_RICHIESTE_ID primary key (CodRichiesta));
+CREATE TABLE RICHIESTE (
+     CodRichiesta INT NOT NULL AUTO_INCREMENT,
+     EntrataUscita ENUM('E', 'U') NOT NULL,
+     DataOra DATETIME NOT NULL DEFAULT NOW(),
+     Descrizione VARCHAR(50) NOT NULL,
+     CostoTotale NUMERIC(6,2) NOT NULL CHECK (CostoTotale >= 0),
+     Esito ENUM('A', 'R'),
+     DataEsito DATE,
+     TargaAstronave CHAR(10) NOT NULL,
+     Scopo INT NOT NULL,
+     PianetaProvenienza CHAR(20) NOT NULL,
+     PianetaDestinazione CHAR(20) NOT NULL,
+     GestitaDa CHAR(20),
+     CONSTRAINT ID_RICHIESTE_ID PRIMARY KEY (CodRichiesta));
 
-create table TIPOLOGIE_CARICO (
-     CodTipoCarico int not null auto_increment,
-     Nome varchar(15) not null,
-     Descrizione varchar(30) not null,
-     CostoUnitario numeric(6,2) not null check (CostoUnitario >= 0),
-     constraint ID_TIPOLOGIE_CARICO_ID primary key (CodTipoCarico));
+CREATE TABLE TIPOLOGIE_CARICO (
+     CodTipoCarico INT NOT NULL AUTO_INCREMENT,
+     Nome VARCHAR(15) NOT NULL,
+     Descrizione VARCHAR(30) NOT NULL,
+     CostoUnitario NUMERIC(6,2) NOT NULL CHECK (CostoUnitario >= 0),
+     CONSTRAINT ID_TIPOLOGIE_CARICO_ID PRIMARY KEY (CodTipoCarico));
 
-create table TIPOLOGIE_VIAGGIO (
-     CodTipoViaggio int not null auto_increment,
-     Nome varchar(30) not null,
-     constraint ID_TIPOLOGIE_VIAGGIO_ID primary key (CodTipoViaggio));
+CREATE TABLE TIPOLOGIE_VIAGGIO (
+     CodTipoViaggio INT NOT NULL AUTO_INCREMENT,
+     Nome VARCHAR(30) NOT NULL,
+     CONSTRAINT ID_TIPOLOGIE_VIAGGIO_ID PRIMARY KEY (CodTipoViaggio));
 
 
 -- Constraints Section
 -- ___________________ 
 
-alter table ASTRONAVI add constraint REF_ASTRO_POSTE_FK
-     foreign key (CodArea, NumeroPosto)
-     references POSTEGGI(CodArea, NumeroPosto);
+ALTER TABLE ASTRONAVI ADD CONSTRAINT REF_ASTRO_POSTE_FK
+     FOREIGN KEY (CodArea, NumeroPosto)
+     REFERENCES POSTEGGI(CodArea, NumeroPosto);
 
-alter table ASTRONAVI add constraint REF_ASTRO_POSTE_CHK
-     check((CodArea is not null and NumeroPosto is not null)
-           or (CodArea is null and NumeroPosto is null)); 
+ALTER TABLE ASTRONAVI ADD CONSTRAINT REF_ASTRO_POSTE_CHK
+     CHECK((CodArea IS NOT NULL AND NumeroPosto IS NOT NULL)
+           OR (CodArea IS NULL AND NumeroPosto IS NULL)); 
 
-alter table ASTRONAVI add constraint REF_ASTRO_MODEL_FK
-     foreign key (CodModello)
-     references MODELLI(CodModello);
+ALTER TABLE ASTRONAVI ADD CONSTRAINT REF_ASTRO_MODEL_FK
+     FOREIGN KEY (CodModello)
+     REFERENCES MODELLI(CodModello);
 
-alter table ASTRONAVI add constraint REF_ASTRO_PERSO_FK
-     foreign key (CUICapitano)
-     references PERSONE(CUI);
+ALTER TABLE ASTRONAVI ADD CONSTRAINT REF_ASTRO_PERSO_FK
+     FOREIGN KEY (CUICapitano)
+     REFERENCES PERSONE(CUI);
 
-alter table CARICHI add constraint REF_CARIC_TIPOL
-     foreign key (Tipologia)
-     references TIPOLOGIE_CARICO(CodTipoCarico);
+ALTER TABLE CARICHI ADD CONSTRAINT REF_CARIC_TIPOL
+     FOREIGN KEY (Tipologia)
+     REFERENCES TIPOLOGIE_CARICO(CodTipoCarico);
 
-alter table CARICHI add constraint REF_CARIC_RICHI_FK
-     foreign key (CodRichiesta)
-     references RICHIESTE(CodRichiesta);
+ALTER TABLE CARICHI ADD CONSTRAINT REF_CARIC_RICHI_FK
+     FOREIGN KEY (CodRichiesta)
+     REFERENCES RICHIESTE(CodRichiesta);
 
-alter table EQUIPAGGI add constraint REF_EQUIP_PERSO
-     foreign key (CUIAstronauta)
-     references PERSONE(CUI);
+ALTER TABLE EQUIPAGGI ADD CONSTRAINT REF_EQUIP_PERSO
+     FOREIGN KEY (CUIAstronauta)
+     REFERENCES PERSONE(CUI);
 
-alter table EQUIPAGGI add constraint REF_EQUIP_ASTRO_FK
-     foreign key (TargaAstronave)
-     references ASTRONAVI(Targa);
+ALTER TABLE EQUIPAGGI ADD CONSTRAINT REF_EQUIP_ASTRO_FK
+     FOREIGN KEY (TargaAstronave)
+     REFERENCES ASTRONAVI(Targa);
 
-alter table MODELLI add constraint REF_MODEL_DIMEN_FK
-     foreign key (DimensioneArea)
-     references DIMENSIONI_PREZZI(Superficie);
+ALTER TABLE MODELLI ADD CONSTRAINT REF_MODEL_DIMEN_FK
+     FOREIGN KEY (DimensioneArea)
+     REFERENCES DIMENSIONI_PREZZI(Superficie);
 
-alter table PERSONE add constraint REF_PERSO_CELLA_FK
-     foreign key (NumCella)
-     references CELLE(NumCella);
+ALTER TABLE PERSONE ADD CONSTRAINT REF_PERSO_CELLA_FK
+     FOREIGN KEY (NumCella)
+     REFERENCES CELLE(NumCella);
 
-alter table PERSONE add constraint REF_PERSO_PIANE_FK
-     foreign key (PianetaNascita)
-     references PIANETI(CodPianeta);
+ALTER TABLE PERSONE ADD CONSTRAINT REF_PERSO_PIANE_FK
+     FOREIGN KEY (PianetaNascita)
+     REFERENCES PIANETI(CodPianeta);
 
-alter table POSTEGGI add constraint REF_POSTE_AREA_
-     foreign key (CodArea)
-     references AREE_ATTRACCO(CodArea);
+ALTER TABLE POSTEGGI ADD CONSTRAINT REF_POSTE_AREA_
+     FOREIGN KEY (CodArea)
+     REFERENCES AREE_ATTRACCO(CodArea);
 
-alter table RICHIESTE add constraint REF_RICHI_ASTRO_FK
-     foreign key (TargaAstronave)
-     references ASTRONAVI(Targa);
+ALTER TABLE RICHIESTE ADD CONSTRAINT REF_RICHI_ASTRO_FK
+     FOREIGN KEY (TargaAstronave)
+     REFERENCES ASTRONAVI(Targa);
 
-alter table RICHIESTE add constraint REF_RICHI_TIPOL_FK
-     foreign key (Scopo)
-     references TIPOLOGIE_VIAGGIO(CodTipoViaggio);
+ALTER TABLE RICHIESTE ADD CONSTRAINT REF_RICHI_TIPOL_FK
+     FOREIGN KEY (Scopo)
+     REFERENCES TIPOLOGIE_VIAGGIO(CodTipoViaggio);
 
-alter table RICHIESTE add constraint REF_RICHI_PIANE_1_FK
-     foreign key (PianetaProvenienza)
-     references PIANETI(CodPianeta);
+ALTER TABLE RICHIESTE ADD CONSTRAINT REF_RICHI_PIANE_1_FK
+     FOREIGN KEY (PianetaProvenienza)
+     REFERENCES PIANETI(CodPianeta);
 
-alter table RICHIESTE add constraint REF_RICHI_PIANE_FK
-     foreign key (PianetaDestinazione)
-     references PIANETI(CodPianeta);
+ALTER TABLE RICHIESTE ADD CONSTRAINT REF_RICHI_PIANE_FK
+     FOREIGN KEY (PianetaDestinazione)
+     REFERENCES PIANETI(CodPianeta);
 
-alter table RICHIESTE add constraint REF_RICHI_PERSO_FK
-     foreign key (GestitaDa)
-     references PERSONE(CUI);
+ALTER TABLE RICHIESTE ADD CONSTRAINT REF_RICHI_PERSO_FK
+     FOREIGN KEY (GestitaDa)
+     REFERENCES PERSONE(CUI);
 
-alter table RICHIESTE add constraint COEX_RICHIESTE
-     check((Esito is not null and DataEsito is not null and GestitaDa is not null)
-           or (Esito is null and DataEsito is null and GestitaDa is null)); 
+ALTER TABLE RICHIESTE ADD CONSTRAINT COEX_RICHIESTE
+     CHECK((Esito IS NOT NULL AND DataEsito IS NOT NULL AND GestitaDa IS NOT NULL)
+           OR (Esito IS NULL AND DataEsito IS NULL AND GestitaDa IS NULL)); 
 
 -- Index Section
 -- _____________ 
 
-create unique index ID_AREE_ATTRACCO_IND
-     on AREE_ATTRACCO (CodArea);
+CREATE UNIQUE INDEX ID_AREE_ATTRACCO_IND
+     ON AREE_ATTRACCO (CodArea);
 
-create unique index ID_ASTRONAVI_IND
-     on ASTRONAVI (Targa);
+CREATE UNIQUE INDEX ID_ASTRONAVI_IND
+     ON ASTRONAVI (Targa);
 
-create index REF_ASTRO_POSTE_IND
-     on ASTRONAVI (CodArea, NumeroPosto);
+CREATE INDEX REF_ASTRO_POSTE_IND
+     ON ASTRONAVI (CodArea, NumeroPosto);
 
-create index REF_ASTRO_MODEL_IND
-     on ASTRONAVI (CodModello);
+CREATE INDEX REF_ASTRO_MODEL_IND
+     ON ASTRONAVI (CodModello);
 
-create index REF_ASTRO_PERSO_IND
-     on ASTRONAVI (CUICapitano);
+CREATE INDEX REF_ASTRO_PERSO_IND
+     ON ASTRONAVI (CUICapitano);
 
-create index REF_CARIC_RICHI_IND
-     on CARICHI (CodRichiesta);
+CREATE INDEX REF_CARIC_RICHI_IND
+     ON CARICHI (CodRichiesta);
 
-create unique index ID_CARICHI_IND
-     on CARICHI (Tipologia, CodRichiesta);
+CREATE UNIQUE INDEX ID_CARICHI_IND
+     ON CARICHI (Tipologia, CodRichiesta);
 
-create unique index ID_CELLE_IND
-     on CELLE (NumCella);
+CREATE UNIQUE INDEX ID_CELLE_IND
+     ON CELLE (NumCella);
 
-create unique index ID_DIMENSIONI_PREZZI_IND
-     on DIMENSIONI_PREZZI (Superficie);
+CREATE UNIQUE INDEX ID_DIMENSIONI_PREZZI_IND
+     ON DIMENSIONI_PREZZI (Superficie);
 
-create unique index ID_EQUIPAGGI_IND
-     on EQUIPAGGI (CUIAstronauta, TargaAstronave);
+CREATE UNIQUE INDEX ID_EQUIPAGGI_IND
+     ON EQUIPAGGI (CUIAstronauta, TargaAstronave);
 
-create index REF_EQUIP_ASTRO_IND
-     on EQUIPAGGI (TargaAstronave);
+CREATE INDEX REF_EQUIP_ASTRO_IND
+     ON EQUIPAGGI (TargaAstronave);
 
-create unique index ID_MODELLI_IND
-     on MODELLI (CodModello);
+CREATE UNIQUE INDEX ID_MODELLI_IND
+     ON MODELLI (CodModello);
 
-create index REF_MODEL_DIMEN_IND
-     on MODELLI (DimensioneArea);
+CREATE INDEX REF_MODEL_DIMEN_IND
+     ON MODELLI (DimensioneArea);
 
-create unique index ID_PERSONE_IND
-     on PERSONE (CUI);
+CREATE UNIQUE INDEX ID_PERSONE_IND
+     ON PERSONE (CUI);
 
-create index REF_PERSO_CELLE_IND
-     on PERSONE (NumCella);
+CREATE INDEX REF_PERSO_CELLE_IND
+     ON PERSONE (NumCella);
 
-create index REF_PERSO_PIANE_IND
-     on PERSONE (PianetaNascita);
+CREATE INDEX REF_PERSO_PIANE_IND
+     ON PERSONE (PianetaNascita);
 
-create unique index ID_PIANETI_IND
-     on PIANETI (CodPianeta);
+CREATE UNIQUE INDEX ID_PIANETI_IND
+     ON PIANETI (CodPianeta);
 
-create unique index ID_POSTEGGI_IND
-     on POSTEGGI (CodArea, NumeroPosto);
+CREATE UNIQUE INDEX ID_POSTEGGI_IND
+     ON POSTEGGI (CodArea, NumeroPosto);
 
-create index REF_RICHI_ASTRO_IND
-     on RICHIESTE (TargaAstronave);
+CREATE INDEX REF_RICHI_ASTRO_IND
+     ON RICHIESTE (TargaAstronave);
 
-create index REF_RICHI_TIPOL_IND
-     on RICHIESTE (Scopo);
+CREATE INDEX REF_RICHI_TIPOL_IND
+     ON RICHIESTE (Scopo);
 
-create index REF_RICHI_PIANE_1_IND
-     on RICHIESTE (PianetaProvenienza);
+CREATE INDEX REF_RICHI_PIANE_1_IND
+     ON RICHIESTE (PianetaProvenienza);
 
-create index REF_RICHI_PIANE_IND
-     on RICHIESTE (PianetaDestinazione);
+CREATE INDEX REF_RICHI_PIANE_IND
+     ON RICHIESTE (PianetaDestinazione);
 
-create index REF_RICHI_PERSO_IND
-     on RICHIESTE (GestitaDa);
+CREATE INDEX REF_RICHI_PERSO_IND
+     ON RICHIESTE (GestitaDa);
 
-create unique index ID_RICHIESTE_IND
-     on RICHIESTE (CodRichiesta);
+CREATE UNIQUE INDEX ID_RICHIESTE_IND
+     ON RICHIESTE (CodRichiesta);
 
-create unique index ID_TIPOLOGIE_CARICO_IND
-     on TIPOLOGIE_CARICO (CodTipoCarico);
+CREATE UNIQUE INDEX ID_TIPOLOGIE_CARICO_IND
+     ON TIPOLOGIE_CARICO (CodTipoCarico);
 
-create unique index ID_TIPOLOGIE_VIAGGIO_IND
-     on TIPOLOGIE_VIAGGIO (CodTipoViaggio);
+CREATE UNIQUE INDEX ID_TIPOLOGIE_VIAGGIO_IND
+     ON TIPOLOGIE_VIAGGIO (CodTipoViaggio);
      
 -- Views Section
 -- _____________
 
-create view RICHIESTE_PENDENTI as
-select * from RICHIESTE where Esito is null;
+CREATE VIEW RICHIESTE_PENDENTI AS
+    SELECT *
+    FROM RICHIESTE
+    WHERE Esito IS NULL;
 
 -- Insertions Section
 -- _____________ 
