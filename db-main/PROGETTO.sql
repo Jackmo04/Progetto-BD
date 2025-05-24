@@ -23,49 +23,49 @@ use PortoMorteNera;
 -- Tables Section
 -- _____________ 
 
-create table AREA_ATTRACCO (
+create table AREE_ATTRACCO (
      CodArea int not null auto_increment,
      Nome varchar(15) not null,
-     constraint ID_AREA_ATTRACCO_ID primary key (CodArea));
+     constraint ID_AREE_ATTRACCO_ID primary key (CodArea));
 
-create table ASTRONAVE (
+create table ASTRONAVI (
      Targa char(8) not null,
      Nome varchar(20) not null,
      CodArea int,
      NumeroPosto int,
      CodModello char(6) not null,
      CUICapitano char(20) not null,
-     constraint ID_ASTRONAVE_ID primary key (Targa),
+     constraint ID_ASTRONAVI_ID primary key (Targa),
      constraint UNIQ_POSTEGGIO unique (CodArea, NumeroPosto));
 
-create table CARICO (
+create table CARICHI (
      Tipologia int not null auto_increment,
      Quantita int not null,
      CodRichiesta int not null,
-     constraint ID_CARICO_ID primary key (Tipologia, CodRichiesta));
+     constraint ID_CARICHI_ID primary key (Tipologia, CodRichiesta));
 
-create table CELLA (
+create table CELLE (
      NumCella int not null auto_increment,
      Capienza int not null check (Capienza > 0),
-     constraint ID_CELLA_ID primary key (NumCella));
+     constraint ID_CELLE_ID primary key (NumCella));
 
-create table DIMENSIONE_PREZZO (
+create table DIMENSIONI_PREZZI (
      Superficie int not null check (Superficie > 0),
      Prezzo numeric(6,2) not null check (Prezzo >= 0),
-     constraint ID_DIMENSIONE_PREZZO_ID primary key (Superficie));
+     constraint ID_DIMENSIONI_PREZZI_ID primary key (Superficie));
 
-create table EQUIPAGGIO (
+create table EQUIPAGGI (
      TargaAstronave char(10) not null,
      CUIAstronauta char(20) not null,
-     constraint ID_EQUIPAGGIO_ID primary key (CUIAstronauta, TargaAstronave));
+     constraint ID_EQUIPAGGI_ID primary key (CUIAstronauta, TargaAstronave));
 
-create table MODELLO (
+create table MODELLI (
      CodModello char(6) not null,
      Nome varchar(20) not null,
      DimensioneArea int not null,
-     constraint ID_MODELLO_ID primary key (CodModello));
+     constraint ID_MODELLI_ID primary key (CodModello));
 
-create table PERSONA (
+create table PERSONE (
      CUI char(13) not null,
      Username varchar(20) not null,
      Nome varchar(25) not null,
@@ -77,23 +77,23 @@ create table PERSONA (
      Ruolo enum('Astronauta', 'Capitano', 'Admin') not null default 'Astronauta',
      NumCella int,
      PianetaNascita char(20) not null,
-     constraint ID_PERSONA_ID primary key (CUI),
-     constraint SID_PERSONA_ID unique (Username));
+     constraint ID_PERSONE_ID primary key (CUI),
+     constraint SID_PERSONE_ID unique (Username));
 
-create table PIANETA (
+create table PIANETI (
      CodPianeta char(10) not null,
      Nome varchar(25) not null,
-     constraint ID_PIANETA_ID primary key (CodPianeta));
+     constraint ID_PIANETI_ID primary key (CodPianeta));
 
-create table POSTEGGIO (
+create table POSTEGGI (
      CodArea int not null,
      NumeroPosto int not null,
-     constraint ID_POSTEGGIO_ID primary key (CodArea, NumeroPosto));
+     constraint ID_POSTEGGI_ID primary key (CodArea, NumeroPosto));
 
-create table RICHIESTA (
+create table RICHIESTE (
      CodRichiesta int not null auto_increment,
      EntrataUscita enum('E', 'U') not null,
-     DataOra datetime not null,
+     DataOra datetime not null default now(),
      Descrizione varchar(50) not null,
      CostoTotale numeric(6,2) not null check (CostoTotale >= 0),
      Esito enum('A', 'R'),
@@ -103,187 +103,187 @@ create table RICHIESTA (
      PianetaProvenienza char(20) not null,
      PianetaDestinazione char(20) not null,
      GestitaDa char(20),
-     constraint ID_RICHIESTA_ID primary key (CodRichiesta));
+     constraint ID_RICHIESTE_ID primary key (CodRichiesta));
 
-create table TIPOLOGIA_CARICO (
+create table TIPOLOGIE_CARICO (
      CodTipoCarico int not null auto_increment,
      Nome varchar(15) not null,
      Descrizione varchar(30) not null,
      CostoUnitario numeric(6,2) not null check (CostoUnitario >= 0),
-     constraint ID_TIPOLOGIA_CARICO_ID primary key (CodTipoCarico));
+     constraint ID_TIPOLOGIE_CARICO_ID primary key (CodTipoCarico));
 
-create table TIPOLOGIA_VIAGGIO (
+create table TIPOLOGIE_VIAGGIO (
      CodTipoViaggio int not null auto_increment,
      Nome varchar(30) not null,
-     constraint ID_TIPOLOGIA_VIAGGIO_ID primary key (CodTipoViaggio));
+     constraint ID_TIPOLOGIE_VIAGGIO_ID primary key (CodTipoViaggio));
 
 
 -- Constraints Section
 -- ___________________ 
 
-alter table ASTRONAVE add constraint REF_ASTRO_POSTE_FK
+alter table ASTRONAVI add constraint REF_ASTRO_POSTE_FK
      foreign key (CodArea, NumeroPosto)
-     references POSTEGGIO(CodArea, NumeroPosto);
+     references POSTEGGI(CodArea, NumeroPosto);
 
-alter table ASTRONAVE add constraint REF_ASTRO_POSTE_CHK
+alter table ASTRONAVI add constraint REF_ASTRO_POSTE_CHK
      check((CodArea is not null and NumeroPosto is not null)
            or (CodArea is null and NumeroPosto is null)); 
 
-alter table ASTRONAVE add constraint REF_ASTRO_MODEL_FK
+alter table ASTRONAVI add constraint REF_ASTRO_MODEL_FK
      foreign key (CodModello)
-     references MODELLO(CodModello);
+     references MODELLI(CodModello);
 
-alter table ASTRONAVE add constraint REF_ASTRO_PERSO_FK
+alter table ASTRONAVI add constraint REF_ASTRO_PERSO_FK
      foreign key (CUICapitano)
-     references PERSONA(CUI);
+     references PERSONE(CUI);
 
-alter table CARICO add constraint REF_CARIC_TIPOL
+alter table CARICHI add constraint REF_CARIC_TIPOL
      foreign key (Tipologia)
-     references TIPOLOGIA_CARICO(CodTipoCarico);
+     references TIPOLOGIE_CARICO(CodTipoCarico);
 
-alter table CARICO add constraint REF_CARIC_RICHI_FK
+alter table CARICHI add constraint REF_CARIC_RICHI_FK
      foreign key (CodRichiesta)
-     references RICHIESTA(CodRichiesta);
+     references RICHIESTE(CodRichiesta);
 
-alter table EQUIPAGGIO add constraint REF_EQUIP_PERSO
+alter table EQUIPAGGI add constraint REF_EQUIP_PERSO
      foreign key (CUIAstronauta)
-     references PERSONA(CUI);
+     references PERSONE(CUI);
 
-alter table EQUIPAGGIO add constraint REF_EQUIP_ASTRO_FK
+alter table EQUIPAGGI add constraint REF_EQUIP_ASTRO_FK
      foreign key (TargaAstronave)
-     references ASTRONAVE(Targa);
+     references ASTRONAVI(Targa);
 
-alter table MODELLO add constraint REF_MODEL_DIMEN_FK
+alter table MODELLI add constraint REF_MODEL_DIMEN_FK
      foreign key (DimensioneArea)
-     references DIMENSIONE_PREZZO(Superficie);
+     references DIMENSIONI_PREZZI(Superficie);
 
-alter table PERSONA add constraint REF_PERSO_CELLA_FK
+alter table PERSONE add constraint REF_PERSO_CELLA_FK
      foreign key (NumCella)
-     references CELLA(NumCella);
+     references CELLE(NumCella);
 
-alter table PERSONA add constraint REF_PERSO_PIANE_FK
+alter table PERSONE add constraint REF_PERSO_PIANE_FK
      foreign key (PianetaNascita)
-     references PIANETA(CodPianeta);
+     references PIANETI(CodPianeta);
 
-alter table POSTEGGIO add constraint REF_POSTE_AREA_
+alter table POSTEGGI add constraint REF_POSTE_AREA_
      foreign key (CodArea)
-     references AREA_ATTRACCO(CodArea);
+     references AREE_ATTRACCO(CodArea);
 
-alter table RICHIESTA add constraint REF_RICHI_ASTRO_FK
+alter table RICHIESTE add constraint REF_RICHI_ASTRO_FK
      foreign key (TargaAstronave)
-     references ASTRONAVE(Targa);
+     references ASTRONAVI(Targa);
 
-alter table RICHIESTA add constraint REF_RICHI_TIPOL_FK
+alter table RICHIESTE add constraint REF_RICHI_TIPOL_FK
      foreign key (Scopo)
-     references TIPOLOGIA_VIAGGIO(CodTipoViaggio);
+     references TIPOLOGIE_VIAGGIO(CodTipoViaggio);
 
-alter table RICHIESTA add constraint REF_RICHI_PIANE_1_FK
+alter table RICHIESTE add constraint REF_RICHI_PIANE_1_FK
      foreign key (PianetaProvenienza)
-     references PIANETA(CodPianeta);
+     references PIANETI(CodPianeta);
 
-alter table RICHIESTA add constraint REF_RICHI_PIANE_FK
+alter table RICHIESTE add constraint REF_RICHI_PIANE_FK
      foreign key (PianetaDestinazione)
-     references PIANETA(CodPianeta);
+     references PIANETI(CodPianeta);
 
-alter table RICHIESTA add constraint REF_RICHI_PERSO_FK
+alter table RICHIESTE add constraint REF_RICHI_PERSO_FK
      foreign key (GestitaDa)
-     references PERSONA(CUI);
+     references PERSONE(CUI);
 
-alter table RICHIESTA add constraint COEX_RICHIESTA
+alter table RICHIESTE add constraint COEX_RICHIESTE
      check((Esito is not null and DataEsito is not null and GestitaDa is not null)
            or (Esito is null and DataEsito is null and GestitaDa is null)); 
 
 -- Index Section
 -- _____________ 
 
-create unique index ID_AREA_ATTRACCO_IND
-     on AREA_ATTRACCO (CodArea);
+create unique index ID_AREE_ATTRACCO_IND
+     on AREE_ATTRACCO (CodArea);
 
-create unique index ID_ASTRONAVE_IND
-     on ASTRONAVE (Targa);
+create unique index ID_ASTRONAVI_IND
+     on ASTRONAVI (Targa);
 
 create index REF_ASTRO_POSTE_IND
-     on ASTRONAVE (CodArea, NumeroPosto);
+     on ASTRONAVI (CodArea, NumeroPosto);
 
 create index REF_ASTRO_MODEL_IND
-     on ASTRONAVE (CodModello);
+     on ASTRONAVI (CodModello);
 
 create index REF_ASTRO_PERSO_IND
-     on ASTRONAVE (CUICapitano);
+     on ASTRONAVI (CUICapitano);
 
 create index REF_CARIC_RICHI_IND
-     on CARICO (CodRichiesta);
+     on CARICHI (CodRichiesta);
 
-create unique index ID_CARICO_IND
-     on CARICO (Tipologia, CodRichiesta);
+create unique index ID_CARICHI_IND
+     on CARICHI (Tipologia, CodRichiesta);
 
-create unique index ID_CELLA_IND
-     on CELLA (NumCella);
+create unique index ID_CELLE_IND
+     on CELLE (NumCella);
 
-create unique index ID_DIMENSIONE_PREZZO_IND
-     on DIMENSIONE_PREZZO (Superficie);
+create unique index ID_DIMENSIONI_PREZZI_IND
+     on DIMENSIONI_PREZZI (Superficie);
 
-create unique index ID_EQUIPAGGIO_IND
-     on EQUIPAGGIO (CUIAstronauta, TargaAstronave);
+create unique index ID_EQUIPAGGI_IND
+     on EQUIPAGGI (CUIAstronauta, TargaAstronave);
 
 create index REF_EQUIP_ASTRO_IND
-     on EQUIPAGGIO (TargaAstronave);
+     on EQUIPAGGI (TargaAstronave);
 
-create unique index ID_MODELLO_IND
-     on MODELLO (CodModello);
+create unique index ID_MODELLI_IND
+     on MODELLI (CodModello);
 
 create index REF_MODEL_DIMEN_IND
-     on MODELLO (DimensioneArea);
+     on MODELLI (DimensioneArea);
 
-create unique index ID_PERSONA_IND
-     on PERSONA (CUI);
+create unique index ID_PERSONE_IND
+     on PERSONE (CUI);
 
-create index REF_PERSO_CELLA_IND
-     on PERSONA (NumCella);
+create index REF_PERSO_CELLE_IND
+     on PERSONE (NumCella);
 
 create index REF_PERSO_PIANE_IND
-     on PERSONA (PianetaNascita);
+     on PERSONE (PianetaNascita);
 
-create unique index ID_PIANETA_IND
-     on PIANETA (CodPianeta);
+create unique index ID_PIANETI_IND
+     on PIANETI (CodPianeta);
 
-create unique index ID_POSTEGGIO_IND
-     on POSTEGGIO (CodArea, NumeroPosto);
+create unique index ID_POSTEGGI_IND
+     on POSTEGGI (CodArea, NumeroPosto);
 
 create index REF_RICHI_ASTRO_IND
-     on RICHIESTA (TargaAstronave);
+     on RICHIESTE (TargaAstronave);
 
 create index REF_RICHI_TIPOL_IND
-     on RICHIESTA (Scopo);
+     on RICHIESTE (Scopo);
 
 create index REF_RICHI_PIANE_1_IND
-     on RICHIESTA (PianetaProvenienza);
+     on RICHIESTE (PianetaProvenienza);
 
 create index REF_RICHI_PIANE_IND
-     on RICHIESTA (PianetaDestinazione);
+     on RICHIESTE (PianetaDestinazione);
 
 create index REF_RICHI_PERSO_IND
-     on RICHIESTA (GestitaDa);
+     on RICHIESTE (GestitaDa);
 
-create unique index ID_RICHIESTA_IND
-     on RICHIESTA (CodRichiesta);
+create unique index ID_RICHIESTE_IND
+     on RICHIESTE (CodRichiesta);
 
-create unique index ID_TIPOLOGIA_CARICO_IND
-     on TIPOLOGIA_CARICO (CodTipoCarico);
+create unique index ID_TIPOLOGIE_CARICO_IND
+     on TIPOLOGIE_CARICO (CodTipoCarico);
 
-create unique index ID_TIPOLOGIA_VIAGGIO_IND
-     on TIPOLOGIA_VIAGGIO (CodTipoViaggio);
+create unique index ID_TIPOLOGIE_VIAGGIO_IND
+     on TIPOLOGIE_VIAGGIO (CodTipoViaggio);
      
 -- Views Section
 -- _____________
 
-create view RichiestePendenti as
-select * from Richiesta where Esito is null;
+create view RICHIESTE_PENDENTI as
+select * from RICHIESTE where Esito is null;
 
 -- Insertions Section
 -- _____________ 
 
-INSERT INTO PIANETA (CodPianeta, Nome) VALUES
+INSERT INTO PIANETI (CodPianeta, Nome) VALUES
 ('DTHSTR0', 'Morte Nera'),
 ('CORU001', 'Coruscant'),
 ('TATO002', 'Tatooine'),
@@ -296,14 +296,14 @@ INSERT INTO PIANETA (CodPianeta, Nome) VALUES
 ('ENDOR09', 'Endor'),
 ('DANT010', 'Dantooine');
 
-INSERT INTO DIMENSIONE_PREZZO (Superficie, Prezzo) VALUES
+INSERT INTO DIMENSIONI_PREZZI (Superficie, Prezzo) VALUES
 (50, 100.00),
 (100, 180.00),
 (200, 350.00),
 (500, 800.00),
 (1000, 1500.00);
 
-INSERT INTO MODELLO (CodModello, Nome, DimensioneArea) VALUES
+INSERT INTO MODELLI (CodModello, Nome, DimensioneArea) VALUES
 ('XW0001', 'X-Wing', 50),
 ('MF0002', 'Millennium Falcon', 100),
 ('SD0003', 'Star Destroyer', 1000),
@@ -312,14 +312,14 @@ INSERT INTO MODELLO (CodModello, Nome, DimensioneArea) VALUES
 ('GR7506', 'Trasporto GR-75', 200);
 
 
-INSERT INTO CELLA (NumCella, Capienza) VALUES
+INSERT INTO CELLE (NumCella, Capienza) VALUES
 (1, 5),
 (2, 3),
 (3, 10),
 (4, 2),
 (5, 7);
 
-INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
+INSERT INTO PERSONE (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
 ('SKWLKE510925T', 'L.Skywalker', 'Luke', 'Skywalker', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'TATO002'),
 ('SLOHAN420713C', 'H.Solo', 'Han', 'Solo', 'Umano', '1942-07-13', FALSE, 'Neutrale', 'Capitano', NULL, 'CORU001'),
 ('RGNLLA510925A', 'L.Organa', 'Leia', 'Organa', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', 4, 'ALDE005'),
@@ -334,26 +334,26 @@ INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato
 ('STRMTR0000002', 'Trooper2', 'Stormtrooper', '00002', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
 ('STRMTR0000003', 'Trooper3', 'Stormtrooper', '00003', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0');
 
-INSERT INTO AREA_ATTRACCO (CodArea, Nome) VALUES
-(1, 'Alpha'),
-(2, 'Beta'),
-(3, 'Officina'),
-(4, 'Rifornimento');
+INSERT INTO AREE_ATTRACCO (Nome) VALUES
+('Alpha'),
+('Beta'),
+('Officina'),
+('Rifornimento');
 
-INSERT INTO POSTEGGIO (CodArea, NumeroPosto) VALUES
+INSERT INTO POSTEGGI (CodArea, NumeroPosto) VALUES
 (1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
 (2, 1), (2, 2), (2, 3), (2, 4),
 (3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6),
 (4, 1), (4, 2);
 
-INSERT INTO ASTRONAVE (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitano) VALUES
+INSERT INTO ASTRONAVI (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitano) VALUES
 ('MFALC001', 'Millennium Falcon', 2, 1, 'MF0002', 'SLOHAN420713C'),
 ('XWING002', 'Red Five', 3, 1, 'XW0001', 'MULDRT600322D'),
 ('STARD003', 'Executor', 3, 5, 'SD0003', 'MULDRT600322D'),
 ('CR900004', 'Tantive IV', 4, 1, 'CR9005', 'MULDRT600322D'),
 ('TIEF0005', 'Black Squadron 1', 3, 2, 'TIF004', 'SKWNKN410419T');
 
-INSERT INTO EQUIPAGGIO (CUIAstronauta, TargaAstronave) VALUES
+INSERT INTO EQUIPAGGI (CUIAstronauta, TargaAstronave) VALUES
 ('STRMTR0000002', 'XWING002'),
 ('SKWLKE510925T', 'MFALC001'),
 ('STRMTR0000003', 'CR900004'),
@@ -362,28 +362,28 @@ INSERT INTO EQUIPAGGIO (CUIAstronauta, TargaAstronave) VALUES
 ('STRMTR0000001', 'CR900004'),
 ('STRMTR0000000', 'TIEF0005');
 
-INSERT INTO TIPOLOGIA_VIAGGIO (CodTipoViaggio, Nome) VALUES
-(1, 'Trasporto merci'),
-(2, 'Missione diplomatica'),
-(3, 'Pattugliamento imperiale'),
-(4, 'Trasporto prigionieri'),
-(5, 'Esplorazione');
+INSERT INTO TIPOLOGIE_VIAGGIO (Nome) VALUES
+('Trasporto merci'),
+('Missione diplomatica'),
+('Pattugliamento imperiale'),
+('Trasporto prigionieri'),
+('Esplorazione');
 
-INSERT INTO TIPOLOGIA_CARICO (CodTipoCarico, Nome, Descrizione, CostoUnitario) VALUES
-(1, 'Spezie', 'Carico di spezie', 500.00),
-(2, 'Armi', 'Armi imperiali', 1200.00),
-(3, 'Dati', 'Informazioni classificate', 2000.00),
-(4, 'Droidi', 'Componenti per droidi', 150.00),
-(5, 'Alimentari', 'Razioni standard', 50.00);
+INSERT INTO TIPOLOGIE_CARICO (Nome, Descrizione, CostoUnitario) VALUES
+('Spezie', 'Carico di spezie', 500.00),
+('Armi', 'Armi imperiali', 1200.00),
+('Dati', 'Informazioni classificate', 2000.00),
+('Droidi', 'Componenti per droidi', 150.00),
+('Alimentari', 'Razioni standard', 50.00);
 
-INSERT INTO RICHIESTA (CodRichiesta, EntrataUscita, DataOra, Descrizione, CostoTotale, Esito, DataEsito, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione, GestitaDa) VALUES
-(1, 'E', '2025-05-20 10:00:00', 'Arrivo per scarico spezie', 1680.00, 'R', '2025-05-20',  'MFALC001', 1, 'TATO002', 'DTHSTR0', 'TRKMFF220306M'),
-(2, 'U', '2025-05-21 14:30:00', 'Partenza per missione diplomatica', 350.00, 'A', '2025-05-21',  'CR900004', 2, 'DTHSTR0', 'ALDE005', 'PLPSHV201204N'),
-(3, 'E', '2025-05-22 08:00:00', 'Rifornimento e manutenzione', 1600.00, NULL, NULL, 'XWING002', 4, 'HOTH003', 'DTHSTR0', NULL),
-(4, 'U', '2025-05-22 18:00:00', 'Pattuglia settore 7', 1500.00, 'A', '2025-05-22', 'STARD003', 3, 'DTHSTR0', 'GEON008', 'PLPSHV201204N'),
-(5, 'E', '2025-05-23 09:15:00', 'Arrivo carico armi', 5300.00, NULL, NULL, 'TIEF0005', 1, 'NABO004', 'DTHSTR0', NULL);
+INSERT INTO RICHIESTE (EntrataUscita, DataOra, Descrizione, CostoTotale, Esito, DataEsito, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione, GestitaDa) VALUES
+('E', '2025-05-20 10:00:00', 'Arrivo per scarico spezie', 1680.00, 'R', '2025-05-20',  'MFALC001', 1, 'TATO002', 'DTHSTR0', 'TRKMFF220306M'),
+('U', '2025-05-21 14:30:00', 'Partenza per missione diplomatica', 350.00, 'A', '2025-05-21',  'CR900004', 2, 'DTHSTR0', 'ALDE005', 'PLPSHV201204N'),
+('E', '2025-05-22 08:00:00', 'Rifornimento e manutenzione', 1600.00, NULL, NULL, 'XWING002', 4, 'HOTH003', 'DTHSTR0', NULL),
+('U', '2025-05-22 18:00:00', 'Pattuglia settore 7', 1500.00, 'A', '2025-05-22', 'STARD003', 3, 'DTHSTR0', 'GEON008', 'PLPSHV201204N'),
+('E', '2025-05-23 09:15:00', 'Arrivo carico armi', 5300.00, NULL, NULL, 'TIEF0005', 1, 'NABO004', 'DTHSTR0', NULL);
 
-INSERT INTO CARICO (Tipologia, Quantita, CodRichiesta) VALUES
+INSERT INTO CARICHI (Tipologia, Quantita, CodRichiesta) VALUES
 (1, 3, 1),
 (2, 1, 5),
 (3, 2, 5),

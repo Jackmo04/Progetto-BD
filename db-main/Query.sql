@@ -4,11 +4,11 @@ USE PortoMorteNera;
 /*
 	S1 -- Creare un nuovo account persona registrando tutti i propri dati nell’applicazione.
 */
-INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
+INSERT INTO PERSONE (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
 ('SKWLKE510925T', 'L.Skywalker', 'Luke', 'Skywalker', 'Umano', '1951-09-25', FALSE, 'Neutrale', 'Astronauta', NULL, 'TATO002');
 
 /* Java
-INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
+INSERT INTO PERSONE (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
 (?, ?, ?, ?, ?, ?, FALSE, 'Neutrale', 'Astronauta', NULL, ?);
 */
 
@@ -17,13 +17,13 @@ INSERT INTO PERSONA (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato
 	S2 -- Accedere al proprio account tramite il CUI o il proprio username e visualizzare le astronavi a cui si appartiene
 */
 select distinct n.targa, n.nome
-from astronave n, persona p, equipaggio e
+from astronavi n, persone p, equipaggi e
 where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = n.Targa) or (p.CUI = n.CUICapitano))
 and p.CUI = 'STRMTR0000001';
 
 /* Java
 select distinct n.targa, n.nome
-from astronave n, persona p, equipaggio e
+from astronavi n, persone p, equipaggi e
 where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = n.Targa) or (p.CUI = n.CUICapitano))
 and p.CUI = ?;
 */
@@ -34,13 +34,13 @@ and p.CUI = ?;
 	operazione effettuabile solo se la nave è attraccata
 */
 SELECT ast.NumeroPosto , ar.Nome AS 'Nome Area'
-FROM astronave ast , area_attracco ar
+FROM astronavi ast , aree_attracco ar
 WHERE ast.CodArea = ar.CodArea
 AND Targa = 'TIEF0005';
 
 /* Java
 SELECT ast.NumeroPosto , ar.Nome as 'Nome Area'
-from astronave ast , area_attracco ar
+from astronavi ast , aree_attracco ar
 where ast.CodArea = ar.CodArea
 and Targa = ?;
 */
@@ -50,7 +50,7 @@ and Targa = ?;
 	S4 -- Visualizzare l’ultima richiesta effettuata dalla nave a cui siamo registrati
 */
 select r.*
-from richiesta r, persona p, equipaggio e, astronave n
+from richieste r, persone p, equipaggi e, astronavi n
 where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = n.Targa) or (p.CUI = n.CUICapitano))
 and r.TargaAstronave = n.Targa
 and p.CUI = 'SLOHAN420713C'
@@ -60,7 +60,7 @@ limit 1;
 
 /* Java
 select r.*
-from richiesta r, persona p, equipaggio e, astronave n
+from richieste r, persone p, equipaggi e, astronavi n
 where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = n.Targa) or (p.CUI = n.CUICapitano))
 and r.TargaAstronave = n.Targa
 and p.CUI = ?
@@ -77,8 +77,8 @@ select distinct r.CodRichiesta , r.EntrataUscita , r.DataOra , r.Descrizione , r
 , r.Esito , r.TargaAstronave ,  tv.Nome as TipologiaViaggio,
 pnt1.Nome as PianetaDestinazione , pnt2.Nome as PianetaDestinazione,
 c.Quantita , tc.Nome , tc.Descrizione
-from richiesta r , persona p , tipologia_viaggio tv ,
-pianeta pnt1 , pianeta pnt2 , carico c , tipologia_carico tc
+from richieste r , persone p , tipologie_viaggio tv ,
+pianeti pnt1 , pianeti pnt2 , carichi c , tipologie_carico tc
 where pnt1.CodPianeta = r.PianetaDestinazione
 and pnt2.CodPianeta = r.PianetaProvenienza
 and r.Scopo = tv.CodTipoViaggio
@@ -91,8 +91,8 @@ select distinct r.CodRichiesta , r.EntrataUscita , r.DataOra , r.Descrizione , r
 , r.Esito , r.TargaAstronave ,  tv.Nome as TipologiaViaggio,
 pnt1.Nome as PianetaDestinazione , pnt2.Nome as PianetaDestinazione,
 c.Quantita , tc.Nome , tc.Descrizione
-from richiesta r , persona p , tipologia_viaggio tv ,
-pianeta pnt1 , pianeta pnt2 , carico c , tipologia_carico tc
+from richieste r , persone p , tipologie_viaggio tv ,
+pianeti pnt1 , pianeti pnt2 , carichi c , tipologie_carico tc
 where pnt1.CodPianeta = r.PianetaDestinazione
 and pnt2.CodPianeta = r.PianetaProvenienza
 and r.Scopo = tv.CodTipoViaggio
@@ -104,11 +104,11 @@ and r.CodRichiesta = ? ; */
 /*
 	C1 -- Registrare la propria nave all'applicazione.
 */
-INSERT INTO ASTRONAVE (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitano) VALUES
+INSERT INTO ASTRONAVI (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitano) VALUES
 ('MFALC001', 'Millennium Falcon', 2, 1, 'MF0002', 'SLOHAN420713C');
 
 /* Java
-INSERT INTO ASTRONAVE (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitano) VALUES
+INSERT INTO ASTRONAVI (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitano) VALUES
 (?, ?, NULL, NULL, ? , ?);
 */
 
@@ -117,21 +117,21 @@ INSERT INTO ASTRONAVE (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitan
 	C2 -- Aggiungere o rimuovere membri all’equipaggio di una nave
 */
 -- Aggiungere
-insert into equipaggio (TargaAstronave, CUIAstronauta) values
+insert into equipaggi (TargaAstronave, CUIAstronauta) values
 ('XWING002', 'STRMTR0000003');
 
 /* Java
-insert into equipaggio (TargaAstronave, CUIAstronauta) values
+insert into equipaggi (TargaAstronave, CUIAstronauta) values
 (?, ?);
 */
 
 -- Rimuovere
-delete from equipaggio e
+delete from equipaggi e
 where e.TargaAstronave = 'XWING002'
 and e.CUIAstronauta = 'STRMTR0000003';
 
 /* Java
-delete from equipaggio e
+delete from equipaggi e
 where e.TargaAstronave = ?
 and e.CUIAstronauta = ?;
 */
@@ -141,13 +141,13 @@ and e.CUIAstronauta = ?;
 	C3 -- Visualizzare tutti i dati dei membri del proprio equipaggio
 */
 select p.*
-from persona p , equipaggio e
+from persone p , equipaggi e
 where p.CUI = e.CUIAstronauta
 and e.TargaAstronave = 'MFALC001';
 
 /* Java 
 select p.*
-from persona p , equipaggio e
+from persone p , equipaggi e
 where p.CUI = e.CUIAstronauta
 and e.TargaAstronave = ? ;
 */
@@ -156,12 +156,12 @@ and e.TargaAstronave = ? ;
 /*
 	C4 -- Richiedere accesso al porto
 */
-insert into Richiesta(EntrataUscita, DataOra, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
-('U', now(), 'PippoPluto2', 1500.00, 'TIEF0005', 3, 'DTHSTR0', 'NABO004');
+insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
+('U', 'PippoPluto2', 1500.00, 'TIEF0005', 3, 'DTHSTR0', 'NABO004');
 
 /* Java
-insert into Richiesta(EntrataUscita, DataOra, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
-('U', now(), ?, ?, ?, ?, 'DTHSTR0', ?);
+insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
+('U', ?, ?, ?, ?, 'DTHSTR0', ?);
 */
 
 -- _____________________________________________
@@ -176,7 +176,7 @@ insert into Richiesta(EntrataUscita, DataOra, Descrizione, CostoTotale, TargaAst
 	capitano potrà visualizzare solo le proprie.
 */
 select r.*
-from richiesta r, persona p, astronave n
+from richieste r, persone p, astronavi n
 where p.CUI = n.CUICapitano
 and r.TargaAstronave = n.Targa
 and p.CUI = 'SLOHAN420713C'
@@ -185,7 +185,7 @@ order by r.DataOra desc;
 
 /* Java
 select r.*
-from richiesta r, persona p, astronave n
+from richieste r, persone p, astronavi n
 where p.CUI = n.CUICapitano
 and r.TargaAstronave = n.Targa
 and p.CUI = ?
@@ -209,27 +209,27 @@ order by r.DataOra desc;
 /*
 	A2 -- Valutare una richiesta pendente
 */
-update richiesta 
-set esito = 'R', dataEsito = date(now()), gestitaDa = 'PLPSHV201204N'
+update richieste
+set esito = 'A', dataEsito = date(now()), gestitaDa = 'PLPSHV201204N'
 where CodRichiesta = 3;
 
 -- Se accettata:
-update astronave
+update astronavi
 set codArea = 4, numeroPosto = 2
 where targa = (select targaAstronave
-			   from richiesta r
+			   from richieste r
                where r.codRichiesta = 3
                and r.esito = 'A');
 
 /* Java
-update richiesta 
+update richieste
 set esito = ?, dataEsito = date(now()), gestitaDa = ?
 where CodRichiesta = ?;
 
-update astronave
+update astronavi
 set codArea = ?, numeroPosto = ?
 where targa = (select targaAstronave
-			   from richiesta r
+			   from richieste r
                where r.codRichiesta = ?
                and r.esito = 'A');
 */
@@ -245,7 +245,7 @@ where targa = (select targaAstronave
 	A4 -- Visualizzare il numero di persone presenti nel porto attualmente
 */
 select count(distinct p.CUI) as `Astronauti in porto`
-from astronave a, equipaggio e, persona p
+from astronavi a, equipaggi e, persone p
 where ((p.CUI = e.CUIAstronauta and e.TargaAstronave = a.Targa) or (p.CUI = a.CUICapitano))
 and a.numeroPosto is not null;
 
@@ -260,9 +260,9 @@ and a.numeroPosto is not null;
 	A6 -- Visualizzare posteggi liberi attualmente
 */
 select p.*
-from posteggio p 
+from posteggi p 
 where (p.codArea, p.numeroPosto) not in (select a.codArea, a.numeroPosto
-										 from astronave a);
+										 from astronavi a);
 
 -- _____________________________________________
 /*
