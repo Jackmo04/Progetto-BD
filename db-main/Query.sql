@@ -173,8 +173,8 @@ and e.TargaAstronave = ? ;
 /*
 	C4 -- Richiedere accesso al porto
 */
-insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
-('E', 'PippoPluto2', 0, 'TIEF0005', 3, 'NABO004', 'DTHSTR0');
+insert into Richieste (EntrataUscita, Descrizione, CostoTotale, DataOra TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
+('E', 'PippoPluto2', 0, now(), 'TIEF0005', 3, 'NABO004', 'DTHSTR0');
 
 -- Se ci sono dei carichi
 insert into Carichi (Tipologia, Quantita, CodRichiesta) values
@@ -187,7 +187,14 @@ where CodRichiesta = (select * from ultimarichiesta);
 
 /* Java
 insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
-('U', ?, ?, ?, ?, ?, 'DTHSTR0');
+('E', ?, ?,,now(), ?, ?, ?, 'DTHSTR0');
+
+INSERT INTO carico (Tipologia, Quantita, CodRichiesta) VALUES
+(?, ?, (select * from ultimarichiesta) );
+
+Update richiesta
+set CostoTotale = ( select * from costoultimarichiesta )
+where CodRichiesta = ( select * from ultimarichiesta );
 */
 -- _____________________________________________
 /*
@@ -207,8 +214,16 @@ set CostoTotale = ( select * from costoultimarichiesta )
 where CodRichiesta = ( select * from ultimarichiesta );
 
 /* Java
-insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
-('U', ?, ?, ?, ?, 'DTHSTR0', ?);
+insert into Richieste (EntrataUscita, Descrizione, CostoTotale,DataOra , TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
+('U', ?, ?,now(), ?, ?, 'DTHSTR0', ?);
+
+INSERT INTO carico (Tipologia, Quantita, CodRichiesta) VALUES
+(?, ?, (select * from ultimarichiesta) );
+
+Update richiesta
+set CostoTotale = ( select * from costoultimarichiesta )
+where CodRichiesta = ( select * from ultimarichiesta );
+
 */
 -- _____________________________________________
 /*
