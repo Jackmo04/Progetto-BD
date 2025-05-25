@@ -1,5 +1,22 @@
 USE PortoMorteNera;
-
+-- VISTE UTILI
+/* Selezionare il cod ultima richiesta */
+create or REPLACE view ultimaRichiesta as
+select r.CodRichiesta
+		from richiesta r
+        order by r.CodRichiesta desc
+        limit 1;
+        
+/* Calcolo del costo dell'ultima richiesta */
+create or REPLACE view CostoUltimaRichiesta as
+select sum(( c.Quantita * tc.CostoUnitario) + dp.Prezzo ) as costo
+from richiesta r , carico c , tipologia_carico tc , astronave ast , modello m , dimensione_prezzo dp
+where r.CodRichiesta = c.CodRichiesta
+and c.Tipologia = tc.CodTipoCarico
+and r.TargaAstronave = ast.Targa
+and ast.CodModello = m.CodModello
+and m.DimensioneArea = dp.Superficie
+and r.CodRichiesta = (select * from ultimarichiesta);
 -- _____________________________________________
 /*
 	S1 -- Creare un nuovo account persona registrando tutti i propri dati nell’applicazione.
@@ -167,32 +184,18 @@ insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, 
 /*
 	C5 -- Richiedere uscita dal porto
 */
+-- Inseriamo la richiesta
+insert into richiesta (EntrataUscita, Descrizione, CostoTotale, DataOra , TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
+('U', 'PippoPluto4', 0, now() , 'TIEF0005', 3, 'DTHSTR0', 'NABO004');
 
-insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
-('U', 'PippoPluto2', 0, 'TIEF0005', 3, 'DTHSTR0', 'NABO004');
+-- Inseriamo il carico all'ultima richiesta aggiunta
+INSERT INTO carico (Tipologia, Quantita, CodRichiesta) VALUES
+(1, 3, (select * from ultimarichiesta ) );
 
-create or REPLACE view ultimaRichiesta as
-select r.CodRichiesta
-		from richiesta r
-        order by r.CodRichiesta desc
-        limit 1;
-
-INSERT INTO CARICHI (Tipologia, Quantita, CodRichiesta) VALUES
-(1, 3, ultimaRichiesta);
-
--- Costo di una richiesta
--- create or REPLACE view Costorichiesta as
-select (c.Quantita * tc.CostoUnitario + dp.Prezzo ) as costo
-from richiesta r , carico c , tipologia_carico tc , astronave ast , modello m , dimensione_prezzo dp
-where r.CodRichiesta = c.CodRichiesta
-and c.Tipologia = tc.CodTipoCarico
-and r.TargaAstronave = ast.Targa
-and ast.CodModello = m.CodModello
-and m.DimensioneArea = dp.Superficie
-and r.CodRichiesta = (select * from ultimarichiesta);
-
+-- Inseriamo il costo totoale calcolato all'ultima richiesta
 Update richiesta
-set CostoTotale = ( select  (select 
+set CostoTotale = ( select * from costoultimarichiesta )
+where CodRichiesta = ( select * from ultimarichiesta );
 
 /* Java
 insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
@@ -230,9 +233,11 @@ select r.CostoTotale
 from richiesta r
 where r.CodRichiesta = 1;
 
--- calcolo costo di una richiesta , usabile per scrivere il costo totale
-select ( select 
-
+/* Java 
+select r.CostoTotale
+from richiesta r
+where r.CodRichiesta = ? ;
+*/
 
 -- _____________________________________________
 /*
