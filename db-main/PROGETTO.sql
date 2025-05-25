@@ -281,6 +281,16 @@ CREATE VIEW RICHIESTE_PENDENTI AS
     SELECT *
     FROM RICHIESTE
     WHERE Esito IS NULL;
+    
+CREATE VIEW RICHIESTE_ACCETTATE AS
+	SELECT *
+	FROM Richieste
+	WHERE Esito = 'A';
+    
+CREATE VIEW RICHIESTE_RIFIUTATE AS
+	SELECT *
+	FROM Richieste
+	WHERE Esito = 'R';
 
 -- Insertions Section
 -- _____________ 

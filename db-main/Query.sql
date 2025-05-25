@@ -174,7 +174,16 @@ and e.TargaAstronave = ? ;
 	C4 -- Richiedere accesso al porto
 */
 insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
-('E', 'PippoPluto2', 1500.00, 'TIEF0005', 3, 'NABO004', 'DTHSTR0');
+('E', 'PippoPluto2', 0, 'TIEF0005', 3, 'NABO004', 'DTHSTR0');
+
+-- Se ci sono dei carichi
+insert into Carichi (Tipologia, Quantita, CodRichiesta) values
+(1, 20, (select * from ultimarichiesta)),
+(2, 5, (select * from ultimarichiesta ));
+
+update richieste
+set CostoTotale = (select * from costoultimarichiesta)
+where CodRichiesta = (select * from ultimarichiesta);
 
 /* Java
 insert into Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) values
@@ -190,7 +199,7 @@ insert into richiesta (EntrataUscita, Descrizione, CostoTotale, DataOra , TargaA
 
 -- Inseriamo il carico all'ultima richiesta aggiunta
 INSERT INTO carico (Tipologia, Quantita, CodRichiesta) VALUES
-(1, 3, (select * from ultimarichiesta ) );
+(1, 3, (select * from ultimarichiesta) );
 
 -- Inseriamo il costo totoale calcolato all'ultima richiesta
 Update richiesta
@@ -286,7 +295,21 @@ where targa = (select targaAstronave
 /*
 	A3 -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
 */
+update Persone
+set NumCella = 3
+where CUI = 'STRMTR0000001';
 
+delete from Equipaggi
+where CUIAstronauta = 'STRMTR0000001';
+
+/* Java
+update Persone
+set NumCella = ?
+where CUI = ?;
+
+delete from Equipaggi
+where CUIAstronauta = ?;
+*/
 
 -- _____________________________________________
 /*
@@ -299,10 +322,42 @@ and a.numeroPosto is not null;
 
 -- _____________________________________________
 /*
-	A5 -- Visualizzare la percentuale di richieste accettante e rifiutate in un dato intervallo di tempo
+	A5 -- Visualizzare la percentuale di richieste accettate e rifiutate in un dato intervallo di tempo
 */
+select round(cra.num * 100 / crt.num, 2) as `% Accettate`, round(crr.num * 100 / crt.num, 2) as `% Rifiutate`
+from (select count(*) num
+	  from Richieste
+      where DataOra between '2025-05-21 14:30:00' and '2025-05-22 18:00:00') crt,
+	 (select count(*) num
+      from Richieste_accettate
+      where DataOra between '2025-05-21 14:30:00' and '2025-05-22 18:00:00') cra,
+     (select count(*) num
+      from Richieste_rifiutate
+      where DataOra between '2025-05-21 14:30:00' and '2025-05-22 18:00:00') crr;
+                    
+-- Oppure
 
+with RichiesteInIntervallo as (
+	select *
+    from Richieste
+    where DataOra between '2025-05-21 14:30:00' and '2025-05-22 18:00:00'
+)
+select
+	round(sum(case when Esito = 'A' then 1 else 0 end) * 100.0 / count(*), 2) as `% Accettate`,
+    round(sum(case when Esito = 'R' then 1 else 0 end) * 100.0 / count(*), 2) as `% Rifiutate`
+from RichiesteInIntervallo;
 
+/* Java
+with RichiesteInIntervallo as (
+	select *
+    from Richieste
+    where DataOra between ? and ?
+)
+select
+	round(sum(case when Esito = 'A' then 1 else 0 end) * 100.0 / count(*), 2) as `% Accettate`,
+    round(sum(case when Esito = 'R' then 1 else 0 end) * 100.0 / count(*), 2) as `% Rifiutate`
+from RichiesteInIntervallo;
+*/
 -- _____________________________________________
 /*  
 	A6 -- Visualizzare posteggi liberi attualmente
@@ -316,3 +371,9 @@ where (p.codArea, p.numeroPosto) not in (select a.codArea, a.numeroPosto
 /*
 	A7 -- Visualizzare le 50 astronavi che hanno trasportato più merce.
 */
+select TargaAstronave, sum(c.Quantita) QtaTot
+from Richieste r, Carichi c
+where c.CodRichiesta = r.CodRichiesta
+group by r.TargaAstronave
+order by QtaTot desc
+limit 50;
