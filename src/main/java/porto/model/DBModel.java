@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import porto.data.Product;
-import porto.data.ProductPreview;
+import porto.data.deleteme.Product;
+import porto.data.deleteme.ProductPreview;
 
 // This is the real model implementation that uses the DAOs we've defined to
 // actually load data from the underlying database.

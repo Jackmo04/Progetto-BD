@@ -1,4 +1,4 @@
-package porto.data;
+package porto.data.deleteme;
 
 import java.sql.Connection;
 import java.util.Collections;
@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import porto.data.DAOException;
+import porto.data.DAOUtils;
+import porto.data.Printer;
 
 public final class Product {
 

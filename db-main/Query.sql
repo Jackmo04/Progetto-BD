@@ -7,27 +7,40 @@ USE PortoMorteNera;
 INSERT INTO PERSONE (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, PianetaNascita) VALUES
 ('SKWLKE510925T', 'L.Skywalker', 'Luke', 'Skywalker', 'Umano', '1951-09-25', FALSE, 'Neutrale', 'Astronauta', 'TATO002');
 
-/* Java
+/* Java [->Persona]
 INSERT INTO PERSONE (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 */
 
 -- _____________________________________________
 /*
-	S2 -- Accedere al proprio account tramite il CUI o il proprio username e visualizzare le astronavi a cui si appartiene
+	S2a -- Accedere al proprio account tramite il CUI o il proprio username
+*/
+SELECT p.*
+FROM persone p
+WHERE 'Trooper1' IN (p.CUI, p.Username)
+AND p.Password = 'pippo';
+
+/* Java [Optional<Persona>]
+SELECT p.*
+FROM persone p
+WHERE ? IN (p.CUI, p.Username)
+AND p.Password = ?;
+*/
+
+/*
+	S2b -- Visualizzare le astronavi a cui appartiene una persona
 */
 SELECT DISTINCT n.targa, n.nome
 FROM astronavi n, persone p, equipaggi e
 WHERE ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = n.Targa) OR (p.CUI = n.CUICapitano))
-AND (p.CUI = 'STRMTR0000001' OR p.Username = 'Trooper1')
-AND p.Password = 'pippo';
+AND p.CUI = 'STRMTR0000001';
 
-/* Java
+/* Java [Set<Astronave>]
 SELECT DISTINCT n.targa, n.nome
 FROM astronavi n, persone p, equipaggi e
 WHERE ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = n.Targa) OR (p.CUI = n.CUICapitano))
-AND (p.CUI = ? OR p.Username = ?)
-AND p.Password = ?;
+AND p.CUI = ?;
 */
 
 -- _____________________________________________
@@ -40,7 +53,7 @@ FROM astronavi ast, aree_attracco ar
 WHERE ast.CodArea = ar.CodArea
 AND Targa = 'TIEF0005';
 
-/* Java
+/* Java [Optional<Posteggio>]
 SELECT ast.CodArea, ar.Nome AS 'Nome Area', ast.NumeroPosto
 FROM astronavi ast, aree_attracco ar
 WHERE ast.CodArea = ar.CodArea
@@ -58,7 +71,7 @@ AND n.Targa = 'MFALC001'
 ORDER BY r.DataOra DESC
 LIMIT 1;
 
-/* Java
+/* Java [Optional<Richiesta>]
 SELECT r.*
 FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
@@ -81,7 +94,7 @@ AND r.CodRichiesta = c.CodRichiesta
 AND r.CodRichiesta = 1
 GROUP BY 1-10;
 
-/* Java
+/* Java [?RichiestaDettagliata]
 SELECT DISTINCT r.CodRichiesta, r.EntrataUscita, r.DataOra, r.Descrizione, r.CostoTotale, r.Esito, r.TargaAstronave, tv.Nome AS TipologiaViaggio,
 	pnt1.Nome AS PianetaDestinazione, pnt2.Nome AS PianetaDestinazione, SUM(DISTINCT c.Quantita) AS QuantitaTotCarico
 FROM richieste r, persone p, tipologie_viaggio tv, pianeti pnt1, pianeti pnt2, carichi c
@@ -101,10 +114,15 @@ GROUP BY 1-10;
 SELECT CodModello, Nome
 FROM Modelli;
 
+/* Java [List<Modello>]
+SELECT CodModello, Nome
+FROM Modelli;
+*/
+
 INSERT INTO ASTRONAVI (Targa, Nome, CodModello, CUICapitano) VALUES
 ('MFALC001', 'Millennium Falcon', 'MF0002', 'SLOHAN420713C');
 
-/* Java
+/* Java [Astronave->null]
 INSERT INTO ASTRONAVI (Targa, Nome, CodModello, CUICapitano) VALUES
 (?, ?, ?, ?);
 */
@@ -117,7 +135,7 @@ INSERT INTO ASTRONAVI (Targa, Nome, CodModello, CUICapitano) VALUES
 INSERT INTO equipaggi (TargaAstronave, CUIAstronauta) VALUES
 ('XWING002', 'STRMTR0000003');
 
-/* Java
+/* Java [Equipaggio->null]
 INSERT INTO equipaggi (TargaAstronave, CUIAstronauta) VALUES
 (?, ?);
 */
@@ -127,7 +145,7 @@ DELETE FROM equipaggi e
 WHERE e.TargaAstronave = 'XWING002'
 AND e.CUIAstronauta = 'STRMTR0000003';
 
-/* Java
+/* Java [Equipaggio->null]
 DELETE FROM equipaggi e
 WHERE e.TargaAstronave = ?
 AND e.CUIAstronauta = ?;
@@ -143,7 +161,7 @@ WHERE p.CUI = e.CUIAstronauta
 AND p.PianetaNascita = pn.CodPianeta
 AND e.TargaAstronave = 'MFALC001';
 
-/* Java 
+/* Java [List<MembroEquipaggio>]
 SELECT p.CUI, p.Nome, p.Cognome, p.Razza, p.DataNascita, p.Ricercato, pn.Nome AS PianetaNascita
 FROM persone p, equipaggi e, pianeti pn
 WHERE p.CUI = e.CUIAstronauta
@@ -169,7 +187,7 @@ UPDATE richieste
 SET CostoTotale = (SELECT Costo FROM Costo_ultima_richiesta)
 WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 
-/* Java
+/* Java [Richiesta->null]
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
 ('E', ?, 0, ?, ?, ?, 'DTHSTR0');
 
@@ -197,7 +215,7 @@ UPDATE richieste
 SET CostoTotale = (SELECT Costo FROM Costo_ultima_richiesta)
 WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 
-/* Java
+/* Java [Richiesta->null]
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
 ('U', ?, ?, ?, ?, 'DTHSTR0', ?);
 
@@ -218,7 +236,7 @@ FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
 AND n.Targa = 'MFALC001';
 
-/* Java
+/* Java [List<Richiesta>]
 SELECT DISTINCT r.*
 FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
@@ -229,15 +247,7 @@ AND n.Targa = ?;
 /*
 	C7 -- Visualizzare il costo di una richiesta di accesso o uscita.
 */
-SELECT r.CostoTotale
-FROM richieste r
-WHERE r.CodRichiesta = 1;
 
-/* Java 
-SELECT r.CostoTotale
-FROM richieste r
-WHERE r.CodRichiesta = ?;
-*/
 
 -- _____________________________________________
 /*
@@ -245,7 +255,7 @@ WHERE r.CodRichiesta = ?;
 */
 SELECT * FROM Richieste_pendenti;
 
-/*java
+/* Java [List<Richiesta>]
 SELECT * FROM Richieste_pendenti;
 */
 
@@ -265,7 +275,7 @@ WHERE targa = (SELECT targaAstronave
                WHERE r.codRichiesta = 3
                AND r.esito = 'A');
 
-/* Java
+/* Java [Richiesta->null not static]
 UPDATE richieste
 SET esito = ?, dataEsito = NOW(), gestitaDa = ?
 WHERE CodRichiesta = ?;
@@ -280,10 +290,9 @@ WHERE targa = (SELECT targaAstronave
 
 -- _____________________________________________
 /*
-	A3 -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
+	A3a -- Visualizza le celle disponibili
 */
-
--- Selezione celle non piene 
+/* old
 SELECT c.NumCella
 FROM celle c
 WHERE c.NumCella NOT IN (SELECT c1.NumCella
@@ -291,17 +300,22 @@ WHERE c.NumCella NOT IN (SELECT c1.NumCella
                          WHERE c1.Capienza <= (SELECT COUNT(p.NumCella)
 											  FROM persone p
                                               WHERE p.NumCella = c1.NumCella
-                                              GROUP BY p.NumCella));
-                                              
--- Oppure                              
+                                              GROUP BY p.NumCella));                         
+*/
 
-SELECT c.NumCella
+SELECT c.*
 FROM celle c
 LEFT JOIN persone p ON c.NumCella = p.NumCella
 GROUP BY c.NumCella, c.Capienza
 HAVING COUNT(p.CUI) < c.Capienza;
 
--- Poi segna e rimuovi
+/* Java [List<Cella>] */
+
+-- _____________________________________________
+/*
+	A3b -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
+*/
+
 UPDATE Persone
 SET NumCella = 4
 WHERE CUI = 'KNBOBI370825C';
@@ -309,7 +323,7 @@ WHERE CUI = 'KNBOBI370825C';
 DELETE FROM Equipaggi
 WHERE CUIAstronauta = 'KNBOBI370825C';
 
-/* Java
+/* Java [Persona non static]
 UPDATE Persone
 SET NumCella = ?
 WHERE CUI = ?;
@@ -326,6 +340,8 @@ SELECT COUNT(DISTINCT p.CUI) AS `Astronauti in porto`
 FROM astronavi a, equipaggi e, persone p
 WHERE ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = a.Targa) OR (p.CUI = a.CUICapitano))
 AND a.numeroPosto IS NOT NULL;
+
+/* Java [Porto.Statistiche->int] */
 
 -- _____________________________________________
 /*
@@ -358,7 +374,7 @@ SELECT
     ROUND(SUM(CASE WHEN Esito = 'R' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS `% Rifiutate`
 FROM RichiesteInIntervallo;
 
-/* Java
+/* Java [Porto.Statistiche-Pair<Double,Double>]
 WITH RichiesteInIntervallo AS (
 	SELECT *
     FROM Richieste
@@ -379,6 +395,8 @@ SELECT p.*
 FROM posteggi p 
 WHERE (p.codArea, p.numeroPosto) NOT IN (SELECT a.codArea, a.numeroPosto
 										 FROM astronavi a);
+										
+/* Java [List<Posteggio>] */
 
 -- _____________________________________________
 /*
@@ -390,3 +408,5 @@ WHERE c.CodRichiesta = r.CodRichiesta
 GROUP BY r.TargaAstronave
 ORDER BY QtaTot DESC
 LIMIT 50;
+
+/* Java [Porto.Statistiche -> Map<Astronave, Integer>] */

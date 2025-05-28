@@ -7,10 +7,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import porto.data.Material;
-import porto.data.Product;
-import porto.data.ProductPreview;
-import porto.data.Tag;
+import porto.data.deleteme.Material;
+import porto.data.deleteme.Product;
+import porto.data.deleteme.ProductPreview;
+import porto.data.deleteme.Tag;
 
 // This is a mocked implementation that uses an in-memory map of products
 // instead of connecting to a database.

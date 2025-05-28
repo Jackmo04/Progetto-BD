@@ -1,4 +1,4 @@
-package porto.data;
+package porto.data.deleteme;
 
 public final class Queries {
 

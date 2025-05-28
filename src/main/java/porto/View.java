@@ -20,8 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import porto.data.Product;
-import porto.data.ProductPreview;
+import porto.data.deleteme.Product;
+import porto.data.deleteme.ProductPreview;
 
 public final class View {
 

@@ -3,7 +3,7 @@ package porto;
 import java.util.Objects;
 
 import porto.data.DAOException;
-import porto.data.ProductPreview;
+import porto.data.deleteme.ProductPreview;
 import porto.model.Model;
 
 // The controller provides a holistic description of how the outside world can
