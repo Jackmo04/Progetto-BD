@@ -16,14 +16,11 @@ public interface Model {
 
     List<ProductPreview> loadPreviews();
 
-    // Create a mocked version of the model.
-    //
-    static Model mock() {
-        return new MockedModel();
-    }
-
-    // Create a model that connects to a database using the given connection.
-    //
+    /**
+     * Create a model from a database connection.
+     * @param connection
+     * @return
+     */
     static Model fromConnection(Connection connection) {
         return new DBModel(connection);
     }
