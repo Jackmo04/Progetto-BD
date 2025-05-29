@@ -17,10 +17,11 @@ import porto.data.PersonImpl;
 import porto.data.PlanetImpl;
 import porto.data.ShipModelImpl;
 import porto.data.StarshipImpl;
+import porto.data.dao.PlanetDAOImpl;
 import porto.data.dao.StarshipDAOImpl;
 import porto.data.utils.DAOUtils;
 
-class TestStarshipDAO {
+class TestPlanetDAO {
 
     private static Connection connection;
     private static Savepoint savepoint;
@@ -43,23 +44,12 @@ class TestStarshipDAO {
     }
 
     @Test
-    public void fromPersonCUI() {
-        var actual = new StarshipDAOImpl().ofPerson(connection, "STRMTR0000001");
+    public void fromCodPlanet() {
+        var actual = new PlanetDAOImpl().getFromCodPlanet(connection, "DTHSTR0");
         var expected = Set.of(
-            new StarshipImpl(
-                "CR900004",
-                "Tantive IV",
-                new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1),
-                new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
-                new PersonImpl("STRMTR0000001", "Trooper1", "pippo", "Stormtrooper", "00001", "Clone", "2000-01-01", false, "Imperiale", "Astronauta", null, new PlanetImpl("DTHSTR0" ,"Morte Nera" ))
-            ),
-            new StarshipImpl(
-                "STARD003",
-                "Executor",
-                new ParkingSpaceImpl(new ParkingAreaImpl(3, "Officina"), 5),
-                new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
-                 new PersonImpl("STRMTR0000001", "Trooper1", "pippo", "Stormtrooper", "00001", "Clone", "2000-01-01", false, "Imperiale", "Astronauta", null, new PlanetImpl("DTHSTR0" ,"Morte Nera" ))
-            )
+            new PlanetImpl("DTHSTR0" , "Morte Nera" ),
+            new PlanetImpl("CORU001" , "Coruscant" )
+            
         );
         assertEquals(expected, actual);
     }

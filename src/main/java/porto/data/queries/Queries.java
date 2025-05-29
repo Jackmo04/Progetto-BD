@@ -9,4 +9,13 @@ public final class Queries {
         WHERE ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = n.Targa) OR (p.CUI = n.CUICapitano))
         AND p.CUI = ?;
     """;
+
+    public static final String PLANET_FROM_CODPLANET = 
+    """
+        SELECT p.*
+        FROM pianeta p
+        WHERE p.CodPianeta = ?;
+    """;
+
+
 }

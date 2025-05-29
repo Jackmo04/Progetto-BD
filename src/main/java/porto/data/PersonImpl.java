@@ -3,7 +3,6 @@ package porto.data;
 import java.util.Optional;
 
 import porto.data.api.Cell;
-import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
 import porto.data.api.Planet;
 

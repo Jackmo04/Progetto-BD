@@ -4,10 +4,8 @@ import java.util.Optional;
 
 public interface Person {
 
-        
     public String getCUI();
 
-  
     public String getName();
 
     public String getUsername();
@@ -23,6 +21,7 @@ public interface Person {
     public Planet getBornPlace();
 
     public Boolean isWanted();
+
     public void setWanted(Boolean wanted);
 
     public String getIdeology();
@@ -30,6 +29,7 @@ public interface Person {
     public String getRole();
 
     public Optional<Cell> getCell();
+
     public void setCell(Cell cell);
 
 }
