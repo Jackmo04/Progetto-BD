@@ -45,7 +45,7 @@ public class StarshipDAOImpl implements StarshipDAO {
                 var modelCode = resultSet.getString("CodModello");
                 var model = new ShipModelDAOImpl(connection).getFromCode(modelCode);
                 var capitanCUI = resultSet.getString("CUIcapitano");
-                var capitan = new PersonDAOImplTemp(connection).getFromCUI(capitanCUI);
+                var capitan = new PersonDAOImpl(connection).getFromCUI(capitanCUI);
                 var ship = new StarshipImpl(plateNumber, name, Optional.ofNullable(parkingSpace), model, capitan);
                 ships.add(ship);
             }

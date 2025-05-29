@@ -54,7 +54,7 @@ public class PersonImpl implements Person {
             Boolean wanted,
             String ideology,
             String role,
-            Cell cell,
+            Optional<Cell> cell,
             Planet bornPlace) {
         this.CUI = CUI;
         this.username = username;
@@ -66,7 +66,7 @@ public class PersonImpl implements Person {
         this.wanted = wanted;
         this.ideology = ideology;
         this.role = role;
-        this.cell = Optional.ofNullable(cell);
+        this.cell = cell;
         this.bornPlace = bornPlace;
     }
 

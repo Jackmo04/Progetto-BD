@@ -41,8 +41,8 @@ class TestPlanetDAO {
 
     @Test
     public void fromCodPlanet() {
-        var actual = Set.of(new PlanetDAOImpl().getFromCodPlanet(connection, "DTHSTR0"),
-                new PlanetDAOImpl().getFromCodPlanet(connection, "CORU001"));
+        var actual = Set.of(new PlanetDAOImpl(connection).getFromCodPlanet( "DTHSTR0"),
+                new PlanetDAOImpl(connection).getFromCodPlanet( "CORU001"));
         var expected = Set.of(
                 Optional.of(new PlanetImpl("DTHSTR0", "Morte Nera")),
                 Optional.of(new PlanetImpl("CORU001", "Coruscant"))

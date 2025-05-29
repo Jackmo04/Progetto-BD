@@ -12,8 +12,19 @@ import porto.data.utils.DAOUtils;
 
 public class PlanetDAOImpl implements PlanetDAO {
 
+    private final Connection connection;
+
+    /**
+     * Constructor for PlanetDAOImpl.
+     * 
+     * @param connection the database connection
+     */
+    public PlanetDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
-    public Optional<Planet> getFromCodPlanet(Connection connection, String codPlanet) throws DAOException {
+    public Optional<Planet> getFromCodPlanet(String codPlanet) throws DAOException {
 
         try (
                 var statement = DAOUtils.prepare(connection, Queries.PLANET_FROM_CODPLANET, codPlanet);

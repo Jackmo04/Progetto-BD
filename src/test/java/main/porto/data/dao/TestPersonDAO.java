@@ -5,19 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
-import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import porto.data.CellImpl;
-import porto.data.dao.CellDAOImpl;
+import porto.data.dao.PersonDAOImpl;
 import porto.data.utils.DAOUtils;
 
 
-class TestCellDAO {
+class TestPersonDAO {
 
     private static Connection connection;
     private static Savepoint savepoint;
@@ -40,13 +38,10 @@ class TestCellDAO {
     }
 
     @Test
-    public void fromNumCell() {
-        var actual = Set.of(new CellDAOImpl(connection).getFromNumCell( 1),
-                new CellDAOImpl(connection).getFromNumCell( 2));
-        var expected = Set.of(
-                Optional.of(new CellImpl(1, 5)),
-                Optional.of(new CellImpl(2, 3))
-        );
+    public void fromCodPlanet() {
+        var actual = Set.of(new PersonDAOImpl(connection).getFromCUI("SKWLKE510925T").get().getCUI(),
+                new PersonDAOImpl(connection).getFromCUI("CHWBCC000101K").get().getCUI());
+        var expected = Set.of("SKWLKE510925T" ,"CHWBCC000101K" );
         assertEquals(expected, actual);
     }
 

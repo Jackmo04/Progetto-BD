@@ -12,8 +12,18 @@ import porto.data.utils.DAOUtils;
 
 public class CellDAOImpl implements CellDAO{
 
+        private final Connection connection;
+
+    /**
+     * Constructor for StarshipDAOImpl.
+     * @param connection the database connection
+     */
+    public CellDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
-    public Optional<Cell> getFromNumCell(Connection connection, Integer numCell) throws DAOException {
+    public Optional<Cell> getFromNumCell(Integer numCell) throws DAOException {
         try (
                 var statement = DAOUtils.prepare(connection, Queries.CELL_FROM_NUMCELL, numCell);
                 var resultSet = statement.executeQuery();) {
