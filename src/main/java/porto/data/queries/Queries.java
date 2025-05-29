@@ -24,4 +24,12 @@ public final class Queries {
         WHERE m.DimensioneArea = dp.Superficie
         AND CodModello = ?;
     """;
+
+    public static final String PLANET_FROM_CODPLANET = 
+    """
+        SELECT p.*
+        FROM pianeti p
+        WHERE p.CodPianeta = ?;
+    """;
+
 }
