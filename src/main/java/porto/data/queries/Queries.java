@@ -13,7 +13,7 @@ public final class Queries {
     public static final String PLANET_FROM_CODPLANET = 
     """
         SELECT p.*
-        FROM pianeta p
+        FROM pianeti p
         WHERE p.CodPianeta = ?;
     """;
 

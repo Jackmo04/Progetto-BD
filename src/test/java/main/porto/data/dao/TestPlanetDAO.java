@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
@@ -43,8 +44,8 @@ class TestPlanetDAO {
         var actual = Set.of(new PlanetDAOImpl().getFromCodPlanet(connection, "DTHSTR0"),
                 new PlanetDAOImpl().getFromCodPlanet(connection, "CORU001"));
         var expected = Set.of(
-                new PlanetImpl("DTHSTR0", "Morte Nera"),
-                new PlanetImpl("CORU001", "Coruscant")
+                Optional.of(new PlanetImpl("DTHSTR0", "Morte Nera")),
+                Optional.of(new PlanetImpl("CORU001", "Coruscant"))
         );
         assertEquals(expected, actual);
     }
