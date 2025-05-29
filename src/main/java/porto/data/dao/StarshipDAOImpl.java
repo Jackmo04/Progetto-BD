@@ -3,10 +3,10 @@ package porto.data.dao;
 import java.sql.Connection;
 import java.util.Set;
 
-import porto.data.Queries;
 import porto.data.StarshipImpl;
 import porto.data.api.Starship;
 import porto.data.api.dao.StarshipDAO;
+import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 

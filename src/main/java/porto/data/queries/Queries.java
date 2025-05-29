@@ -1,4 +1,4 @@
-package porto.data;
+package porto.data.queries;
 
 public final class Queries {
 
