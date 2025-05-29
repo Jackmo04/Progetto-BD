@@ -5,6 +5,10 @@ import java.util.Optional;
 import porto.data.api.Person;
 import porto.data.utils.DAOException;
 
+/**
+ * Interface for Data Access Object (DAO) that provides methods to interact with Person data.
+ * This interface defines methods for retrieving a person by their CUIPerson.
+ */
 public interface PersonDAO {
 
     /**

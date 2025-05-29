@@ -5,6 +5,9 @@ import java.util.Optional;
 import porto.data.api.Cell;
 import porto.data.utils.DAOException;
 
+/**
+ * Interface for Data Access Object (DAO) that provides methods to interact with Cell data.
+ */
 public interface CellDAO
  {
 

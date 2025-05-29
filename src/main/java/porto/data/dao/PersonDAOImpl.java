@@ -23,6 +23,9 @@ public class PersonDAOImpl implements PersonDAO{
         this.connection = connection;
     }
 
+       /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Person> getFromCUI(String CUIPerson) throws DAOException {
         try (

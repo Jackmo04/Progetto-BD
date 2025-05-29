@@ -10,6 +10,10 @@ import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
+/**
+ * Implementation of the PlanetDAO interface for accessing Planet data from the database.
+ * This class provides methods to retrieve Planet information based on specific criteria.
+ */
 public class PlanetDAOImpl implements PlanetDAO {
 
     private final Connection connection;
@@ -23,6 +27,9 @@ public class PlanetDAOImpl implements PlanetDAO {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Planet> getFromCodPlanet(String codPlanet) throws DAOException {
 

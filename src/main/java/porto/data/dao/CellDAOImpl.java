@@ -10,6 +10,10 @@ import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
+/**
+ * Implementation of the CellDAO interface for accessing Cell data from the database.
+ * This class provides methods to retrieve Cell information based on specific criteria.
+ */
 public class CellDAOImpl implements CellDAO{
 
         private final Connection connection;
@@ -22,6 +26,9 @@ public class CellDAOImpl implements CellDAO{
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Cell> getFromNumCell(Integer numCell) throws DAOException {
         try (
