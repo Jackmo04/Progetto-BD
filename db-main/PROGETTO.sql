@@ -4,8 +4,6 @@
 -- * DB-MAIN version: 11.0.2              
 -- * Generator date: Sep 14 2021              
 -- * Generation date: Mon May 19 16:19:42 2025 
--- * LUN file: C:\GitRepository\Progetto-BD\db-main\PROGETTO.lun 
--- * Schema: Porto/SQL1 
 -- ********************************************* 
 
 
