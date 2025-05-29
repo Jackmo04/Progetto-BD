@@ -11,8 +11,18 @@ import porto.data.utils.DAOUtils;
 
 public class ParkingAreaDAOImpl implements ParkingAreaDAO {
 
+    private final Connection connection;
+
+    /**
+     * Constructor for ParkingAreaDAOImpl.
+     * @param connection the database connection
+     */
+    public ParkingAreaDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
-    public ParkingArea getFromCode(Connection connection, int codArea) {
+    public ParkingArea getFromCode(int codArea) {
         try (
             var statement = DAOUtils.prepare(connection, Queries.AREA_FROM_CODE, codArea);
             var resultSet = statement.executeQuery();

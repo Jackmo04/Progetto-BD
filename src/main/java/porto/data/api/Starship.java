@@ -1,5 +1,6 @@
 package porto.data.api;
 
+import java.sql.Connection;
 import java.util.Optional;
 
 public interface Starship {
@@ -33,4 +34,11 @@ public interface Starship {
      * @return the captain
      */
     Person capitan();
+
+    /**
+     * Returns the last request made by the starship.
+     * @param connection the database connection to use
+     * @return the last request made by the starship
+     */
+    Request lastRequest(Connection connection);
 }

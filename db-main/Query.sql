@@ -36,6 +36,7 @@ FROM astronavi n, persone p, equipaggi e
 WHERE ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = n.Targa) OR (p.CUI = n.CUICapitano))
 AND p.CUI = 'STRMTR0000001';
 
+
 /* Java [Set<Astronave>]
 SELECT DISTINCT n.*
 FROM astronavi n, persone p, equipaggi e

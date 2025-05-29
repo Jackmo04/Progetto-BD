@@ -50,7 +50,7 @@ class TestStarshipDAO {
         final String CUI = "STRMTR0000001";
         LOGGER.info("Testing StarshipDAO.ofPerson with CUI: {}", CUI);
 
-        var actual = new StarshipDAOImpl().ofPerson(connection, CUI);
+        var actual = new StarshipDAOImpl(connection).ofPerson(CUI);
         var expected = Set.of(
             new StarshipImpl(
                 "CR900004",

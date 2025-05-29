@@ -14,11 +14,21 @@ import porto.data.utils.DAOUtils;
 
 public class StarshipDAOImpl implements StarshipDAO {
 
+    private final Connection connection;
+
+    /**
+     * Constructor for StarshipDAOImpl.
+     * @param connection the database connection
+     */
+    public StarshipDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public Set<Starship> ofPerson(Connection connection, String CUIPerson) throws DAOException {
+    public Set<Starship> ofPerson(String CUIPerson) throws DAOException {
         Set<Starship> ships = new HashSet<>();
         try (
             var statement = DAOUtils.prepare(connection, Queries.SHIPS_FROM_PERSON, CUIPerson);
@@ -31,11 +41,11 @@ public class StarshipDAOImpl implements StarshipDAO {
                 var spaceNumber = resultSet.getInt("NumeroPosto");
                 var parkingSpace = codArea == 0 || spaceNumber == 0
                     ? null
-                    : new ParkingSpaceDAOImpl().of(connection, codArea, spaceNumber);
+                    : new ParkingSpaceDAOImpl(connection).of(codArea, spaceNumber);
                 var modelCode = resultSet.getString("CodModello");
-                var model = new ShipModelDAOImpl().getFromCode(connection, modelCode);
+                var model = new ShipModelDAOImpl(connection).getFromCode(modelCode);
                 var capitanCUI = resultSet.getString("CUIcapitano");
-                var capitan = new PersonDAOImpl().getFromCUI(connection, capitanCUI);
+                var capitan = new PersonDAOImplTemp(connection).getFromCUI(capitanCUI);
                 var ship = new StarshipImpl(plateNumber, name, Optional.ofNullable(parkingSpace), model, capitan);
                 ships.add(ship);
             }

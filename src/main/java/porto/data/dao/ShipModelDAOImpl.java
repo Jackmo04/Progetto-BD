@@ -11,8 +11,18 @@ import porto.data.utils.DAOUtils;
 
 public class ShipModelDAOImpl implements ShipModelDAO {
 
+    private final Connection connection;
+
+    /**
+     * Constructor for ShipModelDAOImpl.
+     * @param connection the database connection
+     */
+    public ShipModelDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
-    public ShipModel getFromCode(Connection connection, String codModel) {
+    public ShipModel getFromCode(String codModel) {
         try (
             var statement = DAOUtils.prepare(connection, Queries.MODEL_FROM_CODE, codModel);
             var resultSet = statement.executeQuery();
