@@ -11,15 +11,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import porto.data.ParkingAreaImpl;
-import porto.data.ParkingSpaceImpl;
-import porto.data.PersonImpl;
 import porto.data.PlanetImpl;
-import porto.data.ShipModelImpl;
-import porto.data.StarshipImpl;
 import porto.data.dao.PlanetDAOImpl;
-import porto.data.dao.StarshipDAOImpl;
 import porto.data.utils.DAOUtils;
+
 
 class TestPlanetDAO {
 
@@ -45,11 +40,11 @@ class TestPlanetDAO {
 
     @Test
     public void fromCodPlanet() {
-        var actual = new PlanetDAOImpl().getFromCodPlanet(connection, "DTHSTR0");
+        var actual = Set.of(new PlanetDAOImpl().getFromCodPlanet(connection, "DTHSTR0"),
+                new PlanetDAOImpl().getFromCodPlanet(connection, "CORU001"));
         var expected = Set.of(
-            new PlanetImpl("DTHSTR0" , "Morte Nera" ),
-            new PlanetImpl("CORU001" , "Coruscant" )
-            
+                new PlanetImpl("DTHSTR0", "Morte Nera"),
+                new PlanetImpl("CORU001", "Coruscant")
         );
         assertEquals(expected, actual);
     }

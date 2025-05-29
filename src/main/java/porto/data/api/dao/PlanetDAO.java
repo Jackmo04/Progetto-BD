@@ -3,7 +3,6 @@ package porto.data.api.dao;
 import java.sql.Connection;
 import java.util.Optional;
 
-import porto.data.api.Person;
 import porto.data.api.Planet;
 import porto.data.utils.DAOException;
 
