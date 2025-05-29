@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import porto.data.DAOException;
-import porto.data.DAOUtils;
-import porto.data.Printer;
+import porto.data.utils.DAOException;
+import porto.data.utils.DAOUtils;
 
 public final class Material {
 

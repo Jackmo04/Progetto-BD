@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import porto.data.DAOException;
-import porto.data.DAOUtils;
-import porto.data.Printer;
+import porto.data.utils.DAOException;
+import porto.data.utils.DAOUtils;
 
 public final class ProductPreview {
 

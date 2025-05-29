@@ -2,7 +2,7 @@ package porto;
 
 import java.sql.SQLException;
 
-import porto.data.DAOUtils;
+import porto.data.utils.DAOUtils;
 import porto.model.Model;
 
 public final class App {

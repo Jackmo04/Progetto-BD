@@ -1,4 +1,4 @@
-package porto.data;
+package porto.data.utils;
 
 import java.io.Serial;
 
