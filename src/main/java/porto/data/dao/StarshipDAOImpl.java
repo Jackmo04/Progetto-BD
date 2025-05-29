@@ -1,6 +1,8 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import porto.data.StarshipImpl;
@@ -17,7 +19,7 @@ public class StarshipDAOImpl implements StarshipDAO {
      */
     @Override
     public Set<Starship> ofPerson(Connection connection, String CUIPerson) throws DAOException {
-        Set<Starship> ships = Set.of();
+        Set<Starship> ships = new HashSet<>();
         try (
             var statement = DAOUtils.prepare(connection, Queries.SHIPS_FROM_PERSON, CUIPerson);
             var resultSet = statement.executeQuery();
@@ -34,7 +36,7 @@ public class StarshipDAOImpl implements StarshipDAO {
                 var model = new ShipModelDAOImpl().getFromCode(connection, modelCode);
                 var capitanCUI = resultSet.getString("CUIcapitano");
                 var capitan = new PersonDAOImpl().getFromCUI(connection, capitanCUI);
-                var ship = new StarshipImpl(plateNumber, name, parkingSpace, model, capitan);
+                var ship = new StarshipImpl(plateNumber, name, Optional.ofNullable(parkingSpace), model, capitan);
                 ships.add(ship);
             }
         } catch (Exception e) {

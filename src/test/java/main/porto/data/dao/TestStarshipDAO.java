@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import porto.data.ParkingAreaImpl;
 import porto.data.ParkingSpaceImpl;
-import porto.data.PersonImpl;
+import porto.data.PersonImplTemp;
 import porto.data.ShipModelImpl;
 import porto.data.StarshipImpl;
 import porto.data.dao.StarshipDAOImpl;
@@ -43,21 +44,23 @@ class TestStarshipDAO {
 
     @Test
     public void fromPersonCUI() {
-        var actual = new StarshipDAOImpl().ofPerson(connection, "STRMTR0000001");
+        final String CUI = "STRMTR0000001";
+
+        var actual = new StarshipDAOImpl().ofPerson(connection, CUI);
         var expected = Set.of(
             new StarshipImpl(
                 "CR900004",
                 "Tantive IV",
-                new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1),
+                Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1)),
                 new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
-                new PersonImpl("STRMTR0000001", "Pippo", "Pluto")
+                new PersonImplTemp("MULDRT600322D", "Pippo", "P.pluto") // TODO: replace with real person data
             ),
             new StarshipImpl(
                 "STARD003",
                 "Executor",
-                new ParkingSpaceImpl(new ParkingAreaImpl(3, "Officina"), 5),
+                Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(3, "Officina"), 5)),
                 new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
-                new PersonImpl("STRMTR0000001", "Pippo", "Pluto")
+                new PersonImplTemp("MULDRT600322D", "Pippo", "P.pluto") // TODO: replace with real person data
             )
         );
         assertEquals(expected, actual);

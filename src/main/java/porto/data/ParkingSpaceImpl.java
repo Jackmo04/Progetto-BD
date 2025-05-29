@@ -3,6 +3,9 @@ package porto.data;
 import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
 
-public record ParkingSpaceImpl(ParkingArea parkingArea, int spaceNumber) implements ParkingSpace {
+public record ParkingSpaceImpl(
+    ParkingArea parkingArea,
+    int spaceNumber
+) implements ParkingSpace {
 
 }
