@@ -11,6 +11,8 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import porto.data.ParkingAreaImpl;
 import porto.data.ParkingSpaceImpl;
@@ -22,6 +24,7 @@ import porto.data.utils.DAOUtils;
 
 class TestStarshipDAO {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestStarshipDAO.class);
     private static Connection connection;
     private static Savepoint savepoint;
 
@@ -45,6 +48,7 @@ class TestStarshipDAO {
     @Test
     public void fromPersonCUI() {
         final String CUI = "STRMTR0000001";
+        LOGGER.info("Testing StarshipDAO.ofPerson with CUI: {}", CUI);
 
         var actual = new StarshipDAOImpl().ofPerson(connection, CUI);
         var expected = Set.of(
