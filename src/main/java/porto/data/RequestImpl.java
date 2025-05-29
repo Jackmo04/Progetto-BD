@@ -24,5 +24,11 @@ public record RequestImpl(
     Planet departurePlanet,
     Planet destinationPlanet
 ) implements Request {
+
+    @Override
+    public Planet destinationPlane() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'destinationPlane'");
+    }
     
 }

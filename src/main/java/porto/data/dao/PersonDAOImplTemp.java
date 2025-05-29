@@ -2,7 +2,6 @@ package porto.data.dao;
 
 import java.sql.Connection;
 
-import porto.data.PersonImplTemp;
 import porto.data.api.Person;
 import porto.data.api.dao.PersonDAO;
 import porto.data.utils.DAOException;

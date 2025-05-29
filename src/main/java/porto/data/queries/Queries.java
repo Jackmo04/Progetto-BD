@@ -32,4 +32,11 @@ public final class Queries {
         WHERE p.CodPianeta = ?;
     """;
 
+        public static final String CELL_FROM_NUMCELL = 
+    """
+        SELECT c.*
+        FROM celle c
+        WHERE c.NumCella = ?;
+    """;
+
 }
