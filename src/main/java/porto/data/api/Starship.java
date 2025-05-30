@@ -3,6 +3,8 @@ package porto.data.api;
 import java.sql.Connection;
 import java.util.Optional;
 
+import porto.data.PersonImpl;
+
 public interface Starship {
 
     /**
@@ -33,7 +35,7 @@ public interface Starship {
      * Returns the captain of the starship.
      * @return the captain
      */
-    Optional<Person> capitan();
+    Optional<PersonImpl> capitan();
 
     /**
      * Returns the last request made by the starship.

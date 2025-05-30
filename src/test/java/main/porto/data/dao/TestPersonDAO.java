@@ -39,8 +39,8 @@ class TestPersonDAO {
 
     @Test
     public void fromCodPlanet() {
-        var actual = Set.of(new PersonDAOImpl(connection).getFromCUI("SKWLKE510925T").get().getCUI(),
-                new PersonDAOImpl(connection).getFromCUI("CHWBCC000101K").get().getCUI());
+        var actual = Set.of(new PersonDAOImpl(connection).getFromCUI("SKWLKE510925T").get().CUI(),
+                new PersonDAOImpl(connection).getFromCUI("CHWBCC000101K").get().CUI());
         var expected = Set.of("SKWLKE510925T" ,"CHWBCC000101K" );
         assertEquals(expected, actual);
     }

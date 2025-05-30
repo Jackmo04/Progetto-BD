@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.util.Optional;
 
 import porto.data.PersonImpl;
-import porto.data.api.Person;
 import porto.data.api.dao.PersonDAO;
 import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
@@ -27,7 +26,7 @@ public class PersonDAOImpl implements PersonDAO{
      * {@inheritDoc}
      */
     @Override
-    public Optional<Person> getFromCUI(String CUIPerson) throws DAOException {
+    public Optional<PersonImpl> getFromCUI(String CUIPerson) throws DAOException {
         try (
                 var statement = DAOUtils.prepare(connection, Queries.PERSON_FROM_CUI, CUIPerson);
                 var resultSet = statement.executeQuery();) {
@@ -43,7 +42,7 @@ public class PersonDAOImpl implements PersonDAO{
                 var ideology = resultSet.getString("Ideologia");
                 var role = resultSet.getString("Ruolo");
                 var cell = new CellDAOImpl(connection).getFromNumCell(resultSet.getInt("NumCella"));
-                var bornPlanet = new PlanetDAOImpl(connection).getFromCodPlanet(resultSet.getString("PianetaNascita")).get();
+                var bornPlanet = new PlanetDAOImpl(connection).getFromCodPlanet(resultSet.getString("PianetaNascita"));
                 var person = new PersonImpl(CUI, username, password, name, surname, razza, borndate, wanted, ideology, role, cell, bornPlanet);
                 return Optional.of(person);
             } else {

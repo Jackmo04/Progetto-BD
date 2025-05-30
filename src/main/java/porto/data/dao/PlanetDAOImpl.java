@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.util.Optional;
 
 import porto.data.PlanetImpl;
-import porto.data.api.Planet;
 import porto.data.api.dao.PlanetDAO;
 import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
@@ -31,7 +30,7 @@ public class PlanetDAOImpl implements PlanetDAO {
      * {@inheritDoc}
      */
     @Override
-    public Optional<Planet> getFromCodPlanet(String codPlanet) throws DAOException {
+    public Optional<PlanetImpl> getFromCodPlanet(String codPlanet) throws DAOException {
 
         try (
                 var statement = DAOUtils.prepare(connection, Queries.PLANET_FROM_CODPLANET, codPlanet);
