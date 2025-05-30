@@ -4,12 +4,12 @@ USE PortoMorteNera;
 /*
 	S1 -- Creare un nuovo account persona registrando tutti i propri dati nell’applicazione.
 */
-INSERT INTO PERSONE (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, PianetaNascita) VALUES
-('SKWLKE510925T', 'L.Skywalker', 'Luke', 'Skywalker', 'Umano', '1951-09-25', FALSE, 'Neutrale', 'Astronauta', 'TATO002');
+INSERT INTO PERSONE (CUI, Username,Password , Nome, Cognome, Razza, DataNascita, Ideologia, Ruolo, PianetaNascita) VALUES
+('PROVA', 'L.Skywalker', '' , 'Luke', 'Skywalker', 'Umano', '1951-09-25', 'Neutrale', 'Astronauta', 'TATO002');
 
 /* Java [->Persona]
-INSERT INTO PERSONE (CUI, Username, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
-(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO PERSONE (CUI, Username, Password , Nome, Cognome, Razza, DataNascita, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
+(?, ?, ?, ?, ?, ?, ?, ?, ?,?);
 */
 
 -- _____________________________________________

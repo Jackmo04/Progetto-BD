@@ -38,10 +38,21 @@ class TestPersonDAO {
     }
 
     @Test
-    public void fromCodPlanet() {
+    public void fromCUI() {
         var actual = Set.of(new PersonDAOImpl(connection).getFromCUI("SKWLKE510925T").get().CUI(),
                 new PersonDAOImpl(connection).getFromCUI("CHWBCC000101K").get().CUI());
         var expected = Set.of("SKWLKE510925T" ,"CHWBCC000101K" );
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void addPerson() {
+        new PersonDAOImpl(connection).addPerson("STRMTR0000004", "Trooper4", "", "Stormtrooper",
+        "00004", "Clone", "2000-01-01", "Imperiale",
+         "Astronauta",  "DTHSTR0");
+
+        var actual = new PersonDAOImpl(connection).getFromCUI("STRMTR0000004").get().CUI();
+        var expected = "STRMTR0000004";
         assertEquals(expected, actual);
     }
 

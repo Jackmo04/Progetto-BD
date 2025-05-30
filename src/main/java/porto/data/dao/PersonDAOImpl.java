@@ -6,12 +6,13 @@ import java.util.Optional;
 import porto.data.PersonImpl;
 import porto.data.api.dao.PersonDAO;
 import porto.data.queries.Queries;
+import porto.data.queries.QueryAction;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
-public class PersonDAOImpl implements PersonDAO{
+public class PersonDAOImpl implements PersonDAO {
 
-        private final Connection connection;
+    private final Connection connection;
 
     /**
      * Constructor for PlanetDAOImpl.
@@ -22,7 +23,7 @@ public class PersonDAOImpl implements PersonDAO{
         this.connection = connection;
     }
 
-       /**
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -43,7 +44,8 @@ public class PersonDAOImpl implements PersonDAO{
                 var role = resultSet.getString("Ruolo");
                 var cell = new CellDAOImpl(connection).getFromNumCell(resultSet.getInt("NumCella"));
                 var bornPlanet = new PlanetDAOImpl(connection).getFromCodPlanet(resultSet.getString("PianetaNascita"));
-                var person = new PersonImpl(CUI, username, password, name, surname, razza, borndate, wanted, ideology, role, cell, bornPlanet);
+                var person = new PersonImpl(CUI, username, password, name, surname, razza, borndate, wanted, ideology,
+                        role, cell, bornPlanet);
                 return Optional.of(person);
             } else {
                 return Optional.empty();
@@ -52,5 +54,19 @@ public class PersonDAOImpl implements PersonDAO{
             throw new DAOException(e);
         }
 
-}
+    }
+
+    @Override
+    public void addPerson(String CUI, String username, String password, String name, String surname, String race,
+            String borndate,
+            String ideology, String role, String bornPlanet) throws DAOException {
+        try (
+                var statement = DAOUtils.prepare(connection, QueryAction.S1_ADD_PERSON, CUI, username, password,
+                        name, surname, race, borndate,
+                        ideology, role, bornPlanet);
+                var resultSet = statement.executeQuery();) {
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
 }
