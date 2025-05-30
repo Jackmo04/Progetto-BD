@@ -64,7 +64,8 @@ public class PersonDAOImpl implements PersonDAO {
                 var statement = DAOUtils.prepare(connection, QueryAction.S1_ADD_PERSON, CUI, username, password,
                         name, surname, race, borndate,
                         ideology, role, bornPlanet);
-                var resultSet = statement.executeQuery();) {
+        ) {
+            statement.executeUpdate();
         } catch (Exception e) {
             throw new DAOException(e);
         }
