@@ -74,4 +74,20 @@ public class PersonDAOImpl implements PersonDAO {
             throw new DAOException(e);
         }
     }
+
+    @Override
+    public Boolean isValidPerson(String cuiUsername , String password) throws DAOException {
+        
+                try (
+                var statement = DAOUtils.prepare(connection, QueryAction.S2A_ACCESS_DB_REQUEST, cuiUsername , password);
+                var resultSet = statement.executeQuery();) {
+            if (resultSet.next()) {
+                return true; // If we found a person with matching CUI and password, return true
+            } else {
+                return false; // No matching person found
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
 }

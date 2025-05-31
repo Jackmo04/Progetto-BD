@@ -16,7 +16,6 @@ import porto.data.api.Role;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.utils.DAOUtils;
 
-
 class TestPersonDAO {
 
     private static Connection connection;
@@ -43,7 +42,7 @@ class TestPersonDAO {
     public void fromCUI() {
         var actual = Set.of(new PersonDAOImpl(connection).getFromCUI("SKWLKE510925T").get().CUI(),
                 new PersonDAOImpl(connection).getFromCUI("CHWBCC000101K").get().CUI());
-        var expected = Set.of("SKWLKE510925T" ,"CHWBCC000101K" );
+        var expected = Set.of("SKWLKE510925T", "CHWBCC000101K");
         assertEquals(expected, actual);
     }
 
@@ -56,6 +55,17 @@ class TestPersonDAO {
         var actual = new PersonDAOImpl(connection).getFromCUI("STRMTR0000004").get().CUI();
         var expected = "STRMTR0000004";
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void isValidPerson() {
+        var actual = new PersonDAOImpl(connection).isValidPerson("SKWLKE510925T" , "");
+        var expected = true;
+        assertEquals(expected, actual);
+
+        var actual2 = new PersonDAOImpl(connection).isValidPerson("SKWLKE510925T" , "password");
+        var expected2 = false;
+        assertEquals(expected2, actual2);
     }
 
 }
