@@ -16,8 +16,17 @@ public enum Role {
         this.name = name;
     }
 
+    public static Role fromString(String role) {
+        return switch (role.toLowerCase()) {
+            case "astronauta" -> CREW_MEMBER;
+            case "capitano" -> CAPTAIN;
+            case "admin" -> ADMIN;
+            default -> throw new IllegalArgumentException("Unknown role: " + role);
+        };
+    }
 
-    public String getName() {
+    @Override
+    public String toString() {
         return name;
     }
 

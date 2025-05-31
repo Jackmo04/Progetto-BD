@@ -2,7 +2,9 @@ package porto.data.api.dao;
 
 import java.util.Optional;
 
+import porto.data.api.Ideology;
 import porto.data.api.Person;
+import porto.data.api.Role;
 import porto.data.utils.DAOException;
 
 /**
@@ -38,5 +40,5 @@ public interface PersonDAO {
      * @throws DAOException if an error occurs while accessing the database
      */
     void addPerson(String CUI, String username, String password ,String name, String surname, String race, String borndate,
-            String ideology, String role, String bornPlanet) throws DAOException;
+            Ideology ideology, Role role, String bornPlanet) throws DAOException;
 }

@@ -62,13 +62,13 @@ public interface Person {
      * 
      * @return ideology.
      */
-    String ideology();
+    Ideology ideology();
     /**
      * Role of the person in the context of the application.
      * 
      * @return role.
      */
-    String role();
+    Role role();
     /**
      * Optional cell associated with the person.
      * 
@@ -80,6 +80,6 @@ public interface Person {
      * 
      * @return Optional containing Planet if present, otherwise empty.
      */
-    Optional<Planet> bornPlace();
+    Planet bornPlace();
 
 }

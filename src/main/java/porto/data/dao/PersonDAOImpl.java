@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.util.Optional;
 
 import porto.data.PersonImpl;
+import porto.data.api.Ideology;
 import porto.data.api.Person;
+import porto.data.api.Role;
 import porto.data.api.dao.PersonDAO;
 import porto.data.queries.Queries;
 import porto.data.queries.QueryAction;
@@ -41,10 +43,11 @@ public class PersonDAOImpl implements PersonDAO {
                 var razza = resultSet.getString("Razza");
                 var borndate = resultSet.getString("DataNascita");
                 var wanted = resultSet.getBoolean("Ricercato");
-                var ideology = resultSet.getString("Ideologia");
-                var role = resultSet.getString("Ruolo");
+                var ideology = Ideology.fromString(resultSet.getString("Ideologia"));
+                var role = Role.fromString(resultSet.getString("Ruolo"));
                 var cell = new CellDAOImpl(connection).getFromNumCell(resultSet.getInt("NumCella"));
-                var bornPlanet = new PlanetDAOImpl(connection).getFromCodPlanet(resultSet.getString("PianetaNascita"));
+                var planetCod = resultSet.getString("PianetaNascita");
+                var bornPlanet = new PlanetDAOImpl(connection).getFromCodPlanet(planetCod).orElseThrow();
                 var person = new PersonImpl(CUI, username, password, name, surname, razza, borndate, wanted, ideology,
                         role, cell, bornPlanet);
                 return Optional.of(person);
@@ -60,11 +63,11 @@ public class PersonDAOImpl implements PersonDAO {
     @Override
     public void addPerson(String CUI, String username, String password, String name, String surname, String race,
             String borndate,
-            String ideology, String role, String bornPlanet) throws DAOException {
+            Ideology ideology, Role role, String bornPlanet) throws DAOException {
         try (
                 var statement = DAOUtils.prepare(connection, QueryAction.S1_ADD_PERSON, CUI, username, password,
                         name, surname, race, borndate,
-                        ideology, role, bornPlanet);
+                        ideology.toString(), role.toString(), bornPlanet);
         ) {
             statement.executeUpdate();
         } catch (Exception e) {

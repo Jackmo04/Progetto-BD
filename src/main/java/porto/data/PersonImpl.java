@@ -3,8 +3,10 @@ package porto.data;
 import java.util.Optional;
 
 import porto.data.api.Cell;
+import porto.data.api.Ideology;
 import porto.data.api.Person;
 import porto.data.api.Planet;
+import porto.data.api.Role;
 
 /**
  * Implementation of the Person interface.
@@ -29,18 +31,18 @@ import porto.data.api.Planet;
  * @param numCel    Number of cells associated with the person.
  */
 public record PersonImpl(
-        String CUI,
-        String username,
-        String password,
-        String name,
-        String surname,
-        String razza,
-        String bornDate,
-        Boolean wanted,
-        String ideology,
-        String role,
-        Optional<Cell> cell,
-        Optional<Planet> bornPlace
-        ) implements Person {
+    String CUI,
+    String username,
+    String password,
+    String name,
+    String surname,
+    String razza,
+    String bornDate,
+    Boolean wanted,
+    Ideology ideology,
+    Role role,
+    Optional<Cell> cell,
+    Planet bornPlace
+) implements Person {
 
 }

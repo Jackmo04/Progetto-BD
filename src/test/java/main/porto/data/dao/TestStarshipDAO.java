@@ -62,10 +62,10 @@ class TestStarshipDAO {
             "Zabrak",
             "1960-03-22",
             false,
-            Ideology.IMPERIALE.name(),
-            Role.CAPTAIN.name(),
+            Ideology.IMPERIAL,
+            Role.CAPTAIN,
             null,
-            Optional.of(new PlanetImpl("DTHSTR0", "Morte Nera"))
+            new PlanetImpl("DTHSTR0", "Morte Nera")
         );
 
         var actual = new StarshipDAOImpl(connection).ofPerson(CUI);

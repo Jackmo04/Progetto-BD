@@ -33,7 +33,7 @@ public interface Starship {
      * Returns the captain of the starship.
      * @return the captain
      */
-    Optional<Person> capitan();
+    Person capitan();
 
     /**
      * Returns the last request made by the starship.

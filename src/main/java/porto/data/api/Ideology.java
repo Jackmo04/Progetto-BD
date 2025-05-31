@@ -5,9 +5,9 @@ package porto.data.api;
  * Each ideology has a name associated with it.
  */
 public enum Ideology {
-    RIBELLE ("Ribelle"),
-    IMPERIALE ("Imperiale"),
-    NEUTRALE ("Neutrale");
+    REBEL ("Ribelle"),
+    IMPERIAL ("Imperiale"),
+    NEUTRAL ("Neutrale");
 
     private final String name;
 
@@ -20,7 +20,17 @@ public enum Ideology {
         this.name = name;
     }
 
-    public String getName() {
+    public static Ideology fromString(String ideology) {
+        return switch (ideology.toLowerCase()) {
+            case "ribelle" -> REBEL;
+            case "imperiale" -> IMPERIAL;
+            case "neutrale" -> NEUTRAL;
+            default -> throw new IllegalArgumentException("Unknown ideology: " + ideology);
+        };
+    }
+
+    @Override
+    public String toString() {
         return name;
     }
     
