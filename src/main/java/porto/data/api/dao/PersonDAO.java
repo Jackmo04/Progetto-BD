@@ -43,6 +43,15 @@ public interface PersonDAO {
             Ideology ideology, Role role, String bornPlanet) throws DAOException;
 
     /**
+     * Checks if a person is valid based on their CUI and password.
+     * @param cuiUsername the CUI or username of the person
+     * @param password the password of the person
+     * @return true if the person is valid, false otherwise
+     * throws DAOException if an error occurs while accessing the database
+     */
+    boolean isValidPerson(String cuiUsername , String password) throws DAOException;
+
+    /**
      * Clears the cache of persons.
      * @return the number of persons cleared from the cache
      */
