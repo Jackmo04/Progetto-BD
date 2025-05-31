@@ -2,6 +2,7 @@ package porto.data.dao;
 
 import java.sql.Connection;
 import java.util.Optional;
+import java.util.Random;
 
 import porto.data.PersonImpl;
 import porto.data.api.Ideology;
@@ -60,6 +61,9 @@ public class PersonDAOImpl implements PersonDAO {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addPerson(String CUI, String username, String password, String name, String surname, String race,
             String borndate,
@@ -67,19 +71,21 @@ public class PersonDAOImpl implements PersonDAO {
         try (
                 var statement = DAOUtils.prepare(connection, QueryAction.S1_ADD_PERSON, CUI, username, password,
                         name, surname, race, borndate,
-                        ideology.toString(), role.toString(), bornPlanet);
-        ) {
+                        ideology.toString(), role.toString(), bornPlanet);) {
             statement.executeUpdate();
         } catch (Exception e) {
             throw new DAOException(e);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Boolean isValidPerson(String cuiUsername , String password) throws DAOException {
-        
-                try (
-                var statement = DAOUtils.prepare(connection, QueryAction.S2A_ACCESS_DB_REQUEST, cuiUsername , password);
+    public Boolean isValidPerson(String cuiUsername, String password) throws DAOException {
+
+        try (
+                var statement = DAOUtils.prepare(connection, QueryAction.S2A_ACCESS_DB_REQUEST, cuiUsername, password);
                 var resultSet = statement.executeQuery();) {
             if (resultSet.next()) {
                 return true; // If we found a person with matching CUI and password, return true
@@ -89,5 +95,24 @@ public class PersonDAOImpl implements PersonDAO {
         } catch (Exception e) {
             throw new DAOException(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void arrestPerson(String CUI) throws DAOException {
+        var freeCells = new CellDAOImpl(connection).getAllFreeCell();
+        var cellToAssign = freeCells.get(new Random().nextInt(freeCells.size())).numCell();
+
+        try (
+                var statement = DAOUtils.prepare(connection, QueryAction.A3B_ARREST_PERSON, cellToAssign, CUI);
+                var statement2 = DAOUtils.prepare(connection, QueryAction.A3C_DELETE_FROM_EQUIPE, CUI);) {
+            statement.executeUpdate();
+            statement2.executeUpdate();
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+
     }
 }

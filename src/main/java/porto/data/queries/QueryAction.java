@@ -25,6 +25,20 @@ public final class QueryAction {
                 GROUP BY c.NumCella, c.Capienza
                 HAVING COUNT(p.CUI) < c.Capienza;
             """;
+
+            public static final String A3B_ARREST_PERSON =
+        """
+                UPDATE Persone
+                 SET NumCella = ?
+                 WHERE CUI = ?;
+
+
+            """;
+            public static final String A3C_DELETE_FROM_EQUIPE =
+        """
+                DELETE FROM Equipaggi
+                WHERE CUIAstronauta = ?;
+            """;
         
     
 }

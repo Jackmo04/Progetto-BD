@@ -54,6 +54,9 @@ public class CellDAOImpl implements CellDAO {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Cell> getAllFreeCell() throws DAOException {
         var listCell = new ArrayList<Cell>();

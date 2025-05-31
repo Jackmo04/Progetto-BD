@@ -51,4 +51,12 @@ public interface PersonDAO {
      */
     public Boolean isValidPerson(String cuiUsername , String password) throws DAOException;
 
+    /**
+     * Arrests a person by their CUI and assigns them to a cell.
+     * This method updates the person's status to "arrested" and assigns them to a
+     * specific cell.
+     * @param CUI the CUI of the person to be arrested 
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    public void arrestPerson(String CUI ) throws DAOException;
 }
