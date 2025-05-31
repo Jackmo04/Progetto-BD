@@ -301,7 +301,7 @@ WHERE targa = (SELECT targaAstronave
 -- _____________________________________________
 /*
 	A3a -- Visualizza le celle disponibili
-    [Mattia]
+    [Mattia] fatto
 */
 /* old
 SELECT c.NumCella
@@ -325,7 +325,7 @@ HAVING COUNT(p.CUI) < c.Capienza;
 -- _____________________________________________
 /*
 	A3b -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
-    [Mattia]
+    [Mattia] fatto
 */
 
 UPDATE Persone
