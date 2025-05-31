@@ -49,6 +49,36 @@ class TestStarshipDAO {
     }
 
     @Test
+    public void fromPlate() {
+        final String PLATE = "CR900004";
+        LOGGER.info("Testing StarshipDAO.fromPlate with plate: {}", PLATE);
+
+        var actual = new StarshipDAOImpl(connection).fromPlate(PLATE);
+        var expected = Optional.of(new StarshipImpl(
+            "CR900004",
+            "Tantive IV",
+            Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1)),
+            new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
+            new PersonImpl(
+                "MULDRT600322D",
+                "D.Maul",
+                "",
+                "Darth",
+                "Maul",
+                "Zabrak",
+                "1960-03-22",
+                false,
+                Ideology.IMPERIAL,
+                Role.CAPTAIN,
+                Optional.empty(),
+                new PlanetImpl("DANT010", "Dantooine")
+            )
+        ));
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void fromPersonCUI() {
         final String CUI = "STRMTR0000001";
         LOGGER.info("Testing StarshipDAO.ofPerson with CUI: {}", CUI);

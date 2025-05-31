@@ -56,6 +56,35 @@ public class ShipModelDAOImpl implements ShipModelDAO {
      * {@inheritDoc}
      */
     @Override
+    public Set<ShipModel> getAll() {
+        Set<ShipModel> models = new HashSet<>();
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.MODELS_ALL);
+            var resultSet = statement.executeQuery();
+        ) {
+            while (resultSet.next()) {
+                var codModel = resultSet.getString("CodModello");
+                if (cache.stream().anyMatch(model -> model.codModel().equals(codModel))) {
+                    models.add(cache.stream().filter(model -> model.codModel().equals(codModel)).findFirst().orElseThrow());
+                } else {
+                    var name = resultSet.getString("Nome");
+                    var size = resultSet.getInt("DimensioneArea");
+                    var tax = resultSet.getDouble("Prezzo");
+                    var model = new ShipModelImpl(codModel, name, size, tax);
+                    cache.add(model);
+                    models.add(model);
+                }   
+            }
+            return models;
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int clearCache() {
         int size = cache.size();
         cache.clear();

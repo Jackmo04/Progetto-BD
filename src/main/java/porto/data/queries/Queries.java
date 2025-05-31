@@ -2,6 +2,12 @@ package porto.data.queries;
 
 public final class Queries {
 
+    public static final String SHIP_FROM_PLATE = """
+                SELECT *
+                FROM astronavi
+                WHERE Targa = ?;
+            """;
+
     public static final String SHIPS_FROM_PERSON = """
                 SELECT DISTINCT n.*
                 FROM astronavi n, persone p, equipaggi e
@@ -20,6 +26,12 @@ public final class Queries {
                 FROM modelli m, dimensioni_prezzi dp
                 WHERE m.DimensioneArea = dp.Superficie
                 AND CodModello = ?;
+            """;
+
+    public static final String MODELS_ALL = """
+                SELECT m.*, dp.Prezzo
+                FROM modelli m, dimensioni_prezzi dp
+                WHERE m.DimensioneArea = dp.Superficie;
             """;
 
     public static final String PLANET_FROM_CODPLANET = """

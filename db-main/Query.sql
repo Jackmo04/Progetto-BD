@@ -3,6 +3,7 @@ USE PortoMorteNera;
 -- _____________________________________________
 /*
 	S1 -- Creare un nuovo account persona registrando tutti i propri dati nell’applicazione.
+    [MATTIA] Fatto
 */
 INSERT INTO PERSONE (CUI, Username,Password , Nome, Cognome, Razza, DataNascita, Ideologia, Ruolo, PianetaNascita) VALUES
 ('PROVA', 'L.Skywalker', '' , 'Luke', 'Skywalker', 'Umano', '1951-09-25', 'Neutrale', 'Astronauta', 'TATO002');
@@ -15,6 +16,7 @@ INSERT INTO PERSONE (CUI, Username, Password , Nome, Cognome, Razza, DataNascita
 -- _____________________________________________
 /*
 	S2a -- Accedere al proprio account tramite il CUI o il proprio username
+    [Mattia] Fatto
 */
 SELECT p.*
 FROM persone p
@@ -30,6 +32,7 @@ AND p.Password = ?;
 
 /*
 	S2b -- Visualizzare le astronavi a cui appartiene una persona
+    [Matteo] Fatto
 */
 SELECT DISTINCT n.*
 FROM astronavi n, persone p, equipaggi e
@@ -46,8 +49,8 @@ AND p.CUI = ?;
 
 -- _____________________________________________
 /*
-	S3 -- Visualizzare il posteggio della propria nave e l’area di attracco all’interno del porto,
-	operazione effettuabile solo se la nave è attraccata
+	S3 -- Visualizzare il posteggio della propria nave e l’area di attracco all’interno del porto
+    [Matteo] Da fare
 */
 SELECT ast.CodArea, ar.Nome AS 'Nome Area', ast.NumeroPosto
 FROM astronavi ast, aree_attracco ar
@@ -64,6 +67,7 @@ AND Targa = ?;
 -- _____________________________________________
 /*
 	S4 -- Visualizzare l’ultima richiesta effettuata da una nave
+    [] Da fare
 */
 SELECT r.*
 FROM richieste r, astronavi n
@@ -110,6 +114,7 @@ GROUP BY 1-10;
 -- _____________________________________________
 /*
 	C1 -- Registrare la propria nave all'applicazione.
+    [Matteo] Da fare
 */
 -- Visualizz. scelta modello
 SELECT CodModello, Nome
@@ -154,7 +159,8 @@ AND e.CUIAstronauta = ?;
 
 -- _____________________________________________
 /*
-	C3 -- Visualizzare tutti i dati dei membri del proprio equipaggio
+	C3 -- Visualizzare tutti i dati dei membri dell'equipaggio di una propria nave
+    [] Da fare
 */
 SELECT p.CUI, p.Nome, p.Cognome, p.Razza, p.DataNascita, p.Ricercato, pn.Nome AS PianetaNascita
 FROM persone p, equipaggi e, pianeti pn
@@ -173,6 +179,7 @@ AND e.TargaAstronave = ?;
 -- _____________________________________________
 /*
 	C4 -- Richiedere accesso al porto
+    [Matteo?] Da fare
 */
 -- !! SELEZIONI SCOPO E PIANETI
 
@@ -202,6 +209,7 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 -- _____________________________________________
 /*
 	C5 -- Richiedere uscita dal porto
+    [Matteo?] da fare
 */
 -- Inseriamo la richiesta
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
@@ -231,6 +239,7 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 -- _____________________________________________
 /*
 	C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
+    [Matteo] Da fare
 */
 SELECT DISTINCT r.*
 FROM richieste r, astronavi n
@@ -292,6 +301,7 @@ WHERE targa = (SELECT targaAstronave
 -- _____________________________________________
 /*
 	A3a -- Visualizza le celle disponibili
+    [Mattia]
 */
 /* old
 SELECT c.NumCella
@@ -315,6 +325,7 @@ HAVING COUNT(p.CUI) < c.Capienza;
 -- _____________________________________________
 /*
 	A3b -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
+    [Mattia]
 */
 
 UPDATE Persone

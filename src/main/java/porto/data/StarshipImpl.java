@@ -1,11 +1,10 @@
 package porto.data;
 
-import java.sql.Connection;
 import java.util.Optional;
+import java.util.Set;
 
 import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
-import porto.data.api.Request;
 import porto.data.api.ShipModel;
 import porto.data.api.Starship;
 
@@ -17,11 +16,12 @@ public record StarshipImpl(
     String name,
     Optional<ParkingSpace> parkingSpace,
     ShipModel model,
-    Person capitan
+    Person capitan,
+    Set<Person> crewMembers
 ) implements Starship {
 
-    public Request lastRequest(Connection connection) {
-        // TODO implement this method
-        throw new UnsupportedOperationException("Not implemented yet");
+    public StarshipImpl(String plateNumber, String name, Optional<ParkingSpace> parkingSpace, ShipModel model, Person capitan) {
+        this(plateNumber, name, parkingSpace, model, capitan, Set.of());
     }
+
 }
