@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import porto.data.ShipModelImpl;
 import porto.data.StarshipImpl;
 import porto.data.api.Ideology;
 import porto.data.api.Role;
+import porto.data.api.dao.StarshipDAO;
 import porto.data.dao.StarshipDAOImpl;
 import porto.data.utils.DAOUtils;
 
@@ -30,12 +32,14 @@ class TestStarshipDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestStarshipDAO.class);
     private static Connection connection;
     private static Savepoint savepoint;
+    private static StarshipDAO DAO;
 
     @BeforeAll
     public static void setup() throws SQLException {
         connection = DAOUtils.localMySQLConnection("PortoMorteNera", "root", "");
         connection.setAutoCommit(false);
         savepoint = connection.setSavepoint();
+        DAO = new StarshipDAOImpl(connection);
     }
 
     @AfterAll
@@ -48,12 +52,18 @@ class TestStarshipDAO {
         }
     }
 
+    @BeforeEach
+    public void beforeEach() {
+        LOGGER.info("Resetting DAO cache before each test.");
+        DAO.clearCache();
+    }
+
     @Test
     public void fromPlate() {
         final String PLATE = "CR900004";
         LOGGER.info("Testing StarshipDAO.fromPlate with plate: {}", PLATE);
 
-        var actual = new StarshipDAOImpl(connection).fromPlate(PLATE);
+        var actual = DAO.fromPlate(PLATE);
         var expected = Optional.of(new StarshipImpl(
             "CR900004",
             "Tantive IV",
@@ -98,7 +108,7 @@ class TestStarshipDAO {
             new PlanetImpl("DANT010", "Dantooine")
         );
 
-        var actual = new StarshipDAOImpl(connection).ofPerson(CUI);
+        var actual = DAO.ofPerson(CUI);
         var expected = Set.of(
             new StarshipImpl(
                 "CR900004",
