@@ -1,7 +1,9 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import porto.data.ShipModelImpl;
 import porto.data.api.ShipModel;
@@ -13,6 +15,7 @@ import porto.data.utils.DAOUtils;
 public class ShipModelDAOImpl implements ShipModelDAO {
 
     private final Connection connection;
+    private final Set<ShipModel> cache = new HashSet<>();
 
     /**
      * Constructor for ShipModelDAOImpl.
@@ -22,8 +25,14 @@ public class ShipModelDAOImpl implements ShipModelDAO {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<ShipModel> getFromCode(String codModel) {
+        if (cache.stream().anyMatch(model -> model.codModel().equals(codModel))) {
+            return cache.stream().filter(model -> model.codModel().equals(codModel)).findFirst();
+        }
         try (
             var statement = DAOUtils.prepare(connection, Queries.MODEL_FROM_CODE, codModel);
             var resultSet = statement.executeQuery();
@@ -39,6 +48,16 @@ public class ShipModelDAOImpl implements ShipModelDAO {
         } catch (Exception e) {
             throw new DAOException(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int clearCache() {
+        int size = cache.size();
+        cache.clear();
+        return size;
     }
 
 }

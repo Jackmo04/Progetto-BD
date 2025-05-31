@@ -41,4 +41,10 @@ public interface PersonDAO {
      */
     void addPerson(String CUI, String username, String password ,String name, String surname, String race, String borndate,
             Ideology ideology, Role role, String bornPlanet) throws DAOException;
+
+    /**
+     * Clears the cache of persons.
+     * @return the number of persons cleared from the cache
+     */
+    int clearCache();
 }

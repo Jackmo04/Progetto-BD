@@ -12,4 +12,10 @@ public interface ParkingAreaDAO {
      * @return an Optional containing the ParkingArea if found, or empty if not found
      */
     Optional<ParkingArea> getFromCode(int codArea);
+
+    /**
+     * Clears the cache of parking areas.
+     * @return the number of parking areas cleared from the cache
+     */
+    int clearCache();
 }

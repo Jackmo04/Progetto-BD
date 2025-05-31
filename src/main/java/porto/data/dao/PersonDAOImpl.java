@@ -1,7 +1,9 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import porto.data.PersonImpl;
 import porto.data.api.Ideology;
@@ -16,6 +18,7 @@ import porto.data.utils.DAOUtils;
 public class PersonDAOImpl implements PersonDAO {
 
     private final Connection connection;
+    private final Set<Person> cache = new HashSet<>();
 
     /**
      * Constructor for PlanetDAOImpl.
@@ -31,9 +34,15 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public Optional<Person> getFromCUI(String CUIPerson) throws DAOException {
+        if (cache.stream().anyMatch(person -> person.CUI().equals(CUIPerson))) {
+            return cache.stream()
+                .filter(person -> person.CUI().equals(CUIPerson))
+                .findFirst();
+        }
         try (
-                var statement = DAOUtils.prepare(connection, Queries.PERSON_FROM_CUI, CUIPerson);
-                var resultSet = statement.executeQuery();) {
+            var statement = DAOUtils.prepare(connection, Queries.PERSON_FROM_CUI, CUIPerson);
+            var resultSet = statement.executeQuery();
+        ) {
             if (resultSet.next()) {
                 var CUI = resultSet.getString("CUI");
                 var username = resultSet.getString("Username");
@@ -73,5 +82,12 @@ public class PersonDAOImpl implements PersonDAO {
         } catch (Exception e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public int clearCache() {
+        int size = cache.size();
+        cache.clear();
+        return size;
     }
 }

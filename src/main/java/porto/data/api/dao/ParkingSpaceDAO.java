@@ -15,4 +15,10 @@ public interface ParkingSpaceDAO {
      * @throws DAOException if an error occurs while accessing the database
      */
     Optional<ParkingSpace> of(int codArea, int spaceNumber) throws DAOException;
+
+    /**
+     * Clears the cache of ParkingSpace objects.
+     * @return the number of ParkingSpace objects removed from the cache
+     */
+    int clearCache();
 }

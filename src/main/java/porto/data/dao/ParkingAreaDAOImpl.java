@@ -1,7 +1,9 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import porto.data.ParkingAreaImpl;
 import porto.data.api.ParkingArea;
@@ -13,6 +15,7 @@ import porto.data.utils.DAOUtils;
 public class ParkingAreaDAOImpl implements ParkingAreaDAO {
 
     private final Connection connection;
+    private final Set<ParkingArea> cache = new HashSet<>();
 
     /**
      * Constructor for ParkingAreaDAOImpl.
@@ -22,8 +25,14 @@ public class ParkingAreaDAOImpl implements ParkingAreaDAO {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<ParkingArea> getFromCode(int codArea) {
+        if (cache.stream().anyMatch(area -> area.codArea() == codArea)) {
+            return cache.stream().filter(area -> area.codArea() == codArea).findFirst();
+        }
         try (
             var statement = DAOUtils.prepare(connection, Queries.AREA_FROM_CODE, codArea);
             var resultSet = statement.executeQuery();
@@ -38,6 +47,16 @@ public class ParkingAreaDAOImpl implements ParkingAreaDAO {
         } catch (Exception e) {
             throw new DAOException(e);
         }
+    }
+
+    /** 
+     * {@inheritDoc}
+    */
+    @Override
+    public int clearCache() {
+        int size = cache.size();
+        cache.clear();
+        return size;
     }
 
 }
