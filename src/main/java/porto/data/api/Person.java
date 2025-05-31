@@ -42,21 +42,21 @@ public interface Person {
     String surname();
     /**
      * 
-     * @return razza of the person.
+     * @return race of the person.
      */
-    String razza();
+    String race();
     /**
      * Date of birth of the person.
      * 
      * @return bornDate in String format.
      */
-    String bornDate();
+    String dateOfBirth();
     /**
      * Indicates if the person is wanted.
      * 
      * @return true if wanted, false otherwise.
      */
-    Boolean wanted();
+    Boolean isWanted();
     /**
      * Ideological beliefs of the person.
      * 
@@ -80,6 +80,6 @@ public interface Person {
      * 
      * @return Optional containing Planet if present, otherwise empty.
      */
-    Planet bornPlace();
+    Planet birthPlanet();
 
 }
