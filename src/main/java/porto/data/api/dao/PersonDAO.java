@@ -41,4 +41,14 @@ public interface PersonDAO {
      */
     void addPerson(String CUI, String username, String password ,String name, String surname, String race, String borndate,
             Ideology ideology, Role role, String bornPlanet) throws DAOException;
+
+    /**
+     * Validates a person's credentials.
+     * @param cuiUsername the CUI or username of the person
+     * @param password the password of the person
+     * @return true if the credentials are valid, false otherwise
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    public Boolean isValidPerson(String cuiUsername , String password) throws DAOException;
+
 }

@@ -1,25 +1,31 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import porto.data.CellImpl;
 import porto.data.api.Cell;
 import porto.data.api.dao.CellDAO;
 import porto.data.queries.Queries;
+import porto.data.queries.QueryAction;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
 /**
- * Implementation of the CellDAO interface for accessing Cell data from the database.
- * This class provides methods to retrieve Cell information based on specific criteria.
+ * Implementation of the CellDAO interface for accessing Cell data from the
+ * database.
+ * This class provides methods to retrieve Cell information based on specific
+ * criteria.
  */
-public class CellDAOImpl implements CellDAO{
+public class CellDAOImpl implements CellDAO {
 
-        private final Connection connection;
+    private final Connection connection;
 
     /**
      * Constructor for StarshipDAOImpl.
+     * 
      * @param connection the database connection
      */
     public CellDAOImpl(Connection connection) {
@@ -45,6 +51,24 @@ public class CellDAOImpl implements CellDAO{
         } catch (Exception e) {
             throw new DAOException(e);
         }
-    
-}
+
+    }
+
+    @Override
+    public List<Cell> getAllFreeCell() throws DAOException {
+        var listCell = new ArrayList<Cell>();
+        try (
+                var statement = DAOUtils.prepare(connection, QueryAction.A3A_FREE_CELL);
+                var resultSet = statement.executeQuery();) {
+            while (resultSet.next()) {
+                var numCell = resultSet.getInt("NumCella");
+                var capacity = resultSet.getInt("Capienza");
+                var cell = new CellImpl(numCell, capacity);
+                listCell.add(cell);
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+        return listCell;
+    }
 }

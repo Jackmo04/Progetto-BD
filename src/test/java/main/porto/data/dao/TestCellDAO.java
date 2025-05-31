@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -46,6 +47,19 @@ class TestCellDAO {
         var expected = Set.of(
                 Optional.of(new CellImpl(1, 5)),
                 Optional.of(new CellImpl(2, 3))
+        );
+        assertEquals(expected, actual);
+    }
+
+        @Test
+    public void getAllFreeCell() {
+        var actual = new CellDAOImpl(connection).getAllFreeCell();
+        var expected = List.of(
+                new CellImpl(1, 5),
+                new CellImpl(2, 3),
+                new CellImpl(3, 10),
+                new CellImpl(4, 2),
+                new CellImpl(5, 7)
         );
         assertEquals(expected, actual);
     }
