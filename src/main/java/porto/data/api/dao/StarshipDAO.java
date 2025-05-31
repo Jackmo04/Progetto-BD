@@ -14,4 +14,10 @@ public interface StarshipDAO {
      * @throws DAOException if an error occurs while accessing the database
      */
     Set<Starship> ofPerson(String CUIPerson) throws DAOException;
+
+    /**
+     * Clears the cache of starships.
+     * @return the number of starships cleared from the cache
+     */
+    int clearCache();
 }
