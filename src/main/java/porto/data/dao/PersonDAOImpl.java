@@ -59,6 +59,7 @@ public class PersonDAOImpl implements PersonDAO {
                 var bornPlanet = new PlanetDAOImpl(connection).getFromCodPlanet(planetCod).orElseThrow();
                 var person = new PersonImpl(CUI, username, password, name, surname, razza, borndate, wanted, ideology,
                         role, cell, bornPlanet);
+                cache.add(person);
                 return Optional.of(person);
             } else {
                 return Optional.empty();

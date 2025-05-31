@@ -40,9 +40,10 @@ public class ParkingAreaDAOImpl implements ParkingAreaDAO {
             if (resultSet.next()) {
                 var name = resultSet.getString("Nome");
                 var area = new ParkingAreaImpl(codArea, name);
+                cache.add(area);
                 return Optional.of(area);
             } else {
-                return Optional.empty(); // No area found with the given code
+                return Optional.empty();
             }
         } catch (Exception e) {
             throw new DAOException(e);

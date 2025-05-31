@@ -11,12 +11,18 @@ import porto.data.utils.DAOException;
  */
 public interface PlanetDAO {
 
-/**
- * Retrieves a planet by its codPlanet.
- * @param codPlanet the code of the planet
- * @return an Optional containing the Planet object if found, or empty if not found
- * throws DAOException if an error occurs while accessing the database
- * @throws DAOException if an error occurs while accessing the database
- * */
+    /**
+     * Retrieves a planet by its codPlanet.
+     * @param codPlanet the code of the planet
+     * @return an Optional containing the Planet object if found, or empty if not found
+     * throws DAOException if an error occurs while accessing the database
+     * @throws DAOException if an error occurs while accessing the database
+     * */
     Optional<Planet> getFromCodPlanet( String codPlanet) throws DAOException;
+
+    /**
+     * Clears the cache of planets.
+     * @return the number of planets removed from the cache
+     */
+    int clearCache();
 }

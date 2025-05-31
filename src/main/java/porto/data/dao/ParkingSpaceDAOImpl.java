@@ -27,14 +27,17 @@ public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
      * {@inheritDoc}
      */
     public Optional<ParkingSpace> of(int codArea, int spaceNumber) throws DAOException {
-        // Check if the parking space is already in the cache
         if (cache.stream().anyMatch(space -> space.parkingArea().codArea() == codArea && space.spaceNumber() == spaceNumber)) {
             return cache.stream()
                 .filter(space -> space.parkingArea().codArea() == codArea && space.spaceNumber() == spaceNumber)
                 .findFirst();
         }
         var area = new ParkingAreaDAOImpl(connection).getFromCode(codArea);
-        return area.map(a -> new ParkingSpaceImpl(a, spaceNumber));
+        Optional<ParkingSpace> space = area.map(a -> new ParkingSpaceImpl(a, spaceNumber));
+        if (space.isPresent()) {
+            cache.add(space.get());
+        }
+        return space;
     }
 
     /**

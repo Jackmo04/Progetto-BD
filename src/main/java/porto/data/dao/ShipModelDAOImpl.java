@@ -41,9 +41,11 @@ public class ShipModelDAOImpl implements ShipModelDAO {
                 var name = resultSet.getString("Nome");
                 var size = resultSet.getInt("DimensioneArea");
                 var tax = resultSet.getDouble("Prezzo");
-                return Optional.of(new ShipModelImpl(codModel, name, size, tax));
+                var model = new ShipModelImpl(codModel, name, size, tax);
+                cache.add(model);
+                return Optional.of(model);
             } else {
-                return Optional.empty(); // No ship model found with the given code
+                return Optional.empty();
             }
         } catch (Exception e) {
             throw new DAOException(e);
