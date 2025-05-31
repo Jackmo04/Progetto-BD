@@ -2,7 +2,9 @@ package porto.data;
 
 import java.util.Optional;
 
+import porto.data.api.Cell;
 import porto.data.api.Person;
+import porto.data.api.Planet;
 
 /**
  * Implementation of the Person interface.
@@ -37,8 +39,8 @@ public record PersonImpl(
         Boolean wanted,
         String ideology,
         String role,
-        Optional<CellImpl> cell,
-        Optional<PlanetImpl> bornPlace
+        Optional<Cell> cell,
+        Optional<Planet> bornPlace
         ) implements Person {
 
 }

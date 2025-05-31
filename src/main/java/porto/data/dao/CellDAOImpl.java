@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.Optional;
 
 import porto.data.CellImpl;
+import porto.data.api.Cell;
 import porto.data.api.dao.CellDAO;
 import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
@@ -29,7 +30,7 @@ public class CellDAOImpl implements CellDAO{
      * {@inheritDoc}
      */
     @Override
-    public Optional<CellImpl> getFromNumCell(Integer numCell) throws DAOException {
+    public Optional<Cell> getFromNumCell(Integer numCell) throws DAOException {
         try (
                 var statement = DAOUtils.prepare(connection, Queries.CELL_FROM_NUMCELL, numCell);
                 var resultSet = statement.executeQuery();) {
