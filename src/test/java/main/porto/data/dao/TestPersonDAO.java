@@ -1,6 +1,7 @@
 package main.porto.data.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -66,6 +67,16 @@ class TestPersonDAO {
         var actual2 = new PersonDAOImpl(connection).isValidPerson("SKWLKE510925T" , "password");
         var expected2 = false;
         assertEquals(expected2, actual2);
+    }
+
+        @Test
+    public void arrestPerson() {
+        new PersonDAOImpl(connection).arrestPerson("STRMTR0000001");
+        // Assuming arrestPerson updates the person's cell number to 1
+        // Verify that the person is now in the cell with number 1
+
+        var actual = new PersonDAOImpl(connection).getFromCUI("STRMTR0000001").get().cell().get().numCell();
+        assertNotNull(actual);
     }
 
 }

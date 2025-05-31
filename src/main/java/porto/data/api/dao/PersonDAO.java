@@ -56,4 +56,13 @@ public interface PersonDAO {
      * @return the number of persons cleared from the cache
      */
     int clearCache();
+
+    /**
+     * Arrests a person by their CUI and assigns them to a cell.
+     * This method updates the person's status to "arrested" and assigns them to a
+     * specific cell.
+     * @param CUI the CUI of the person to be arrested 
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    public void arrestPerson(String CUI ) throws DAOException;
 }

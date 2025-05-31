@@ -1,5 +1,6 @@
 package porto.data.api.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import porto.data.api.Cell;
@@ -20,4 +21,12 @@ public interface CellDAO
      * @throws DAOException if an error occurs during the retrieval
      */
     Optional<Cell> getFromNumCell(Integer numCell) throws DAOException;
+
+    /**
+     * Adds a new Cell to the database.
+     *
+     * @param cell the Cell to be added
+     * @throws DAOException if an error occurs during the addition
+     */
+    List<Cell> getAllFreeCell() throws DAOException;
 }

@@ -16,6 +16,29 @@ public final class QueryAction {
                 WHERE ? IN (p.CUI, p.Username)
                 AND p.Password = ?;
             """;
+
+        public static final String A3A_FREE_CELL=
+         """
+                SELECT c.*
+                FROM celle c
+                LEFT JOIN persone p ON c.NumCella = p.NumCella
+                GROUP BY c.NumCella, c.Capienza
+                HAVING COUNT(p.CUI) < c.Capienza;
+            """;
+
+            public static final String A3B_ARREST_PERSON =
+        """
+                UPDATE Persone
+                 SET NumCella = ?
+                 WHERE CUI = ?;
+
+
+            """;
+            public static final String A3C_DELETE_FROM_EQUIPE =
+        """
+                DELETE FROM Equipaggi
+                WHERE CUIAstronauta = ?;
+            """;
         
     
 }
