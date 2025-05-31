@@ -11,6 +11,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import porto.data.api.Ideology;
+import porto.data.api.Role;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.utils.DAOUtils;
 
@@ -48,8 +50,8 @@ class TestPersonDAO {
     @Test
     public void addPerson() {
         new PersonDAOImpl(connection).addPerson("STRMTR0000004", "Trooper4", "", "Stormtrooper",
-        "00004", "Clone", "2000-01-01", "Imperiale",
-         "Astronauta",  "DTHSTR0");
+        "00004", "Clone", "2000-01-01", Ideology.IMPERIALE.name(),
+         Role.CREW_MEMBER.name(),  "DTHSTR0");
 
         var actual = new PersonDAOImpl(connection).getFromCUI("STRMTR0000004").get().CUI();
         var expected = "STRMTR0000004";

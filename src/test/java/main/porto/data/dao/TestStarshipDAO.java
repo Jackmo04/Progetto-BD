@@ -20,6 +20,8 @@ import porto.data.PersonImpl;
 import porto.data.PlanetImpl;
 import porto.data.ShipModelImpl;
 import porto.data.StarshipImpl;
+import porto.data.api.Ideology;
+import porto.data.api.Role;
 import porto.data.dao.StarshipDAOImpl;
 import porto.data.utils.DAOUtils;
 
@@ -53,21 +55,22 @@ class TestStarshipDAO {
 
         var actual = new StarshipDAOImpl(connection).ofPerson(CUI);
         var expected = Set.of(
-            new StarshipImpl(
-                "CR900004",
-                "Tantive IV",
-                Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1)),
-                new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
-                Optional.of(new PersonImpl("STRMTR0000001", "Trooper1", "pippo", "Stormtrooper", "00001", "Clone", "2000-01-01", false, "Imperiale", "Astronauta", null, Optional.of(new PlanetImpl("DTHSTR0" ,"Morte Nera" ))))
-            ),
-            new StarshipImpl(
-                "STARD003",
-                "Executor",
-                Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(3, "Officina"), 5)),
-                new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
-                 Optional.of(new PersonImpl("STRMTR0000001", "Trooper1", "pippo", "Stormtrooper", "00001", "Clone", "2000-01-01", false, "Imperiale", "Astronauta", null, Optional.of(new PlanetImpl("DTHSTR0" ,"Morte Nera" ))))
-            )
-        );
+                new StarshipImpl(
+                        "CR900004",
+                        "Tantive IV",
+                        Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1)),
+                        new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
+                        Optional.of(new PersonImpl("STRMTR0000001", "Trooper1", "pippo", "Stormtrooper", "00001",
+                                "Clone", "2000-01-01", false, Ideology.IMPERIALE.name(),
+                                Role.CREW_MEMBER.name(), null, Optional.of(new PlanetImpl("DTHSTR0", "Morte Nera"))))),
+                new StarshipImpl(
+                        "STARD003",
+                        "Executor",
+                        Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(3, "Officina"), 5)),
+                        new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
+                        Optional.of(new PersonImpl("STRMTR0000001", "Trooper1", "pippo", "Stormtrooper", "00001",
+                                "Clone", "2000-01-01", false, Ideology.IMPERIALE.name(), Role.CREW_MEMBER.name(), null,
+                                Optional.of(new PlanetImpl("DTHSTR0", "Morte Nera"))))));
         assertEquals(expected, actual);
     }
 
