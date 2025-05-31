@@ -16,7 +16,7 @@ public record StarshipImpl(
     String name,
     Optional<ParkingSpace> parkingSpace,
     ShipModel model,
-    Optional<PersonImpl> capitan
+    PersonImpl capitan
 ) implements Starship {
 
     public Request lastRequest(Connection connection) {

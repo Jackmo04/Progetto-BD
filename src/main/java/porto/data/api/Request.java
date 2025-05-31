@@ -51,7 +51,7 @@ public interface Request {
      * Returns the person who managed the request, if applicable.
      * @return the person who managed the request
      */
-    Optional<String> managedBy();
+    Optional<Person> managedBy();
 
     /**
      * Returns the starship associated with the request.

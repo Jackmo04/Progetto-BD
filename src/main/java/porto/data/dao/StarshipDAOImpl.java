@@ -2,7 +2,6 @@ package porto.data.dao;
 
 import java.sql.Connection;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import porto.data.StarshipImpl;
@@ -39,14 +38,13 @@ public class StarshipDAOImpl implements StarshipDAO {
                 var name = resultSet.getString("Nome");
                 var codArea = resultSet.getInt("CodArea");
                 var spaceNumber = resultSet.getInt("NumeroPosto");
-                var parkingSpace = codArea == 0 || spaceNumber == 0
-                    ? null
-                    : new ParkingSpaceDAOImpl(connection).of(codArea, spaceNumber);
+                var parkingSpace = new ParkingSpaceDAOImpl(connection).of(codArea, spaceNumber);
                 var modelCode = resultSet.getString("CodModello");
-                var model = new ShipModelDAOImpl(connection).getFromCode(modelCode);
+                var model = new ShipModelDAOImpl(connection).getFromCode(modelCode).orElseThrow();
                 var capitanCUI = resultSet.getString("CUIcapitano");
-                var capitan = new PersonDAOImpl(connection).getFromCUI(capitanCUI);
-                var ship = new StarshipImpl(plateNumber, name, Optional.ofNullable(parkingSpace), model, capitan);
+                var capitan = new PersonDAOImpl(connection).getFromCUI(capitanCUI).orElseThrow();
+                
+                var ship = new StarshipImpl(plateNumber, name, parkingSpace, model, capitan);
                 ships.add(ship);
             }
         } catch (Exception e) {

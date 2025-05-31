@@ -1,6 +1,7 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.Optional;
 
 import porto.data.ParkingSpaceImpl;
 import porto.data.api.ParkingSpace;
@@ -19,7 +20,8 @@ public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
         this.connection = connection;
     }
 
-    public ParkingSpace of(int codArea, int spaceNumber) throws DAOException {
-        return new ParkingSpaceImpl(new ParkingAreaDAOImpl(connection).getFromCode(codArea), spaceNumber);
+    public Optional<ParkingSpace> of(int codArea, int spaceNumber) throws DAOException {
+        var area = new ParkingAreaDAOImpl(connection).getFromCode(codArea);
+        return area.map(a -> new ParkingSpaceImpl(a, spaceNumber));
     }
 }

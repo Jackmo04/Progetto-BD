@@ -1,5 +1,7 @@
 package porto.data.api.dao;
 
+import java.util.Optional;
+
 import porto.data.api.ShipModel;
 
 public interface ShipModelDAO {
@@ -7,7 +9,7 @@ public interface ShipModelDAO {
     /**
      * Retrieves a ship model by its code.
      * @param codModel the code of the ship model
-     * @return the ship model, or null if not found
+     * @return an Optional containing the ShipModel if found, or empty if not found
      */
-    ShipModel getFromCode(String codModel);
+    Optional<ShipModel> getFromCode(String codModel);
 }

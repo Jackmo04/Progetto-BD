@@ -1,6 +1,7 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.Optional;
 
 import porto.data.ShipModelImpl;
 import porto.data.api.ShipModel;
@@ -22,7 +23,7 @@ public class ShipModelDAOImpl implements ShipModelDAO {
     }
 
     @Override
-    public ShipModel getFromCode(String codModel) {
+    public Optional<ShipModel> getFromCode(String codModel) {
         try (
             var statement = DAOUtils.prepare(connection, Queries.MODEL_FROM_CODE, codModel);
             var resultSet = statement.executeQuery();
@@ -31,9 +32,9 @@ public class ShipModelDAOImpl implements ShipModelDAO {
                 var name = resultSet.getString("Nome");
                 var size = resultSet.getInt("DimensioneArea");
                 var tax = resultSet.getDouble("Prezzo");
-                return new ShipModelImpl(codModel, name, size, tax);
+                return Optional.of(new ShipModelImpl(codModel, name, size, tax));
             } else {
-                return null; // No ship model found with the given code
+                return Optional.empty(); // No ship model found with the given code
             }
         } catch (Exception e) {
             throw new DAOException(e);

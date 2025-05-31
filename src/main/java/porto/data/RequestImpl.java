@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 import porto.data.api.FlightPurpose;
+import porto.data.api.Person;
 import porto.data.api.Planet;
 import porto.data.api.Request;
 import porto.data.api.RequestState;
@@ -18,7 +19,7 @@ public record RequestImpl(
     double totalPrice,
     RequestState state,
     Optional<Timestamp> dateTimeManaged,
-    Optional<String> managedBy,
+    Optional<Person> managedBy,
     Starship starship,
     FlightPurpose purpose,
     Planet departurePlanet,

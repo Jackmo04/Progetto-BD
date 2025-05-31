@@ -1,5 +1,7 @@
 package porto.data.api.dao;
 
+import java.util.Optional;
+
 import porto.data.api.ParkingArea;
 
 public interface ParkingAreaDAO {
@@ -7,7 +9,7 @@ public interface ParkingAreaDAO {
     /**
      * Retrieves a parking area by its code.
      * @param codArea the code of the parking area
-     * @return the parking area if found, or null if not found
+     * @return an Optional containing the ParkingArea if found, or empty if not found
      */
-    ParkingArea getFromCode(int codArea);
+    Optional<ParkingArea> getFromCode(int codArea);
 }

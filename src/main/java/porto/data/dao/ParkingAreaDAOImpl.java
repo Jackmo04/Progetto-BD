@@ -1,6 +1,7 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.Optional;
 
 import porto.data.ParkingAreaImpl;
 import porto.data.api.ParkingArea;
@@ -22,7 +23,7 @@ public class ParkingAreaDAOImpl implements ParkingAreaDAO {
     }
 
     @Override
-    public ParkingArea getFromCode(int codArea) {
+    public Optional<ParkingArea> getFromCode(int codArea) {
         try (
             var statement = DAOUtils.prepare(connection, Queries.AREA_FROM_CODE, codArea);
             var resultSet = statement.executeQuery();
@@ -30,9 +31,9 @@ public class ParkingAreaDAOImpl implements ParkingAreaDAO {
             if (resultSet.next()) {
                 var name = resultSet.getString("Nome");
                 var area = new ParkingAreaImpl(codArea, name);
-                return area;
+                return Optional.of(area);
             } else {
-                return null; // No area found with the given code
+                return Optional.empty(); // No area found with the given code
             }
         } catch (Exception e) {
             throw new DAOException(e);

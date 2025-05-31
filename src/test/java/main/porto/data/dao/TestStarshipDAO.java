@@ -53,24 +53,35 @@ class TestStarshipDAO {
         final String CUI = "STRMTR0000001";
         LOGGER.info("Testing StarshipDAO.ofPerson with CUI: {}", CUI);
 
+        final var CAPITAN = new PersonImpl(
+            "MULDRT600322D",
+            "D.Maul",
+            "",
+            "Darth",
+            "Maul",
+            "Zabrak",
+            "1960-03-22",
+            false,
+            Ideology.IMPERIALE.name(),
+            Role.CAPTAIN.name(),
+            null,
+            Optional.of(new PlanetImpl("DTHSTR0", "Morte Nera"))
+        );
+
         var actual = new StarshipDAOImpl(connection).ofPerson(CUI);
         var expected = Set.of(
-                new StarshipImpl(
-                        "CR900004",
-                        "Tantive IV",
-                        Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1)),
-                        new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
-                        Optional.of(new PersonImpl("STRMTR0000001", "Trooper1", "pippo", "Stormtrooper", "00001",
-                                "Clone", "2000-01-01", false, Ideology.IMPERIALE.name(),
-                                Role.CREW_MEMBER.name(), null, Optional.of(new PlanetImpl("DTHSTR0", "Morte Nera"))))),
-                new StarshipImpl(
-                        "STARD003",
-                        "Executor",
-                        Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(3, "Officina"), 5)),
-                        new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
-                        Optional.of(new PersonImpl("STRMTR0000001", "Trooper1", "pippo", "Stormtrooper", "00001",
-                                "Clone", "2000-01-01", false, Ideology.IMPERIALE.name(), Role.CREW_MEMBER.name(), null,
-                                Optional.of(new PlanetImpl("DTHSTR0", "Morte Nera"))))));
+            new StarshipImpl(
+                "CR900004",
+                "Tantive IV",
+                Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1)),
+                new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
+                CAPITAN),
+            new StarshipImpl(
+                "STARD003",
+                "Executor",
+                Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(3, "Officina"), 5)),
+                new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
+                CAPITAN));
         assertEquals(expected, actual);
     }
 
