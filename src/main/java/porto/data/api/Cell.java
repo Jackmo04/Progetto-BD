@@ -5,5 +5,17 @@ package porto.data.api;
  * This interface can be extended to define specific behaviors or properties of a Cell.
  */
 public interface Cell {
+
+    /**
+     * 
+     * @return number of cell.
+     */
+    Integer numCell();
+
+    /**
+     * 
+     * @return capacity of cell.
+     */
+    Integer capacity();
     
 }

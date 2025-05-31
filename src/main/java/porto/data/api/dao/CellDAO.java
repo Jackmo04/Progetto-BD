@@ -2,7 +2,7 @@ package porto.data.api.dao;
 
 import java.util.Optional;
 
-import porto.data.CellImpl;
+import porto.data.api.Cell;
 import porto.data.utils.DAOException;
 
 /**
@@ -19,5 +19,5 @@ public interface CellDAO
      * @return the Person associated with the given cell number
      * @throws DAOException if an error occurs during the retrieval
      */
-    Optional<CellImpl> getFromNumCell(Integer numCell) throws DAOException;
+    Optional<Cell> getFromNumCell(Integer numCell) throws DAOException;
 }
