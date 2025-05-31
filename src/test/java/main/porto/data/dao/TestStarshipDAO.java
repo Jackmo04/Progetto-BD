@@ -64,8 +64,8 @@ class TestStarshipDAO {
             false,
             Ideology.IMPERIAL,
             Role.CAPTAIN,
-            null,
-            new PlanetImpl("DTHSTR0", "Morte Nera")
+            Optional.empty(),
+            new PlanetImpl("DANT010", "Dantooine")
         );
 
         var actual = new StarshipDAOImpl(connection).ofPerson(CUI);
