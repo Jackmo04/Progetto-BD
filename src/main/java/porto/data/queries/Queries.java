@@ -69,4 +69,9 @@ public final class Queries {
         FROM tipologie_viaggio t;
     """;
 
+    public static final String INSERT_STARSHIP = """
+        INSERT INTO astronavi (Targa, Nome, CodModello, CUICapitano)
+        VALUES (?, ?, ?, ?);
+    """;
+
 }

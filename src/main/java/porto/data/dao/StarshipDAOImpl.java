@@ -2,6 +2,7 @@ package porto.data.dao;
 
 import java.sql.Connection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -93,8 +94,19 @@ public class StarshipDAOImpl implements StarshipDAO {
      */
     @Override
     public void add(Starship starship) throws DAOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'add'");
+        Objects.requireNonNull(starship, "Starship cannot be null");
+        var plateNumber = starship.plateNumber();
+        var name = starship.name();
+        var modelCode = starship.model().codModel();
+        var capitanCUI = starship.capitan().CUI();
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.INSERT_STARSHIP, plateNumber, name, modelCode, capitanCUI);
+        ) {
+            statement.executeUpdate();
+            cache.add(starship);
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
 
     /**
