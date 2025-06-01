@@ -1,6 +1,7 @@
 package porto.data.api.dao;
 
 import java.util.Optional;
+import java.util.Set;
 
 import porto.data.api.Planet;
 import porto.data.utils.DAOException;
@@ -19,6 +20,13 @@ public interface PlanetDAO {
      * @throws DAOException if an error occurs while accessing the database
      * */
     Optional<Planet> getFromCodPlanet( String codPlanet) throws DAOException;
+
+    /**
+     * Retrieves all planets from the database.
+     * @return a Set of all Planet objects
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    Set<Planet> getAll() throws DAOException;
 
     /**
      * Clears the cache of planets.

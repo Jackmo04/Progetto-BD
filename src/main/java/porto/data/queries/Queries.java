@@ -85,4 +85,9 @@ public final class Queries {
         AND CUIAstronauta = ?;
     """;
 
+    public static final String PLANETS_ALL = """
+        SELECT p.*
+        FROM pianeti p;
+    """;
+
 }

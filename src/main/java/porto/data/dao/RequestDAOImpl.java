@@ -30,7 +30,7 @@ public class RequestDAOImpl implements RequestDAO {
      */
     public RequestDAOImpl(Connection connection) {
         this.connection = connection;
-        flightPurpose = new FlightPurposeDAOImpl(connection).getSetFlightPurposeByCode();
+        flightPurpose = new FlightPurposeDAOImpl(connection).getAll();
     }
 
     @Override

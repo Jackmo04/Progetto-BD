@@ -14,6 +14,6 @@ public interface FlightPurposeDAO {
      * @return the flight purpose associated with the given code
      * @throws DAOException if an error occurs while accessing the database
      */
-    Set<FlightPurpose> getSetFlightPurposeByCode() throws DAOException;
+    Set<FlightPurpose> getAll() throws DAOException;
 
 }

@@ -35,7 +35,11 @@ public class PlanetDAOImpl implements PlanetDAO {
      */
     @Override
     public Optional<Planet> getFromCodPlanet(String codPlanet) throws DAOException {
-
+        if (cache.stream().anyMatch(p -> p.codPlanet().equals(codPlanet))) {
+            return cache.stream()
+                .filter(p -> p.codPlanet().equals(codPlanet))
+                .findFirst();
+        }
         try (
             var statement = DAOUtils.prepare(connection, Queries.PLANET_FROM_CODPLANET, codPlanet);
             var resultSet = statement.executeQuery();
@@ -49,6 +53,37 @@ public class PlanetDAOImpl implements PlanetDAO {
             } else {
                 return Optional.empty();
             }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Planet> getAll() throws DAOException {
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.PLANETS_ALL);
+            var resultSet = statement.executeQuery();
+        ) {
+            Set<Planet> planets = new HashSet<>();
+            while (resultSet.next()) {
+                var cod = resultSet.getString("CodPianeta");
+                if (cache.stream().anyMatch(p -> p.codPlanet().equals(cod))) {
+                    planets.add(cache.stream()
+                        .filter(p -> p.codPlanet().equals(cod))
+                        .findFirst()
+                        .orElseThrow()
+                    );
+                } else {
+                    var name = resultSet.getString("Nome");
+                    var planet = new PlanetImpl(cod, name);
+                    planets.add(planet);
+                    cache.add(planet);
+                }
+            }
+            return planets;
         } catch (Exception e) {
             throw new DAOException(e);
         }

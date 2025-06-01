@@ -36,7 +36,7 @@ class TestFlightPurposeDAO {
 
     @Test
     public void getAllFlightPurpose() {
-        var actual = new FlightPurposeDAOImpl(connection).getSetFlightPurposeByCode().size();
+        var actual = new FlightPurposeDAOImpl(connection).getAll().size();
         var expected = 5;
         assertEquals(expected, actual);
     }

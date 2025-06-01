@@ -3,7 +3,7 @@ USE PortoMorteNera;
 -- _____________________________________________
 /*
 	S1 -- Creare un nuovo account persona registrando tutti i propri dati nell’applicazione.
-    [MATTIA] Fatto
+    {Person} [MATTIA] Fatto
 */
 INSERT INTO PERSONE (CUI, Username,Password , Nome, Cognome, Razza, DataNascita, Ideologia, Ruolo, PianetaNascita) VALUES
 ('PROVA', 'L.Skywalker', '' , 'Luke', 'Skywalker', 'Umano', '1951-09-25', 'Neutrale', 'Astronauta', 'TATO002');
@@ -16,7 +16,7 @@ INSERT INTO PERSONE (CUI, Username, Password , Nome, Cognome, Razza, DataNascita
 -- _____________________________________________
 /*
 	S2a -- Accedere al proprio account tramite il CUI o il proprio username
-    [Mattia] Fatto
+    {Person} [Mattia] Fatto
 */
 SELECT p.*
 FROM persone p
@@ -32,7 +32,7 @@ AND p.Password = ?;
 
 /*
 	S2b -- Visualizzare le astronavi a cui appartiene una persona
-    [Matteo] Fatto
+    {Starship} [Matteo] Fatto
 */
 SELECT DISTINCT n.*
 FROM astronavi n, persone p, equipaggi e
@@ -50,7 +50,7 @@ AND p.CUI = ?;
 -- _____________________________________________
 /*
 	S3 -- Visualizzare il posteggio della propria nave e l’area di attracco all’interno del porto
-    [Matteo] Fatto
+    {Starship} [Matteo] Fatto
 */
 SELECT ast.CodArea, ar.Nome AS 'Nome Area', ast.NumeroPosto
 FROM astronavi ast, aree_attracco ar
@@ -66,7 +66,7 @@ WHERE Targa = ?;
 -- _____________________________________________
 /*
 	S4 -- Visualizzare l’ultima richiesta effettuata da una nave
-    [] Da fare
+    {Request} [?] Da fare
 */
 SELECT r.*
 FROM richieste r, astronavi n
@@ -87,6 +87,7 @@ LIMIT 1;
 -- _____________________________________________
 /*
 	S5 -- Visualizzare le informazioni dettagliate di una richiesta.
+    {Request} [?] Da fare
 */
 SELECT DISTINCT r.CodRichiesta, r.EntrataUscita, r.DataOra, r.Descrizione, r.CostoTotale, r.Esito, r.TargaAstronave, tv.Nome AS TipologiaViaggio,
 	pnt1.Nome AS PianetaDestinazione, pnt2.Nome AS PianetaDestinazione, SUM(DISTINCT c.Quantita) AS QuantitaTotCarico
@@ -98,7 +99,7 @@ AND r.CodRichiesta = c.CodRichiesta
 AND r.CodRichiesta = 1
 GROUP BY 1-10;
 
-/* Java [?RichiestaDettagliata]
+/* Java [Optional<Request>]
 SELECT DISTINCT r.CodRichiesta, r.EntrataUscita, r.DataOra, r.Descrizione, r.CostoTotale, r.Esito, r.TargaAstronave, tv.Nome AS TipologiaViaggio,
 	pnt1.Nome AS PianetaDestinazione, pnt2.Nome AS PianetaDestinazione, SUM(DISTINCT c.Quantita) AS QuantitaTotCarico
 FROM richieste r, persone p, tipologie_viaggio tv, pianeti pnt1, pianeti pnt2, carichi c
@@ -113,9 +114,9 @@ GROUP BY 1-10;
 -- _____________________________________________
 /*
 	C1 -- Registrare la propria nave all'applicazione.
-    [Matteo] Fatto
+    {Starship} [Matteo] Fatto
 */
--- Visualizz. scelta modello [Matteo] Fatto
+-- Visualizz. scelta modello {ShipModel} [Matteo] Fatto
 SELECT CodModello, Nome
 FROM Modelli;
 
@@ -135,7 +136,7 @@ INSERT INTO ASTRONAVI (Targa, Nome, CodModello, CUICapitano) VALUES
 -- _____________________________________________
 /*
 	C2 -- Aggiungere o rimuovere membri all’equipaggio di una nave
-    [Matteo] Fatto
+    {Starship} [Matteo] Fatto
 */
 -- Aggiungere
 INSERT INTO equipaggi (TargaAstronave, CUIAstronauta) VALUES
@@ -146,7 +147,7 @@ INSERT INTO equipaggi (TargaAstronave, CUIAstronauta) VALUES
 (?, ?);
 */
 
--- Rimuovere
+-- Rimuovere {Starship} [Matteo] Fatto
 DELETE FROM equipaggi e
 WHERE e.TargaAstronave = 'XWING002'
 AND e.CUIAstronauta = 'STRMTR0000003';
