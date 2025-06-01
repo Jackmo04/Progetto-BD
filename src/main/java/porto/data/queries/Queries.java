@@ -57,5 +57,16 @@ public final class Queries {
         FROM astronavi
         WHERE Targa = ?;
     """;
+                
+    public static final String REQUEST_FROM_COD = """
+        SELECT r.*
+        FROM richieste r
+        WHERE r.CodRichiesta = ?;
+    """;
+
+    public static final String ALL_FLIGHT_PURPOSE = """
+        SELECT t.*
+        FROM tipologie_viaggio t;
+    """;
 
 }
