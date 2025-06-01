@@ -143,6 +143,14 @@ public class StarshipDAOImpl implements StarshipDAO {
      * {@inheritDoc}
      */
     @Override
+    public void removeCrewMember(String plateNumber, Person member) throws DAOException {
+        this.removeCrewMember(plateNumber, member.CUI());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeCrewMember(String plateNumber, String memberCUI) throws DAOException {
         Objects.requireNonNull(plateNumber, "Plate number cannot be null");
         Objects.requireNonNull(memberCUI, "Crew member CUI cannot be null");

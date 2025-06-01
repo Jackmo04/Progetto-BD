@@ -50,6 +50,21 @@ class TestStarshipDAO {
         new PlanetImpl("DANT010", "Dantooine")
     );
 
+    private static final Person CREW_STRMTR = new PersonImpl(
+        "STRMTR0000002",
+        "Trooper2",
+        "",
+        "Stormtrooper",
+        "00002",
+        "Clone",
+        "2000-01-01",
+        false,
+        Ideology.IMPERIAL,
+        Role.CREW_MEMBER,
+        Optional.empty(),
+        new PlanetImpl("DTHSTR0", "Morte Nera")
+    );
+
     @BeforeAll
     public static void setup() throws SQLException {
         connection = DAOUtils.localMySQLConnection("PortoMorteNera", "root", "");
@@ -126,9 +141,9 @@ class TestStarshipDAO {
     }
 
     @Test
-    public void add() {
+    public void addStarship() {
         final String PLATE = "ADDED001";
-        LOGGER.info("Testing StarshipDAO.add with plate: {}", PLATE);
+        LOGGER.info("Testing StarshipDAO.addStarship with plate: {}", PLATE);
 
         var ship = new StarshipImpl(
             PLATE,
@@ -157,6 +172,84 @@ class TestStarshipDAO {
             () -> DAO.addStarship(duplicateShip),
             "Expected DAOException when adding a ship with an existing plate"
         );
+    }
+
+    @Test
+    public void addCrewMember() {
+        final String PLATE = "STARD003";
+        LOGGER.info("Testing StarshipDAO.addCrewMember with plate: {}, member CUI: {}", PLATE, CREW_STRMTR.CUI());
+
+        var actual = DAO.ofPerson(CREW_STRMTR.CUI());
+        var expected = Set.of(
+            new StarshipImpl(
+                "XWING002",
+                "Red Five",
+                new ShipModelImpl("XW0001", "X-Wing", 50, 100.0),
+                CAPITAN_MULDRT
+            )
+        );
+        assertEquals(expected, actual);
+
+        DAO.addCrewMember(PLATE, CREW_STRMTR);
+        
+        actual = DAO.ofPerson(CREW_STRMTR.CUI());
+        expected = Set.of(
+            new StarshipImpl(
+                "XWING002",
+                "Red Five",
+                new ShipModelImpl("XW0001", "X-Wing", 50, 100.0),
+                CAPITAN_MULDRT
+            ),
+            new StarshipImpl(
+                PLATE,
+                "Executor",
+                new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
+                CAPITAN_MULDRT
+            )
+        );
+        assertEquals(expected, actual);
+
+        // Test adding a crew member to a non-existent ship
+        final String NON_EXISTENT_PLATE = "NONEXISTENT";
+        LOGGER.info("Testing StarshipDAO.addCrewMember with non-existent plate: {}", NON_EXISTENT_PLATE);
+        assertThrows(
+            DAOException.class,
+            () -> DAO.addCrewMember(NON_EXISTENT_PLATE, CREW_STRMTR),
+            "Expected DAOException when adding a crew member to a non-existent ship"
+        );
+
+        // Test adding a person who doesn't have the CREW_MEMBER role
+        LOGGER.info("Testing StarshipDAO.addCrewMember with a person who is not a crew member: {}", CAPITAN_MULDRT.CUI());
+        assertThrows(
+            IllegalArgumentException.class, 
+            () -> DAO.addCrewMember(PLATE, CAPITAN_MULDRT),
+            "Expected IllegalArgumentException when adding a person who is not a crew member"
+        );
+
+    }
+
+    @Test
+    public void removeCrewMember() {
+        final String PLATE = "XWING002";
+        LOGGER.info("Testing StarshipDAO.removeCrewMember with plate: {}, member CUI: {}", PLATE, CREW_STRMTR.CUI());
+
+        var actual = DAO.ofPerson(CREW_STRMTR.CUI());
+        var expected = Set.of(
+            new StarshipImpl(
+                "XWING002",
+                "Red Five",
+                new ShipModelImpl("XW0001", "X-Wing", 50, 100.0),
+                CAPITAN_MULDRT
+            )
+        );
+        assertEquals(expected, actual);
+
+        DAO.removeCrewMember(PLATE, CREW_STRMTR);
+        
+        actual = DAO.ofPerson(CREW_STRMTR.CUI());
+        expected = Set.of();
+        assertEquals(expected, actual);
+
     }
 
 }

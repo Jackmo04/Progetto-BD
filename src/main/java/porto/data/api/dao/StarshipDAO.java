@@ -54,6 +54,14 @@ public interface StarshipDAO {
     /**
      * Removes a crew member from a starship.
      * @param plateNumber the plate number of the starship
+     * @param member the person to remove from the crew
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    void removeCrewMember(String plateNumber, Person member) throws DAOException;
+
+    /**
+     * Removes a crew member from a starship.
+     * @param plateNumber the plate number of the starship
      * @param memberCUI the CUI of the person to remove from the crew
      * @throws DAOException if an error occurs while accessing the database
      */
