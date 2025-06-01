@@ -1,6 +1,7 @@
 package main.porto.data.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,10 +20,12 @@ import porto.data.PersonImpl;
 import porto.data.PlanetImpl;
 import porto.data.ShipModelImpl;
 import porto.data.StarshipImpl;
+import porto.data.api.Person;
 import porto.data.api.Ideology;
 import porto.data.api.Role;
 import porto.data.api.dao.StarshipDAO;
 import porto.data.dao.StarshipDAOImpl;
+import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
 class TestStarshipDAO {
@@ -31,6 +34,21 @@ class TestStarshipDAO {
     private static Connection connection;
     private static Savepoint savepoint;
     private static StarshipDAO DAO;
+
+    private static final Person CAPITAN_MULDRT = new PersonImpl(
+        "MULDRT600322D",
+        "D.Maul",
+        "",
+        "Darth",
+        "Maul",
+        "Zabrak",
+        "1960-03-22",
+        false,
+        Ideology.IMPERIAL,
+        Role.CAPTAIN,
+        Optional.empty(),
+        new PlanetImpl("DANT010", "Dantooine")
+    );
 
     @BeforeAll
     public static void setup() throws SQLException {
@@ -66,20 +84,7 @@ class TestStarshipDAO {
             "CR900004",
             "Tantive IV",
             new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
-            new PersonImpl(
-                "MULDRT600322D",
-                "D.Maul",
-                "",
-                "Darth",
-                "Maul",
-                "Zabrak",
-                "1960-03-22",
-                false,
-                Ideology.IMPERIAL,
-                Role.CAPTAIN,
-                Optional.empty(),
-                new PlanetImpl("DANT010", "Dantooine")
-            )
+            CAPITAN_MULDRT
         ));
         assertEquals(expected, actual);
 
@@ -97,33 +102,18 @@ class TestStarshipDAO {
         final String CUI = "STRMTR0000001";
         LOGGER.info("Testing StarshipDAO.ofPerson with CUI: {}", CUI);
 
-        final var CAPITAN = new PersonImpl(
-            "MULDRT600322D",
-            "D.Maul",
-            "",
-            "Darth",
-            "Maul",
-            "Zabrak",
-            "1960-03-22",
-            false,
-            Ideology.IMPERIAL,
-            Role.CAPTAIN,
-            Optional.empty(),
-            new PlanetImpl("DANT010", "Dantooine")
-        );
-
         var actual = DAO.ofPerson(CUI);
         var expected = Set.of(
             new StarshipImpl(
                 "CR900004",
                 "Tantive IV",
                 new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
-                CAPITAN),
+                CAPITAN_MULDRT),
             new StarshipImpl(
                 "STARD003",
                 "Executor",
                 new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
-                CAPITAN));
+                CAPITAN_MULDRT));
         assertEquals(expected, actual);
 
         // Test with non-existent CUI
@@ -133,6 +123,40 @@ class TestStarshipDAO {
         actual = DAO.ofPerson(NON_EXISTENT_CUI);
         expected = Set.of();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void add() {
+        final String PLATE = "ADDED001";
+        LOGGER.info("Testing StarshipDAO.add with plate: {}", PLATE);
+
+        var ship = new StarshipImpl(
+            PLATE,
+            "New Ship",
+            new ShipModelImpl("GR7506", "Trasporto GR-75", 200, 350.0),
+            CAPITAN_MULDRT
+        );
+        DAO.add(ship);
+        
+        var actual = DAO.fromPlate(PLATE);
+        var expected = Optional.of(ship);
+        assertEquals(expected, actual);
+
+        // Test adding a ship with an existing plate
+        LOGGER.info("Testing StarshipDAO.add with existing plate: {}", PLATE);
+
+        var duplicateShip = new StarshipImpl(
+            PLATE,
+            "Duplicate Ship",
+            new ShipModelImpl("GR7506", "Trasporto GR-75", 200, 350.0),
+            CAPITAN_MULDRT
+        );
+        
+        assertThrows(
+            DAOException.class,
+            () -> DAO.add(duplicateShip),
+            "Expected DAOException when adding a ship with an existing plate"
+        );
     }
 
 }
