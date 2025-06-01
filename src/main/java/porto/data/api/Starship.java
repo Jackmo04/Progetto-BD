@@ -1,7 +1,6 @@
 package porto.data.api;
 
 import java.util.Optional;
-import java.util.Set;
 
 public interface Starship {
 
@@ -34,11 +33,5 @@ public interface Starship {
      * @return the captain
      */
     Person capitan();
-
-    /**
-     * Returns the crew members of the starship.
-     * @return a set of crew members
-     */
-    Set<Person> crewMembers();
 
 }
