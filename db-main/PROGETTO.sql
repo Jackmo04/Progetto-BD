@@ -379,7 +379,7 @@ INSERT INTO ASTRONAVI (Targa, Nome, CodArea, NumeroPosto, CodModello, CUICapitan
 ('XWING002', 'Red Five', 3, 1, 'XW0001', 'MULDRT600322D'),
 ('STARD003', 'Executor', 3, 5, 'SD0003', 'MULDRT600322D'),
 ('CR900004', 'Tantive IV', 4, 1, 'CR9005', 'MULDRT600322D'),
-('TIEF0005', 'Black Squadron 1', 3, 2, 'TIF004', 'SKWNKN410419T');
+('TIEF0005', 'Black Squadron 1', NULL, NULL, 'TIF004', 'SKWNKN410419T');
 
 INSERT INTO EQUIPAGGI (CUIAstronauta, TargaAstronave) VALUES
 ('STRMTR0000002', 'XWING002'),

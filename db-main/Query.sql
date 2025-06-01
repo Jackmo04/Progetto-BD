@@ -50,7 +50,7 @@ AND p.CUI = ?;
 -- _____________________________________________
 /*
 	S3 -- Visualizzare il posteggio della propria nave e l’area di attracco all’interno del porto
-    [Matteo] Da fare
+    [Matteo] Fatto
 */
 SELECT ast.CodArea, ar.Nome AS 'Nome Area', ast.NumeroPosto
 FROM astronavi ast, aree_attracco ar
@@ -58,10 +58,9 @@ WHERE ast.CodArea = ar.CodArea
 AND Targa = 'TIEF0005';
 
 /* Java [Optional<Posteggio>]
-SELECT ast.CodArea, ar.Nome AS 'Nome Area', ast.NumeroPosto
-FROM astronavi ast, aree_attracco ar
-WHERE ast.CodArea = ar.CodArea
-AND Targa = ?;
+SELECT CodArea, NumeroPosto
+FROM astronavi
+WHERE Targa = ?;
 */
 
 -- _____________________________________________
