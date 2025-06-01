@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Set;
 
-import porto.data.CellImpl;
 import porto.data.RequestImpl;
 import porto.data.api.FlightPurpose;
 import porto.data.api.Person;
@@ -41,22 +40,22 @@ public class RequestDAOImpl implements RequestDAO {
                 var resultSet = statement.executeQuery();) {
             if (resultSet.next()) {
                 Integer codRequestDB = resultSet.getInt("CodRichiesta");
-                RequestType type = RequestType.fromString(resultSet.getString("TipoRichiesta"));
-                Timestamp dateTime = resultSet.getTimestamp("DataOraRichiesta");
+                RequestType type = RequestType.fromString(resultSet.getString("EntrataUscita"));
+                Timestamp dateTime = resultSet.getTimestamp("DataOra");
                 String description = resultSet.getString("Descrizione");
                 double totalPrice = resultSet.getDouble("CostoTotale");
                 RequestState state = RequestState.fromString(resultSet.getString("Esito"));
-                Optional<Timestamp> dateTimeManaged = Optional.ofNullable(resultSet.getTimestamp("DataOraGestione"));
+                Optional<Timestamp> dateTimeManaged = Optional.ofNullable(resultSet.getTimestamp("DataEsito"));
                 Starship starship = new StarshipDAOImpl(connection).fromPlate(resultSet.getString("TargaAstronave"))
                         .get();
-                Integer codTipoViaggio = resultSet.getInt("CodTipoViaggio");
+                Integer codTipoViaggio = resultSet.getInt("Scopo");
                 FlightPurpose purpose = flightPurpose.stream()
                         .filter(fp -> fp.codFlightPurpose().equals(codTipoViaggio))
                         .findFirst().get();
                 Planet departurePlanet = new PlanetDAOImpl(connection)
-                        .getFromCodPlanet(resultSet.getString("CodPianetaPartenza")).get();
+                        .getFromCodPlanet(resultSet.getString("PianetaProvenienza")).get();
                 Planet destinationPlanet = new PlanetDAOImpl(connection)
-                        .getFromCodPlanet(resultSet.getString("CodPianetaDestinazione")).get();
+                        .getFromCodPlanet(resultSet.getString("PianetaDestinazione")).get();
                 Optional<Person> managedBy = new PersonDAOImpl(connection).getFromCUI(resultSet.getString("GestitaDa"));
 
                 var request = new RequestImpl(codRequestDB, type, dateTime, description, totalPrice, state,
