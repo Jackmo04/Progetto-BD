@@ -8,7 +8,9 @@ import java.util.Set;
 import porto.data.ParkingSpaceImpl;
 import porto.data.api.ParkingSpace;
 import porto.data.api.dao.ParkingSpaceDAO;
+import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
+import porto.data.utils.DAOUtils;
 
 public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
 
@@ -26,6 +28,7 @@ public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Optional<ParkingSpace> of(int codArea, int spaceNumber) throws DAOException {
         if (cache.stream().anyMatch(space -> space.parkingArea().codArea() == codArea && space.spaceNumber() == spaceNumber)) {
             return cache.stream()
@@ -38,6 +41,27 @@ public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
             cache.add(space.get());
         }
         return space;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<ParkingSpace> ofStarship(String starshipPlateNumber) throws DAOException {
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.SPACE_FROM_PLATE, starshipPlateNumber);
+            var resultSet = statement.executeQuery();
+        ) {
+            if (resultSet.next()) {
+                var codArea = resultSet.getInt("CodArea");
+                var spaceNumber = resultSet.getInt("NumeroPosto");
+                return this.of(codArea, spaceNumber);
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
 
     /**
