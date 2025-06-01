@@ -135,6 +135,7 @@ INSERT INTO ASTRONAVI (Targa, Nome, CodModello, CUICapitano) VALUES
 -- _____________________________________________
 /*
 	C2 -- Aggiungere o rimuovere membri all’equipaggio di una nave
+    [Matteo] Fatto
 */
 -- Aggiungere
 INSERT INTO equipaggi (TargaAstronave, CUIAstronauta) VALUES
