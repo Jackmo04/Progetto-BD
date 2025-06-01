@@ -15,8 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import porto.data.ParkingAreaImpl;
-import porto.data.ParkingSpaceImpl;
 import porto.data.PersonImpl;
 import porto.data.PlanetImpl;
 import porto.data.ShipModelImpl;
@@ -67,7 +65,6 @@ class TestStarshipDAO {
         var expected = Optional.of(new StarshipImpl(
             "CR900004",
             "Tantive IV",
-            Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1)),
             new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
             new PersonImpl(
                 "MULDRT600322D",
@@ -84,7 +81,14 @@ class TestStarshipDAO {
                 new PlanetImpl("DANT010", "Dantooine")
             )
         ));
+        assertEquals(expected, actual);
 
+        // Test with non-existent plate
+        final String NON_EXISTENT_PLATE = "NONEXISTENT";
+        LOGGER.info("Testing StarshipDAO.fromPlate with non-existent plate: {}", NON_EXISTENT_PLATE);
+
+        actual = DAO.fromPlate(NON_EXISTENT_PLATE);
+        expected = Optional.empty();
         assertEquals(expected, actual);
     }
 
@@ -113,15 +117,21 @@ class TestStarshipDAO {
             new StarshipImpl(
                 "CR900004",
                 "Tantive IV",
-                Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(4, "Rifornimento"), 1)),
                 new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
                 CAPITAN),
             new StarshipImpl(
                 "STARD003",
                 "Executor",
-                Optional.of(new ParkingSpaceImpl(new ParkingAreaImpl(3, "Officina"), 5)),
                 new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
                 CAPITAN));
+        assertEquals(expected, actual);
+
+        // Test with non-existent CUI
+        final String NON_EXISTENT_CUI = "NONEXISTENT";
+        LOGGER.info("Testing StarshipDAO.ofPerson with non-existent CUI: {}", NON_EXISTENT_CUI);
+
+        actual = DAO.ofPerson(NON_EXISTENT_CUI);
+        expected = Set.of();
         assertEquals(expected, actual);
     }
 

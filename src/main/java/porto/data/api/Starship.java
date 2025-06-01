@@ -2,6 +2,8 @@ package porto.data.api;
 
 import java.util.Optional;
 
+import porto.data.api.dao.ParkingSpaceDAO;
+
 public interface Starship {
 
     /**
@@ -17,12 +19,6 @@ public interface Starship {
     String name();
 
     /**
-     * Returns the parking space of the starship, if any.
-     * @return an Optional containing the parking space, or empty if not on the station
-     */
-    Optional<ParkingSpace> parkingSpace();
-
-    /**
      * Returns the model of the starship.
      * @return the ship model
      */
@@ -34,4 +30,11 @@ public interface Starship {
      */
     Person capitan();
 
+    /**
+     * Returns the parking space where the starship is docked.
+     * @return an Optional containing the parking space if present, otherwise empty
+     * @deprecated Use {@link ParkingSpaceDAO#ofStarship(String starshipPlateNumber)} instead.
+     */
+    @Deprecated
+    Optional<ParkingSpace> parkingSpace(); // TODO Remove this method when all references to Starship.parkingSpace() are replaced
 }
