@@ -160,7 +160,7 @@ AND e.CUIAstronauta = ?;
 -- _____________________________________________
 /*
 	C3 -- Visualizzare tutti i dati dei membri dell'equipaggio di una propria nave
-    [] Da fare
+    [Mattia] Da fare
 */
 SELECT p.CUI, p.Nome, p.Cognome, p.Razza, p.DataNascita, p.Ricercato, pn.Nome AS PianetaNascita
 FROM persone p, equipaggi e, pianeti pn
@@ -168,7 +168,7 @@ WHERE p.CUI = e.CUIAstronauta
 AND p.PianetaNascita = pn.CodPianeta
 AND e.TargaAstronave = 'MFALC001';
 
-/* Java [List<MembroEquipaggio>]
+/* Java [List<Person>]
 SELECT p.CUI, p.Nome, p.Cognome, p.Razza, p.DataNascita, p.Ricercato, pn.Nome AS PianetaNascita
 FROM persone p, equipaggi e, pianeti pn
 WHERE p.CUI = e.CUIAstronauta
@@ -179,7 +179,7 @@ AND e.TargaAstronave = ?;
 -- _____________________________________________
 /*
 	C4 -- Richiedere accesso al porto
-    [Matteo?] Da fare
+    [] Da fare
 */
 -- !! SELEZIONI SCOPO E PIANETI
 
@@ -209,7 +209,7 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 -- _____________________________________________
 /*
 	C5 -- Richiedere uscita dal porto
-    [Matteo?] da fare
+    [] da fare
 */
 -- Inseriamo la richiesta
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
@@ -239,7 +239,7 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 -- _____________________________________________
 /*
 	C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
-    [Matteo] Da fare
+    [] Da fare
 */
 SELECT DISTINCT r.*
 FROM richieste r, astronavi n
@@ -256,12 +256,14 @@ AND n.Targa = ?;
 -- _____________________________________________
 /*
 	C7 -- Visualizzare il costo di una richiesta di accesso o uscita.
+    [] Da fare
 */
 
 
 -- _____________________________________________
 /*
 	A1 -- Visualizzare tutte le richieste pendenti
+    [] Da fare
 */
 SELECT * FROM Richieste_pendenti;
 
@@ -272,6 +274,7 @@ SELECT * FROM Richieste_pendenti;
 -- _____________________________________________
 /*
 	A2 -- Valutare una richiesta pendente
+    [] Da fare
 */
 UPDATE richieste
 SET esito = 'A', dataEsito = NOW(), gestitaDa = 'PLPSHV201204N'
@@ -301,7 +304,7 @@ WHERE targa = (SELECT targaAstronave
 -- _____________________________________________
 /*
 	A3a -- Visualizza le celle disponibili
-    [Mattia] fatto
+    [Mattia] Fatto
 */
 /* old
 SELECT c.NumCella
@@ -325,7 +328,7 @@ HAVING COUNT(p.CUI) < c.Capienza;
 -- _____________________________________________
 /*
 	A3b -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
-    [Mattia] fatto
+    [Mattia] Fatto
 */
 
 UPDATE Persone
@@ -347,6 +350,7 @@ WHERE CUIAstronauta = ?;
 -- _____________________________________________
 /*
 	A4 -- Visualizzare il numero di persone presenti nel porto attualmente
+    [] Da fare
 */
 SELECT COUNT(DISTINCT p.CUI) AS `Astronauti in porto`
 FROM astronavi a, equipaggi e, persone p
@@ -358,6 +362,7 @@ AND a.numeroPosto IS NOT NULL;
 -- _____________________________________________
 /*
 	A5 -- Visualizzare la percentuale di richieste accettate e rifiutate in un dato intervallo di tempo
+    [] Da fare
 */
 SELECT 
 	ROUND(cra.num * 100 / crt.num, 2) AS `% Accettate`,
@@ -402,6 +407,7 @@ FROM RichiesteInIntervallo;
 -- _____________________________________________
 /*  
 	A6 -- Visualizzare posteggi liberi attualmente
+    [Matteo] Da fare
 */
 SELECT p.*
 FROM posteggi p 
@@ -413,6 +419,7 @@ WHERE (p.codArea, p.numeroPosto) NOT IN (SELECT a.codArea, a.numeroPosto
 -- _____________________________________________
 /*
 	A7 -- Visualizzare le 50 astronavi che hanno trasportato più merce.
+    [Matteo] Da fare
 */
 SELECT r.TargaAstronave, SUM(c.Quantita) QtaTot
 FROM Richieste r, Carichi c
@@ -421,4 +428,4 @@ GROUP BY r.TargaAstronave
 ORDER BY QtaTot DESC
 LIMIT 50;
 
-/* Java [Porto.Statistiche -> Map<Astronave, Integer>] */
+/* Java [Map<Astronave, Integer>] */
