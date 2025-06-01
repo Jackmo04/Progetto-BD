@@ -136,7 +136,7 @@ class TestStarshipDAO {
             new ShipModelImpl("GR7506", "Trasporto GR-75", 200, 350.0),
             CAPITAN_MULDRT
         );
-        DAO.add(ship);
+        DAO.addStarship(ship);
         
         var actual = DAO.fromPlate(PLATE);
         var expected = Optional.of(ship);
@@ -154,7 +154,7 @@ class TestStarshipDAO {
         
         assertThrows(
             DAOException.class,
-            () -> DAO.add(duplicateShip),
+            () -> DAO.addStarship(duplicateShip),
             "Expected DAOException when adding a ship with an existing plate"
         );
     }

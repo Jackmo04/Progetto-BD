@@ -3,6 +3,7 @@ package porto.data.api.dao;
 import java.util.Optional;
 import java.util.Set;
 
+import porto.data.api.Person;
 import porto.data.api.Starship;
 import porto.data.utils.DAOException;
 
@@ -29,7 +30,34 @@ public interface StarshipDAO {
      * @param starship the starship to add
      * @throws DAOException if an error occurs while accessing the database
      */
-    void add(Starship starship) throws DAOException;
+    void addStarship(Starship starship) throws DAOException;
+
+    /**
+     * Adds a crew member to a starship.
+     * @param plateNumber the plate number of the starship
+     * @param member the person to add as a crew member
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    void addCrewMember(String plateNumber, Person member) throws DAOException;
+
+    /**
+     * Adds a crew member to a starship.
+     * <br><br>
+     * <b>Note:</b> This method does not check the role of the person associated with the provided CUI.
+     * Use {@link #addCrewMember(String, Person)} instead to ensure the person is a crew member.
+     * @param plateNumber the plate number of the starship
+     * @param memberCUI the CUI of the person to add as a crew member
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    void addCrewMember(String plateNumber, String memberCUI) throws DAOException;
+
+    /**
+     * Removes a crew member from a starship.
+     * @param plateNumber the plate number of the starship
+     * @param memberCUI the CUI of the person to remove from the crew
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    void removeCrewMember(String plateNumber, String memberCUI) throws DAOException;
 
     /**
      * Clears the cache of starships.

@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import porto.data.StarshipImpl;
+import porto.data.api.Person;
+import porto.data.api.Role;
 import porto.data.api.Starship;
 import porto.data.api.dao.StarshipDAO;
 import porto.data.queries.Queries;
@@ -62,6 +64,7 @@ public class StarshipDAOImpl implements StarshipDAO {
      */
     @Override
     public Set<Starship> ofPerson(String CUIPerson) throws DAOException {
+        Objects.requireNonNull(CUIPerson, "CUI of the person cannot be null");
         Set<Starship> ships = new HashSet<>();
         try (
             var statement = DAOUtils.prepare(connection, Queries.SHIPS_FROM_PERSON, CUIPerson);
@@ -93,7 +96,7 @@ public class StarshipDAOImpl implements StarshipDAO {
      * {@inheritDoc}
      */
     @Override
-    public void add(Starship starship) throws DAOException {
+    public void addStarship(Starship starship) throws DAOException {
         Objects.requireNonNull(starship, "Starship cannot be null");
         var plateNumber = starship.plateNumber();
         var name = starship.name();
@@ -104,6 +107,49 @@ public class StarshipDAOImpl implements StarshipDAO {
         ) {
             statement.executeUpdate();
             cache.add(starship);
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addCrewMember(String plateNumber, Person member) throws DAOException {
+        if (member.role() != Role.CREW_MEMBER) {
+            throw new IllegalArgumentException("Person must be a crew member to be added to a starship.");
+        }
+        this.addCrewMember(plateNumber, member.CUI());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addCrewMember(String plateNumber, String memberCUI) throws DAOException {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        Objects.requireNonNull(memberCUI, "Crew member CUI cannot be null");
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.INSERT_CREW_MEMBER, plateNumber, memberCUI);
+        ) {
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeCrewMember(String plateNumber, String memberCUI) throws DAOException {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        Objects.requireNonNull(memberCUI, "Crew member CUI cannot be null");
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.REMOVE_CREW_MEMBER, plateNumber, memberCUI);
+        ) {
+            statement.executeUpdate();
         } catch (Exception e) {
             throw new DAOException(e);
         }

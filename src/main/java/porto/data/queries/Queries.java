@@ -74,4 +74,15 @@ public final class Queries {
         VALUES (?, ?, ?, ?);
     """;
 
+    public static final String INSERT_CREW_MEMBER = """
+        INSERT INTO equipaggi (TargaAstronave, CUIAstronauta)
+        VALUES (?, ?);
+    """;
+
+    public static final String REMOVE_CREW_MEMBER = """
+        DELETE FROM equipaggi
+        WHERE TargaAstronave = ?
+        AND CUIAstronauta = ?;
+    """;
+
 }
