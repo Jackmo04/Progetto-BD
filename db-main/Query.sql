@@ -113,9 +113,9 @@ GROUP BY 1-10;
 -- _____________________________________________
 /*
 	C1 -- Registrare la propria nave all'applicazione.
-    [Matteo] Da fare
+    [Matteo] Fatto
 */
--- Visualizz. scelta modello
+-- Visualizz. scelta modello [Matteo] Fatto
 SELECT CodModello, Nome
 FROM Modelli;
 
