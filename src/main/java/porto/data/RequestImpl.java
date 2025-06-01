@@ -18,12 +18,12 @@ public record RequestImpl(
     String description,
     double totalPrice,
     RequestState state,
-    Optional<Timestamp> dateTimeManaged,
-    Optional<Person> managedBy,
+    Optional<Timestamp> dateTimeManaged,   
     Starship starship,
     FlightPurpose purpose,
     Planet departurePlanet,
-    Planet destinationPlanet
+    Planet destinationPlanet,
+    Optional<Person> managedBy
 ) implements Request {
 
     @Override
