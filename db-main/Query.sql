@@ -66,9 +66,9 @@ WHERE Targa = ?;
 -- _____________________________________________
 /*
 	S4 -- Visualizzare l’ultima richiesta effettuata da una nave
-    {Request} [Mattia] Da fare
+    {Request} [Mattia] Fatto
 */
-SELECT r.*
+SELECT r.CodRichiesta
 FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
 AND n.Targa = 'MFALC001'
@@ -76,7 +76,7 @@ ORDER BY r.DataOra DESC
 LIMIT 1;
 
 /* Java [Optional<Richiesta>]
-SELECT r.*
+SELECT r.CodRichiesta
 FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
 AND n.Targa = ?
@@ -155,7 +155,7 @@ AND e.CUIAstronauta = ?;
 -- _____________________________________________
 /*
 	C3 -- Visualizzare tutti i dati dei membri dell'equipaggio di una propria nave
-    {Person} [Mattia] Da fare
+    {Person} [Mattia] Fatto
 */
 SELECT p.CUI
 FROM persone p, equipaggi e, pianeti pn

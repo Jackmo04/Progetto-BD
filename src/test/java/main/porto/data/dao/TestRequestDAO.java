@@ -41,5 +41,12 @@ class TestRequestDAO {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void lastRequest() {
+        var requestDAO = new RequestDAOImpl(connection);
+        var actual = requestDAO.getLastRequest("MFALC001");
+        var expected = requestDAO.getRequestByCodRequest(1);
+        assertEquals(expected, actual);
+    }
 
 }
