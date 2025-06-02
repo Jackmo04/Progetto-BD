@@ -257,7 +257,7 @@ AND n.Targa = ?;
 -- _____________________________________________
 /*
 	A1 -- Visualizzare tutte le richieste pendenti
-    {Request} [?] Da fare
+    {Request} [Mattia] fatto
 */
 SELECT * FROM Richieste_pendenti;
 
