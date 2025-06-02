@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,6 +25,7 @@ import porto.data.StarshipImpl;
 import porto.data.api.Person;
 import porto.data.api.Ideology;
 import porto.data.api.Role;
+import porto.data.api.Starship;
 import porto.data.api.dao.StarshipDAO;
 import porto.data.dao.StarshipDAOImpl;
 import porto.data.utils.DAOException;
@@ -65,6 +68,27 @@ class TestStarshipDAO {
         new PlanetImpl("DTHSTR0", "Morte Nera")
     );
 
+    private static final Starship SHIP_XWING = new StarshipImpl(
+        "XWING002",
+        "Red Five",
+        new ShipModelImpl("XW0001", "X-Wing", 50, 100.0),
+        CAPITAN_MULDRT
+    );
+
+    private static final Starship SHIP_TANTIVE = new StarshipImpl(
+        "CR900004",
+        "Tantive IV",
+        new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
+        CAPITAN_MULDRT
+    );
+
+    private static final Starship SHIP_EXECUTOR = new StarshipImpl(
+        "STARD003",
+        "Executor",
+        new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
+        CAPITAN_MULDRT
+    );
+
     @BeforeAll
     public static void setup() throws SQLException {
         connection = DAOUtils.localMySQLConnection("PortoMorteNera", "root", "");
@@ -95,12 +119,7 @@ class TestStarshipDAO {
         LOGGER.info("Testing StarshipDAO.fromPlate with plate: {}", PLATE);
 
         var actual = DAO.fromPlate(PLATE);
-        var expected = Optional.of(new StarshipImpl(
-            "CR900004",
-            "Tantive IV",
-            new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
-            CAPITAN_MULDRT
-        ));
+        var expected = Optional.of(SHIP_TANTIVE);
         assertEquals(expected, actual);
 
         // Test with non-existent plate
@@ -118,17 +137,7 @@ class TestStarshipDAO {
         LOGGER.info("Testing StarshipDAO.ofPerson with CUI: {}", CUI);
 
         var actual = DAO.ofPerson(CUI);
-        var expected = Set.of(
-            new StarshipImpl(
-                "CR900004",
-                "Tantive IV",
-                new ShipModelImpl("CR9005", "Corvette CR90", 200, 350.0),
-                CAPITAN_MULDRT),
-            new StarshipImpl(
-                "STARD003",
-                "Executor",
-                new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
-                CAPITAN_MULDRT));
+        var expected = Set.of(SHIP_TANTIVE, SHIP_EXECUTOR);
         assertEquals(expected, actual);
 
         // Test with non-existent CUI
@@ -180,33 +189,13 @@ class TestStarshipDAO {
         LOGGER.info("Testing StarshipDAO.addCrewMember with plate: {}, member CUI: {}", PLATE, CREW_STRMTR.CUI());
 
         var actual = DAO.ofPerson(CREW_STRMTR.CUI());
-        var expected = Set.of(
-            new StarshipImpl(
-                "XWING002",
-                "Red Five",
-                new ShipModelImpl("XW0001", "X-Wing", 50, 100.0),
-                CAPITAN_MULDRT
-            )
-        );
+        var expected = Set.of(SHIP_XWING);
         assertEquals(expected, actual);
 
         DAO.addCrewMember(PLATE, CREW_STRMTR);
         
         actual = DAO.ofPerson(CREW_STRMTR.CUI());
-        expected = Set.of(
-            new StarshipImpl(
-                "XWING002",
-                "Red Five",
-                new ShipModelImpl("XW0001", "X-Wing", 50, 100.0),
-                CAPITAN_MULDRT
-            ),
-            new StarshipImpl(
-                PLATE,
-                "Executor",
-                new ShipModelImpl("SD0003", "Star Destroyer", 1000, 1500.0),
-                CAPITAN_MULDRT
-            )
-        );
+        expected = Set.of(SHIP_XWING, SHIP_EXECUTOR);
         assertEquals(expected, actual);
 
         // Test adding a crew member to a non-existent ship
@@ -230,24 +219,36 @@ class TestStarshipDAO {
 
     @Test
     public void removeCrewMember() {
-        final String PLATE = "XWING002";
-        LOGGER.info("Testing StarshipDAO.removeCrewMember with plate: {}, member CUI: {}", PLATE, CREW_STRMTR.CUI());
+        LOGGER.info(
+            "Testing StarshipDAO.removeCrewMember with plate: {}, member CUI: {}", 
+            SHIP_XWING.plateNumber(), 
+            CREW_STRMTR.CUI()
+        );
 
         var actual = DAO.ofPerson(CREW_STRMTR.CUI());
-        var expected = Set.of(
-            new StarshipImpl(
-                "XWING002",
-                "Red Five",
-                new ShipModelImpl("XW0001", "X-Wing", 50, 100.0),
-                CAPITAN_MULDRT
-            )
-        );
+        var expected = Set.of(SHIP_XWING);
         assertEquals(expected, actual);
 
-        DAO.removeCrewMember(PLATE, CREW_STRMTR);
+        DAO.removeCrewMember(SHIP_XWING.plateNumber(), CREW_STRMTR);
         
         actual = DAO.ofPerson(CREW_STRMTR.CUI());
         expected = Set.of();
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    public void topTransporting() {
+        LOGGER.info("Testing StarshipDAO.get50TransportedMost");
+
+        var actual = DAO.get50TransportedMost().entrySet().stream()
+            .map(entry -> Map.entry(entry.getKey().plateNumber(), entry.getValue()))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<String, Integer> expected = Map.of(
+            "XWING002", 10,
+            "MFALC001", 3,
+            "TIEF0005", 3
+        );
         assertEquals(expected, actual);
 
     }
