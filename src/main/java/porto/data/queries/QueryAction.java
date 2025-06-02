@@ -47,6 +47,16 @@ public final class QueryAction {
                 WHERE p.CUI = e.CUIAstronauta
                 AND e.TargaAstronave = ?;
             """;
+
+        public static final String S4_LAST_REQUEST =
+        """
+                SELECT r.CodRichiesta
+                FROM richieste r, astronavi n
+                WHERE r.TargaAstronave = n.Targa
+                AND n.Targa = ?
+                ORDER BY r.DataOra DESC
+                LIMIT 1;
+            """;
         
         
     

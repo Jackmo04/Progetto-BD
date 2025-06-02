@@ -15,6 +15,7 @@ import porto.data.api.RequestType;
 import porto.data.api.Starship;
 import porto.data.api.dao.RequestDAO;
 import porto.data.queries.Queries;
+import porto.data.queries.QueryAction;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
@@ -100,9 +101,18 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public String getDettaliedRequest(Integer codRequest) throws DAOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDettaliedRequest'");
+    public Optional<Request> getLastRequest(String plate) throws DAOException {
+                try (
+                var statement = DAOUtils.prepare(connection, QueryAction.S4_LAST_REQUEST, plate);
+                var resultSet = statement.executeQuery();) {
+            if (resultSet.next()) {
+                return getRequestByCodRequest(resultSet.getInt("CodRichiesta"));
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
 
 }

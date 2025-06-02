@@ -68,7 +68,7 @@ WHERE Targa = ?;
 	S4 -- Visualizzare l’ultima richiesta effettuata da una nave
     {Request} [Mattia] Da fare
 */
-SELECT r.*
+SELECT r.CodRichiesta
 FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
 AND n.Targa = 'MFALC001'
@@ -76,7 +76,7 @@ ORDER BY r.DataOra DESC
 LIMIT 1;
 
 /* Java [Optional<Richiesta>]
-SELECT r.*
+SELECT r.CodRichiesta
 FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
 AND n.Targa = ?

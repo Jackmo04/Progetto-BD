@@ -46,12 +46,13 @@ public interface RequestDAO {
     public void addEntryRequest(String description, Starship starship, String scope, Planet originPlanet)
             throws DAOException;
 
+
         /**
-         * Retrieves detailed information about a request by its unique code.
-         * @param codRequest the unique code of the request
-         * @return a String containing detailed information about the request
+         * Retrieves the last request made for a specific plate.
+         * @param plate the plate of the starship for which to retrieve the last request
+         * @return the last request made for the specified plate, or null if no request exists
          * @throws DAOException if an error occurs while accessing the database
-         */
-    public String getDettaliedRequest (Integer codRequest) throws DAOException;
+         */    
+    public Optional<Request> getLastRequest (String  plate) throws DAOException;
 
 }
