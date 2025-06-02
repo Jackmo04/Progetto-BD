@@ -42,48 +42,52 @@ class TestPersonDAO {
 
     @Test
     public void fromCUI() {
-        var actual = Set.of(new PersonDAOImpl(connection).getFromCUI("SKWLKE510925T").get().CUI(),
-                new PersonDAOImpl(connection).getFromCUI("CHWBCC000101K").get().CUI());
+        var personDAO = new PersonDAOImpl(connection);
+        var actual = Set.of(personDAO.getFromCUI("SKWLKE510925T").get().CUI(),
+                personDAO.getFromCUI("CHWBCC000101K").get().CUI());
         var expected = Set.of("SKWLKE510925T", "CHWBCC000101K");
         assertEquals(expected, actual);
     }
 
     @Test
     public void addPerson() {
-        new PersonDAOImpl(connection).addPerson("STRMTR0000004", "Trooper4", "", "Stormtrooper",
-        "00004", "Clone", "2000-01-01", Ideology.IMPERIAL,
-         Role.CREW_MEMBER,  "DTHSTR0");
+        var personDAO = new PersonDAOImpl(connection);
+        personDAO.addPerson("STRMTR0000004", "Trooper4", "", "Stormtrooper",
+                "00004", "Clone", "2000-01-01", Ideology.IMPERIAL,
+                Role.CREW_MEMBER, "DTHSTR0");
 
-        var actual = new PersonDAOImpl(connection).getFromCUI("STRMTR0000004").get().CUI();
+        var actual = personDAO.getFromCUI("STRMTR0000004").get().CUI();
         var expected = "STRMTR0000004";
         assertEquals(expected, actual);
     }
 
     @Test
     public void isValidPerson() {
-        var actual = new PersonDAOImpl(connection).isValidPerson("SKWLKE510925T" , "");
+        var personDAO = new PersonDAOImpl(connection);
+        var actual = personDAO.isValidPerson("SKWLKE510925T", "");
         var expected = true;
         assertEquals(expected, actual);
 
-        var actual2 = new PersonDAOImpl(connection).isValidPerson("SKWLKE510925T" , "password");
+        var actual2 = personDAO.isValidPerson("SKWLKE510925T", "password");
         var expected2 = false;
         assertEquals(expected2, actual2);
     }
 
-        @Test
+    @Test
     public void arrestPerson() {
-        new PersonDAOImpl(connection).arrestPerson("STRMTR0000001");
+        var personDAO = new PersonDAOImpl(connection);
+        personDAO.arrestPerson("STRMTR0000001");
 
-        var actual = new PersonDAOImpl(connection).getFromCUI("STRMTR0000001").get().cell().get().numCell();
+        var actual = personDAO.getFromCUI("STRMTR0000001").get().cell().get().numCell();
         assertNotNull(actual);
     }
 
-            @Test
+    @Test
     public void getEquipeOfStarship() {
         var personDao = new PersonDAOImpl(connection);
         var actual = personDao.getEquipeOfStarship("MFALC001");
         var expected = List.of(personDao.getFromCUI("CHWBCC000101K").get(),
-        personDao.getFromCUI("SKWLKE510925T").get());
+                personDao.getFromCUI("SKWLKE510925T").get());
         assertEquals(expected, actual);
     }
 

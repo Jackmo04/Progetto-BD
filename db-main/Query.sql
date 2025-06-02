@@ -66,7 +66,7 @@ WHERE Targa = ?;
 -- _____________________________________________
 /*
 	S4 -- Visualizzare l’ultima richiesta effettuata da una nave
-    {Request} [Mattia] Da fare
+    {Request} [Mattia] Fatto
 */
 SELECT r.CodRichiesta
 FROM richieste r, astronavi n
