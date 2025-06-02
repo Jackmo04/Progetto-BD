@@ -173,7 +173,7 @@ AND e.TargaAstronave = ?;
 -- _____________________________________________
 /*
 	C4 -- Richiedere accesso al porto
-    {Request} [Matteo] Da fare
+    {Request} [Matteo] Fatto
 */
 -- !! SELEZIONI SCOPO E PIANETI [Matteo] Fatto
 
@@ -203,7 +203,7 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 -- _____________________________________________
 /*
 	C5 -- Richiedere uscita dal porto
-    {Request} [Matteo] Da fare
+    {Request} [Matteo] Fatto
 */
 -- Inseriamo la richiesta
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
