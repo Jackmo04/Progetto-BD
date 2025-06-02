@@ -19,4 +19,10 @@ public interface Payload {
      * @return the associated request code
      */
     int associatedRequestCode();
+
+    /**
+     * Gets the total price of the payload.
+     * @return the total price
+     */
+    double totalPrice();
 }
