@@ -83,6 +83,28 @@ public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
      * {@inheritDoc}
      */
     @Override
+    public Set<ParkingSpace> getAllFree() throws DAOException {
+        Set<ParkingSpace> freeSpaces = new HashSet<>();
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.FREE_PARKING_SPACES);
+            var resultSet = statement.executeQuery();
+        ) {
+            while (resultSet.next()) {
+                var codArea = resultSet.getInt("CodArea");
+                var spaceNumber = resultSet.getInt("NumeroPosto");
+                var parkingSpace = this.of(codArea, spaceNumber).orElseThrow();
+                freeSpaces.add(parkingSpace);
+            }
+            return freeSpaces;
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int clearCache() {
         int size = cache.size();
         cache.clear();

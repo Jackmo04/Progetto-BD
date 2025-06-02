@@ -1,6 +1,7 @@
 package porto.data.api.dao;
 
 import java.util.Optional;
+import java.util.Set;
 
 import porto.data.api.ParkingSpace;
 import porto.data.utils.DAOException;
@@ -30,6 +31,13 @@ public interface ParkingSpaceDAO {
      * @throws DAOException if an error occurs while accessing the database
      */
     int getNumberOfPeopleOnStation() throws DAOException;
+
+    /**
+     * Returns a set of all free parking spaces on the station.
+     * @return a Set of ParkingSpace objects representing all free spaces
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    Set<ParkingSpace> getAllFree() throws DAOException;
 
     /**
      * Clears the cache of ParkingSpace objects.

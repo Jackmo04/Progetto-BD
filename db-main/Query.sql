@@ -211,6 +211,7 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 /*
 	C5 -- Richiedere uscita dal porto
     {Request} [?] Da fare
+    requestAccess(connection, Set<Payload>)
 */
 -- Inseriamo la richiesta
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
