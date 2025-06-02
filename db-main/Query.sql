@@ -209,7 +209,7 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
 ('U', 'PippoPluto2', 0, 'TIEF0005', 3, 'DTHSTR0', 'NABO004');
 
--- Inseriamo il carico all'ultima richiesta aggiunta {Payload} [Matteo] Da fare
+-- Inseriamo il carico all'ultima richiesta aggiunta {Payload} [Matteo] Fatto
 INSERT INTO Carichi (Tipologia, Quantita, CodRichiesta) VALUES
 (1, 20, (SELECT CodRichiesta FROM Ultima_richiesta));
 
