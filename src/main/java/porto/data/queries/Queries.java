@@ -97,4 +97,12 @@ public final class Queries {
         AND a.numeroPosto IS NOT NULL;
     """;
 
+    public static final String FREE_PARKING_SPACES = """
+        SELECT p.*
+        FROM posteggi p 
+        WHERE (p.codArea, p.numeroPosto) NOT IN (SELECT a.codArea, a.numeroPosto
+										         FROM astronavi a
+                                                 WHERE a.numeroPosto IS NOT NULL);
+    """;
+
 }

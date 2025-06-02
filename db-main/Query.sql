@@ -180,7 +180,7 @@ AND e.TargaAstronave = ?;
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
 ('E', 'PippoPluto2', 0, 'TIEF0005', 3, 'NABO004', 'DTHSTR0');
 
--- Se ci sono dei carichi {Payload} [?] Da fare
+-- C45a Se ci sono dei carichi {Payload} [?] Da fare
 INSERT INTO Carichi (Tipologia, Quantita, CodRichiesta) VALUES
 (1, 20, (SELECT CodRichiesta FROM Ultima_richiesta)),
 (2, 5, (SELECT CodRichiesta FROM Ultima_richiesta ));
@@ -401,13 +401,14 @@ FROM RichiesteInIntervallo;
 -- _____________________________________________
 /*  
 	A6 -- Visualizzare posteggi liberi attualmente
-    {ParkingSpace} [Matteo] Da fare
+    {ParkingSpace} [Matteo] Fatto
 */
 SELECT p.*
 FROM posteggi p 
 WHERE (p.codArea, p.numeroPosto) NOT IN (SELECT a.codArea, a.numeroPosto
-										 FROM astronavi a);
-										
+										 FROM astronavi a
+                                         WHERE a.numeroPosto IS NOT NULL);
+						
 /* Java [List<Posteggio>] */
 
 -- _____________________________________________

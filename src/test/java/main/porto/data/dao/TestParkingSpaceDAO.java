@@ -130,4 +130,13 @@ class TestParkingSpaceDAO {
         expected = NUMBER_OF_PEOPLE - 2; // 2 crew members removed
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void getAllFree() {
+        LOGGER.info("Testing ParkingSpaceDAO.getAllFree");
+
+        var actual = DAO.getAllFree().size();
+        var expected = 13;
+        assertEquals(expected, actual);
+    }
 }
