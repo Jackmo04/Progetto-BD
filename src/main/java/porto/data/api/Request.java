@@ -80,6 +80,6 @@ public interface Request {
      * Returns the planet to which the starship is destined.
      * @return the destination planet
      */
-    Planet destinationPlane();
+    Planet destinationPlanet();
 
 }

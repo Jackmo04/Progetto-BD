@@ -30,14 +30,5 @@ public record RequestImpl(
     Planet destinationPlanet,
     Optional<Person> managedBy
 ) implements Request {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Planet destinationPlane() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'destinationPlane'");
-    }
     
 }
