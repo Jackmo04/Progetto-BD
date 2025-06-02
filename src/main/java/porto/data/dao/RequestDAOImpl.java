@@ -1,6 +1,7 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 import porto.data.RequestImpl;
 import porto.data.api.FlightPurpose;
+import porto.data.api.Payload;
 import porto.data.api.Planet;
 import porto.data.api.Request;
 import porto.data.api.RequestState;
@@ -82,20 +84,80 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public void addExitRequest(String description, FlightPurpose purpose, Starship starship, Planet destinationPlanet)
-            throws DAOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addExitRequest'");
+    public void addExitRequest(
+        String description, 
+        FlightPurpose purpose, 
+        Starship starship, 
+        Planet destinationPlanet,
+        Set<Payload> payloads
+    ) throws DAOException {
+        this.addRequest(description, purpose, starship, destinationPlanet, payloads, Queries.INSERT_EXIT_REQUEST);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addEntryRequest(String description, FlightPurpose purpose, Starship starship, Planet originPlanet)
-            throws DAOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addEntryRequest'");
+    public void addEntryRequest(
+        String description,
+        FlightPurpose purpose,
+        Starship starship,
+        Planet originPlanet,
+        Set<Payload> payloads
+    ) throws DAOException {
+        this.addRequest(description, purpose, starship, originPlanet, payloads, Queries.INSERT_ENTRY_REQUEST);
+    }
+
+    private void addRequest(
+        String description,
+        FlightPurpose purpose,
+        Starship starship,
+        Planet planet,
+        Set<Payload> payloads,
+        String query
+    ) throws DAOException {
+        try (
+            var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        ) {
+            statement.setObject(1, description);
+            statement.setObject(2, purpose.code());
+            statement.setObject(3, starship.plateNumber());
+            statement.setObject(4, planet.codPlanet());
+            statement.executeUpdate();
+            var resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                if (payloads.isEmpty()) {
+                    return;
+                }
+                var codRequest = resultSet.getInt(1);
+                this.addPayloadsToRequest(payloads, codRequest);
+            } else {
+                throw new DAOException("Failed to retrieve generated key for request.");
+            }
+
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    private void addPayloadsToRequest(Set<Payload> payloads, int codRequest) throws DAOException {
+        if (payloads.isEmpty()) {
+            return;
+        }
+        var payloadDAO = new PayloadDAOImpl(connection);
+        var totalPrice = payloads.stream()
+            .mapToDouble(Payload::totalPrice)
+            .sum();
+        payloads.forEach(pl -> {
+            payloadDAO.add(pl.type(), pl.quantity(), codRequest);
+        });
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.UPDATE_REQUEST_TOTAL_PRICE, totalPrice, codRequest);
+        ) {
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new DAOException("Failed to update total price for request.", e);
+        }
     }
 
     /**
@@ -104,8 +166,9 @@ public class RequestDAOImpl implements RequestDAO {
     @Override
     public Optional<Request> getLastRequest(String plate) throws DAOException {
         try (
-                var statement = DAOUtils.prepare(connection, QueryAction.S4_LAST_REQUEST, plate);
-                var resultSet = statement.executeQuery();) {
+            var statement = DAOUtils.prepare(connection, QueryAction.S4_LAST_REQUEST, plate);
+            var resultSet = statement.executeQuery();
+        ) {
             if (resultSet.next()) {
                 return getRequestByCodRequest(resultSet.getInt("CodRichiesta"));
             } else {

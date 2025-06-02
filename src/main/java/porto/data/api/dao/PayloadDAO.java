@@ -1,6 +1,5 @@
 package porto.data.api.dao;
 
-import porto.data.api.Payload;
 import porto.data.api.PayloadType;
 import porto.data.utils.DAOException;
 
@@ -11,8 +10,7 @@ public interface PayloadDAO {
      * @param type the type of payload to add
      * @param quantity the quantity of the payload
      * @param codRequest the code of the request associated with the payload
-     * @return the added payload
      * @throws DAOException if an error occurs while adding the payload
      */
-    Payload add(PayloadType type, int quantity, int codRequest) throws DAOException;
+    void add(PayloadType type, int quantity, int codRequest) throws DAOException;
 }

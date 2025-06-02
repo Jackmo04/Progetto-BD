@@ -15,12 +15,6 @@ public interface Payload {
     int quantity();
 
     /**
-     * Gets the code of the associated request.
-     * @return the associated request code
-     */
-    int associatedRequestCode();
-
-    /**
      * Gets the total price of the payload.
      * @return the total price
      */

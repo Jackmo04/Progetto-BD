@@ -2,8 +2,10 @@ package porto.data.api.dao;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import porto.data.api.FlightPurpose;
+import porto.data.api.Payload;
 import porto.data.api.Planet;
 import porto.data.api.Request;
 import porto.data.api.Starship;
@@ -16,78 +18,88 @@ import porto.data.utils.DAOException;
  */
 public interface RequestDAO {
 
-        /**
-         * Retrieves a request by its unique code.
-         *
-         * @param codRequest the unique code of the request
-         * @return an Optional containing the Request if found, or empty if not found
-         * @throws DAOException if an error occurs while accessing the database
-         */
+    /**
+     * Retrieves a request by its unique code.
+     *
+     * @param codRequest the unique code of the request
+     * @return an Optional containing the Request if found, or empty if not found
+     * @throws DAOException if an error occurs while accessing the database
+     */
     public Optional<Request> getRequestByCodRequest(Integer codRequest) throws DAOException;
 
-        /**
-         * Adds a new exit request to the database.
-         *
-         * @param description the description of the request
-         * @param starship the starship associated with the request
-         * @param purpose the purpose of the flight
-         * @param destinationPlanet the destination planet for the request
-         * @throws DAOException if an error occurs while accessing the database
-         */
-    public void addExitRequest(String description, FlightPurpose purpose, Starship starship, Planet destinationPlanet)
-            throws DAOException;
+    /**
+     * Adds a new exit request to the database.
+     *
+     * @param description the description of the request
+     * @param starship the starship associated with the request
+     * @param purpose the purpose of the flight
+     * @param destinationPlanet the destination planet for the request
+     * @param payloads the set of payloads associated with the request
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    public void addExitRequest(
+        String description, 
+        FlightPurpose purpose, 
+        Starship starship, 
+        Planet destinationPlanet, 
+        Set<Payload> payloads
+    ) throws DAOException;
 
-        /**
-         * Adds a new entry request to the database.
-         * @param description the description of the request
-         * @param starship the starship associated with the request
-         * @param purpose the purpose of the flight
-         * @param originPlanet the origin planet for the request
-         * @throws DAOException if an error occurs while accessing the database
-         */
-    public void addEntryRequest(String description, FlightPurpose purpose, Starship starship, Planet originPlanet)
-            throws DAOException;
+    /**
+     * Adds a new entry request to the database.
+     * @param description the description of the request
+     * @param starship the starship associated with the request
+     * @param purpose the purpose of the flight
+     * @param originPlanet the origin planet for the request
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    public void addEntryRequest(
+        String description, 
+        FlightPurpose purpose, 
+        Starship starship, 
+        Planet originPlanet,
+        Set<Payload> payloads
+    ) throws DAOException;
 
 
-        /**
-         * Retrieves the last request made for a specific plate.
-         * @param plate the plate of the starship for which to retrieve the last request
-         * @return the last request made for the specified plate, or null if no request exists
-         * @throws DAOException if an error occurs while accessing the database
-         */    
+    /**
+     * Retrieves the last request made for a specific plate.
+     * @param plate the plate of the starship for which to retrieve the last request
+     * @return the last request made for the specified plate, or null if no request exists
+     * @throws DAOException if an error occurs while accessing the database
+     */    
     public Optional<Request> getLastRequest (String  plate) throws DAOException;
 
-        /**
-         * Retrieves the history of requests made for a specific plate.
-         * @param plate the plate of the starship for which to retrieve the request history
-         * @return a list of requests associated with the specified plate
-         * @throws DAOException if an error occurs while accessing the database
-         */
+    /**
+     * Retrieves the history of requests made for a specific plate.
+     * @param plate the plate of the starship for which to retrieve the request history
+     * @return a list of requests associated with the specified plate
+     * @throws DAOException if an error occurs while accessing the database
+     */
     public List<Request> requestHistory (String  plate) throws DAOException;
 
 
-        /**
-         * Retrieves a list of all requests in the database.
-         *
-         * @return a list of all requests
-         * @throws DAOException if an error occurs while accessing the database
-         */
+    /**
+     * Retrieves a list of all requests in the database.
+     * @return a list of all requests
+     * @throws DAOException if an error occurs while accessing the database
+     */
     public List<Request> pendingRequests() throws DAOException;
 
-        /**
-         * Accepts a request by its unique code and the CUI of the admin processing it.
-         * @param codRequest
-         * @param CUIAdmin
-         * @throws DAOException
-         */
+    /**
+     * Accepts a request by its unique code and the CUI of the admin processing it.
+     * @param codRequest
+     * @param CUIAdmin
+     * @throws DAOException
+     */
     public void acceptEnterRequest(Integer codRequest , String CUIAdmin) throws DAOException;
 
-        /**
-         * Rejects a request by its unique code and the CUI of the admin processing it.
-         * @param codRequest
-         * @param CUIAdmin
-         * @throws DAOException
-         */
+    /**
+     * Rejects a request by its unique code and the CUI of the admin processing it.
+     * @param codRequest
+     * @param CUIAdmin
+     * @throws DAOException
+     */
     public void rejectRequest(Integer codRequest , String CUIAdmin) throws DAOException;
 
 }

@@ -6,8 +6,10 @@ import porto.data.api.PayloadType;
 public record PayloadImpl(
     PayloadType type,
     int quantity,
-    int associatedRequestCode,
     double totalPrice
 ) implements Payload {
 
+    public PayloadImpl(PayloadType type, int quantity, int codRequest) {
+        this(type, quantity, quantity * type.unitPrice());
+    }
 }

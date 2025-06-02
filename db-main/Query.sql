@@ -220,7 +220,7 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 
 /* Java [Richiesta->null]
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
-('U', ?, ?, ?, ?, 'DTHSTR0', ?);
+('U', ?, 0, ?, ?, 'DTHSTR0', ?);
 
 INSERT INTO Carichi (Tipologia, Quantita, CodRichiesta) VALUES
 (?, ?, (SELECT CodRichiesta FROM Ultima_richiesta));

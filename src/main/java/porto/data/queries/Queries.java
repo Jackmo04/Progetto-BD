@@ -124,4 +124,20 @@ public final class Queries {
         FROM tipologie_carico t;
     """;
 
+    public static final String INSERT_ENTRY_REQUEST = """
+        INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione)
+        VALUES ('E', ?, 0, ?, ?, ?, 'DTHSTR0');
+    """;
+
+    public static final String INSERT_EXIT_REQUEST = """
+        INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione)
+        VALUES ('U', ?, 0, ?, ?, 'DTHSTR0', ?);
+    """;
+
+    public static final String UPDATE_REQUEST_TOTAL_PRICE = """
+        UPDATE richieste
+        SET CostoTotale = ?
+        WHERE CodRichiesta = ?;
+    """;
+
 }
