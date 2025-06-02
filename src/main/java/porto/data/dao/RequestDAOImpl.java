@@ -248,7 +248,7 @@ public class RequestDAOImpl implements RequestDAO {
             var resultSet = statement.executeQuery();
         ) {
             if (resultSet.next()) {
-                return Optional.of(RequestState.fromString(resultSet.getString("Stato")));
+                return Optional.of(RequestState.fromString(resultSet.getString("Esito")));
             } else {
                 return Optional.empty();
             }
