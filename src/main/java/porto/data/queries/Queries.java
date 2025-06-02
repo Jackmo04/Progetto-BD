@@ -114,4 +114,14 @@ public final class Queries {
         LIMIT 50;
     """;
 
+    public static final String ADD_PAYLOAD = """
+        INSERT INTO Carichi (Tipologia, Quantita, CodRichiesta) 
+        VALUES (?, ?, ?);
+    """;
+
+    public static final String PAYLOAD_TYPE_ALL = """
+        SELECT t.*
+        FROM tipologie_carico t;
+    """;
+
 }
