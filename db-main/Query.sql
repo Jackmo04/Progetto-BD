@@ -351,7 +351,7 @@ WHERE CUIAstronauta = ?;
 -- _____________________________________________
 /*
 	A4 -- Visualizzare il numero di persone presenti nel porto attualmente
-    {ParkingSpace} [Matteo] Da fare
+    {ParkingSpace} [Matteo] Fatto
 */
 SELECT COUNT(DISTINCT p.CUI) AS `Astronauti in porto`
 FROM astronavi a, equipaggi e, persone p
