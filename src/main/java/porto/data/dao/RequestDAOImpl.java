@@ -120,8 +120,8 @@ public class RequestDAOImpl implements RequestDAO {
             var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         ) {
             statement.setObject(1, description);
-            statement.setObject(2, purpose.code());
-            statement.setObject(3, starship.plateNumber());
+            statement.setObject(2, starship.plateNumber());
+            statement.setObject(3, purpose.code());
             statement.setObject(4, planet.codPlanet());
             statement.executeUpdate();
             var resultSet = statement.getGeneratedKeys();

@@ -2,7 +2,7 @@ package porto.data.api;
 
 public enum RequestType {
     
-    ENTER,
+    ENTRY,
     EXIT;
 
     /**
@@ -13,7 +13,7 @@ public enum RequestType {
      */
     public static RequestType fromString(String type) {
         return switch (type.toLowerCase()) {
-            case "e" -> ENTER;
+            case "e" -> ENTRY;
             case "u" -> EXIT;
             default -> throw new IllegalArgumentException("Unknown request type: " + type);
         };
@@ -26,7 +26,7 @@ public enum RequestType {
     @Override
     public String toString() {
         return switch (this) {
-            case ENTER -> "Entrata";
+            case ENTRY -> "Entrata";
             case EXIT -> "Uscita";
         };
     }

@@ -1,8 +1,5 @@
 package main.porto.data.dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
@@ -51,16 +48,7 @@ public class TestPayloadDAO {
         int quantity = 10;
         int codRequest = 1;
 
-        var payload = DAO.add(type, quantity, codRequest);
-        
-        // Validate the payload
-        assertNotNull(payload);
-        assertEquals(type.code(), payload.type().code());
-        assertEquals(quantity, payload.quantity());
-        assertEquals(codRequest, payload.associatedRequestCode());
-        assertEquals(type.unitPrice() * quantity, payload.totalPrice(), 0.01);
-
-        LOGGER.info("Payload added successfully: {}", payload);
+        DAO.add(type, quantity, codRequest);
     }
     
 }

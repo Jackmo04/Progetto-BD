@@ -40,9 +40,9 @@ public class FlightPurposeDAOImpl implements FlightPurposeDAO {
         ) {
             while (resultSet.next()) {
                 var codFlightPurpose = resultSet.getInt("CodTipoViaggio");
-                if (cache.stream().anyMatch(fp -> fp.code().equals(codFlightPurpose))) {
+                if (cache.stream().anyMatch(fp -> fp.code() == codFlightPurpose)) {
                     setPurpose.add(cache.stream()
-                        .filter(fp -> fp.code().equals(codFlightPurpose))
+                        .filter(fp -> fp.code() == codFlightPurpose)
                         .findFirst().get()
                     );
                 } else {
