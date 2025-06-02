@@ -157,17 +157,16 @@ AND e.CUIAstronauta = ?;
 	C3 -- Visualizzare tutti i dati dei membri dell'equipaggio di una propria nave
     {Person} [Mattia] Da fare
 */
-SELECT p.*
+SELECT p.CUI
 FROM persone p, equipaggi e, pianeti pn
 WHERE p.CUI = e.CUIAstronauta
 AND p.PianetaNascita = pn.CodPianeta
 AND e.TargaAstronave = 'MFALC001';
 
 /* Java [List<Person>]
-SELECT p.*
+SELECT p.CUI
 FROM persone p, equipaggi e, pianeti pn
 WHERE p.CUI = e.CUIAstronauta
-AND p.PianetaNascita = pn.CodPianeta
 AND e.TargaAstronave = ?;
 */
 

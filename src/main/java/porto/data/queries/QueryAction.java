@@ -39,6 +39,15 @@ public final class QueryAction {
                 DELETE FROM Equipaggi
                 WHERE CUIAstronauta = ?;
             """;
+
+                        public static final String C3_SHOW_EQUIPE_STARSHIP =
+        """
+                SELECT p.CUI
+                FROM persone p, equipaggi e
+                WHERE p.CUI = e.CUIAstronauta
+                AND e.TargaAstronave = ?;
+            """;
+        
         
     
 }

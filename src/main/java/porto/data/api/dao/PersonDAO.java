@@ -1,5 +1,6 @@
 package porto.data.api.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import porto.data.api.Ideology;
@@ -65,4 +66,13 @@ public interface PersonDAO {
      * @throws DAOException if an error occurs while accessing the database
      */
     public void arrestPerson(String CUI ) throws DAOException;
+
+    /**
+     * Retrieves a list of persons who are part of the crew of a starship.
+     * 
+     * @param plate the plate number of the starship
+     * @return a list of Person objects representing the crew members of the starship
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    public List<Person> getEquipeOfStarship( String plate) throws DAOException;
 }
