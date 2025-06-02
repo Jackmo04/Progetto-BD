@@ -117,11 +117,32 @@ public class RequestDAOImpl implements RequestDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Request> requestHistory(String plate) throws DAOException {
         var requests = new ArrayList<Request>();               
         try (
                 var statement = DAOUtils.prepare(connection, QueryAction.C6_REQUEST_HISTORY, plate);
+                var resultSet = statement.executeQuery();) {
+            while (resultSet.next()) {
+                requests.add(getRequestByCodRequest(resultSet.getInt("CodRichiesta")).get());
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+        return requests;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Request> pendingRequests() throws DAOException {
+                var requests = new ArrayList<Request>();               
+        try (
+                var statement =  DAOUtils.prepare(connection, QueryAction.A1_PENDING_REQUEST);
                 var resultSet = statement.executeQuery();) {
             while (resultSet.next()) {
                 requests.add(getRequestByCodRequest(resultSet.getInt("CodRichiesta")).get());

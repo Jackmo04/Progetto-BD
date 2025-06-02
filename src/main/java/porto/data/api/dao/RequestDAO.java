@@ -64,4 +64,13 @@ public interface RequestDAO {
          */
     public List<Request> requestHistory (String  plate) throws DAOException;
 
+
+        /**
+         * Retrieves a list of all requests in the database.
+         *
+         * @return a list of all requests
+         * @throws DAOException if an error occurs while accessing the database
+         */
+    public List<Request> pendingRequests() throws DAOException;
+
 }

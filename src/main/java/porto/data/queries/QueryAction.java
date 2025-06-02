@@ -43,7 +43,7 @@ public final class QueryAction {
             """;
 
     public static final String S4_LAST_REQUEST = """
-                SELECT r.CodRichiesta
+                SELECT *
                 FROM richieste r, astronavi n
                 WHERE r.TargaAstronave = n.Targa
                 AND n.Targa = ?
@@ -55,6 +55,10 @@ public final class QueryAction {
                     FROM richieste r, astronavi n
                     WHERE r.TargaAstronave = n.Targa
                     AND n.Targa = ?;
+                    """;
+
+    public static final String A1_PENDING_REQUEST = """
+                        SELECT * FROM Richieste_pendenti;
                     """;
 
 }
