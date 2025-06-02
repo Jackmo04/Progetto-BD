@@ -46,7 +46,7 @@ public class PayloadTypeDAOImpl implements PayloadTypeDAO {
                 } else {
                     var name = resultSet.getString("Nome");
                     var description = resultSet.getString("Descrizione");
-                    var unitPrice = resultSet.getDouble("PrezzoUnitario");
+                    var unitPrice = resultSet.getDouble("CostoUnitario");
                     var type = new PayloadTypeImpl(code, name, description, unitPrice);
                     cache.add(type);
                     types.add(type);
@@ -56,5 +56,12 @@ public class PayloadTypeDAOImpl implements PayloadTypeDAO {
         } catch (Exception e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public int clearCache() {
+        int size = cache.size();
+        cache.clear();
+        return size;
     }
 }
