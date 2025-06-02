@@ -25,6 +25,13 @@ public interface ParkingSpaceDAO {
     Optional<ParkingSpace> ofStarship(String starshipPlateNumber) throws DAOException;
 
     /**
+     * Returns the number of people currently on the station.
+     * @return the number of people on the station
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    int getNumberOfPeopleOnStation() throws DAOException;
+
+    /**
      * Clears the cache of ParkingSpace objects.
      * @return the number of ParkingSpace objects removed from the cache
      */

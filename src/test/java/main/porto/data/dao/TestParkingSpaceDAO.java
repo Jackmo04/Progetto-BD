@@ -8,6 +8,7 @@ import java.sql.Savepoint;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import porto.data.ParkingAreaImpl;
 import porto.data.ParkingSpaceImpl;
 import porto.data.api.dao.ParkingSpaceDAO;
 import porto.data.dao.ParkingSpaceDAOImpl;
+import porto.data.dao.StarshipDAOImpl;
 import porto.data.utils.DAOUtils;
 
 class TestParkingSpaceDAO {
@@ -31,7 +33,6 @@ class TestParkingSpaceDAO {
     public static void setup() throws SQLException {
         connection = DAOUtils.localMySQLConnection("PortoMorteNera", "root", "");
         connection.setAutoCommit(false);
-        savepoint = connection.setSavepoint();
         DAO = new ParkingSpaceDAOImpl(connection);
     }
 
@@ -46,9 +47,19 @@ class TestParkingSpaceDAO {
     }
 
     @BeforeEach
-    public void beforeEach() {
-        LOGGER.info("Resetting DAO cache before each test.");
+    public void beforeEach() throws SQLException {
+        LOGGER.info("Starting a new test, creating a new savepoint...");
+        savepoint = connection.setSavepoint();
+        LOGGER.info("Resetting DAO cache...");
         DAO.clearCache();
+    }
+
+    @AfterEach
+    public void afterEach() throws SQLException {
+        if (savepoint != null) {
+            LOGGER.info("Rolling back to the previous savepoint...");
+            connection.rollback(savepoint);
+        }
     }
 
     @Test
@@ -97,6 +108,26 @@ class TestParkingSpaceDAO {
 
         actual = DAO.ofStarship(PLATE_NUMBER_TF);
         expected = Optional.empty();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getNumberOfPeopleOnStation() {
+        final int NUMBER_OF_PEOPLE = 7;
+        LOGGER.info("Testing ParkingSpaceDAO.getNumberOfPeopleOnStation");
+
+        int actual = DAO.getNumberOfPeopleOnStation();
+        int expected = NUMBER_OF_PEOPLE;
+        assertEquals(expected, actual);
+
+        // Remove crew members from starships
+        final var starshipDAO = new StarshipDAOImpl(connection);
+        starshipDAO.removeCrewMember("MFALC001", "CHWBCC000101K");
+        starshipDAO.removeCrewMember("CR900004", "STRMTR0000003");
+        LOGGER.info("Removed crew members from starships, now testing again.");
+
+        actual = DAO.getNumberOfPeopleOnStation();
+        expected = NUMBER_OF_PEOPLE - 2; // 2 crew members removed
         assertEquals(expected, actual);
     }
 }

@@ -68,6 +68,21 @@ public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
      * {@inheritDoc}
      */
     @Override
+    public int getNumberOfPeopleOnStation() throws DAOException {
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.NUMBER_OF_PEOPLE_ON_STATION);
+            var resultSet = statement.executeQuery();
+        ) {
+            return resultSet.next() ? resultSet.getInt(1) : 0;
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int clearCache() {
         int size = cache.size();
         cache.clear();

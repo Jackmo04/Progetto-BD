@@ -90,4 +90,11 @@ public final class Queries {
         FROM pianeti p;
     """;
 
+    public static final String NUMBER_OF_PEOPLE_ON_STATION = """
+        SELECT COUNT(DISTINCT p.CUI)
+        FROM astronavi a, equipaggi e, persone p
+        WHERE ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = a.Targa) OR (p.CUI = a.CUICapitano))
+        AND a.numeroPosto IS NOT NULL;
+    """;
+
 }
