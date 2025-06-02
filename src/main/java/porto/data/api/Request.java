@@ -3,6 +3,11 @@ package porto.data.api;
 import java.sql.Timestamp;
 import java.util.Optional;
 
+/**
+ * Interface representing a request in the Porto system.
+ * Provides methods to access various attributes of a request such as code, type, date, description,
+ * total price, state, management details, starship, flight purpose, and departure/destination planets.
+ */
 public interface Request {
 
     /**

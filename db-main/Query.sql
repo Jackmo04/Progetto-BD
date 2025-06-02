@@ -66,7 +66,7 @@ WHERE Targa = ?;
 -- _____________________________________________
 /*
 	S4 -- Visualizzare l’ultima richiesta effettuata da una nave
-    {Request} [?] Da fare
+    {Request} [Mattia] Da fare
 */
 SELECT r.*
 FROM richieste r, astronavi n
@@ -87,7 +87,7 @@ LIMIT 1;
 -- _____________________________________________
 /*
 	S5 -- Visualizzare le informazioni dettagliate di una richiesta.
-    {Request} [?] Da fare
+    {Request} [Mattia] fatta
 */
 SELECT DISTINCT r.CodRichiesta, r.EntrataUscita, r.DataOra, r.Descrizione, r.CostoTotale, r.Esito, r.TargaAstronave, tv.Nome AS TipologiaViaggio,
 	pnt1.Nome AS PianetaDestinazione, pnt2.Nome AS PianetaDestinazione, SUM(DISTINCT c.Quantita) AS QuantitaTotCarico
@@ -100,15 +100,9 @@ AND r.CodRichiesta = 1
 GROUP BY 1-10;
 
 /* Java [Optional<Request>]
-SELECT DISTINCT r.CodRichiesta, r.EntrataUscita, r.DataOra, r.Descrizione, r.CostoTotale, r.Esito, r.TargaAstronave, tv.Nome AS TipologiaViaggio,
-	pnt1.Nome AS PianetaDestinazione, pnt2.Nome AS PianetaDestinazione, SUM(DISTINCT c.Quantita) AS QuantitaTotCarico
-FROM richieste r, persone p, tipologie_viaggio tv, pianeti pnt1, pianeti pnt2, carichi c
-WHERE pnt1.CodPianeta = r.PianetaDestinazione
-AND pnt2.CodPianeta = r.PianetaProvenienza
-AND r.Scopo = tv.CodTipoViaggio
-AND r.CodRichiesta = c.CodRichiesta
-AND r.CodRichiesta = ?
-GROUP BY 1-10;
+SELECT r.*
+FROM richeste
+WHERE CodRichiesta = ?;
 */
 
 -- _____________________________________________
@@ -163,14 +157,14 @@ AND e.CUIAstronauta = ?;
 	C3 -- Visualizzare tutti i dati dei membri dell'equipaggio di una propria nave
     {Person} [Mattia] Da fare
 */
-SELECT p.CUI, p.Nome, p.Cognome, p.Razza, p.DataNascita, p.Ricercato, pn.Nome AS PianetaNascita
+SELECT p.*
 FROM persone p, equipaggi e, pianeti pn
 WHERE p.CUI = e.CUIAstronauta
 AND p.PianetaNascita = pn.CodPianeta
 AND e.TargaAstronave = 'MFALC001';
 
 /* Java [List<Person>]
-SELECT p.CUI, p.Nome, p.Cognome, p.Razza, p.DataNascita, p.Ricercato, pn.Nome AS PianetaNascita
+SELECT p.*
 FROM persone p, equipaggi e, pianeti pn
 WHERE p.CUI = e.CUIAstronauta
 AND p.PianetaNascita = pn.CodPianeta
@@ -180,7 +174,7 @@ AND e.TargaAstronave = ?;
 -- _____________________________________________
 /*
 	C4 -- Richiedere accesso al porto
-    {Request} [?] Da fare
+    {Request} [Matteo] Da fare
 */
 -- !! SELEZIONI SCOPO E PIANETI [Matteo] Fatto
 
@@ -210,14 +204,13 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 -- _____________________________________________
 /*
 	C5 -- Richiedere uscita dal porto
-    {Request} [?] Da fare
-    requestAccess(connection, Set<Payload>)
+    {Request} [Matteo] Da fare
 */
 -- Inseriamo la richiesta
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
 ('U', 'PippoPluto2', 0, 'TIEF0005', 3, 'DTHSTR0', 'NABO004');
 
--- Inseriamo il carico all'ultima richiesta aggiunta {Payload} [?] Da fare
+-- Inseriamo il carico all'ultima richiesta aggiunta {Payload} [Matteo] Da fare
 INSERT INTO Carichi (Tipologia, Quantita, CodRichiesta) VALUES
 (1, 20, (SELECT CodRichiesta FROM Ultima_richiesta));
 
@@ -241,7 +234,7 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 -- _____________________________________________
 /*
 	C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
-    {Request} [?] Da fare
+    {Request} [Mattia] Da fare
 */
 SELECT DISTINCT r.*
 FROM richieste r, astronavi n
@@ -269,7 +262,7 @@ AND n.Targa = ?;
 */
 SELECT * FROM Richieste_pendenti;
 
-/* Java [List<Richiesta>]
+/* Java [Set<Richiesta> getPending()]
 SELECT * FROM Richieste_pendenti;
 */
 

@@ -5,6 +5,10 @@ import java.util.Set;
 import porto.data.api.FlightPurpose;
 import porto.data.utils.DAOException;
 
+/**
+ * Interface representing a Data Access Object (DAO) for flight purposes.
+ * Provides methods to interact with flight purposes in the database.
+ */
 public interface FlightPurposeDAO {
 
     /**

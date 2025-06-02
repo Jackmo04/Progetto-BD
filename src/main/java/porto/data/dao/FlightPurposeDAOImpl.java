@@ -11,6 +11,10 @@ import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
+/**
+ * Implementation of the FlightPurposeDAO interface.
+ * Provides methods to interact with flight purposes in the database.
+ */
 public class FlightPurposeDAOImpl implements FlightPurposeDAO {
 
     private final Connection connection;
@@ -24,6 +28,9 @@ public class FlightPurposeDAOImpl implements FlightPurposeDAO {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<FlightPurpose> getAll() throws DAOException {
         var setPurpose = new HashSet<FlightPurpose>();

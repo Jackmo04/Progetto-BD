@@ -11,6 +11,11 @@ import porto.data.api.RequestState;
 import porto.data.api.RequestType;
 import porto.data.api.Starship;
 
+/**
+ * Implementation of the Request interface.
+ * Represents a request with various attributes such as code, type, date, description, total price, state,
+ * managed date, starship, flight purpose, departure and destination planets, and the person managing the request.
+ */
 public record RequestImpl(
     int codRichiesta,
     RequestType type,
@@ -26,6 +31,9 @@ public record RequestImpl(
     Optional<Person> managedBy
 ) implements Request {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Planet destinationPlane() {
         // TODO Auto-generated method stub

@@ -18,6 +18,10 @@ import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
+/**
+ * Implementation of the RequestDAO interface.
+ * Provides methods to interact with requests in the database.
+ */
 public class RequestDAOImpl implements RequestDAO {
 
     private final Connection connection;
@@ -33,6 +37,9 @@ public class RequestDAOImpl implements RequestDAO {
         flightPurpose = new FlightPurposeDAOImpl(connection).getAll();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Request> getRequestByCodRequest(Integer codRequest) throws DAOException {
         try (
@@ -69,6 +76,9 @@ public class RequestDAOImpl implements RequestDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addExitRequest(String description, Starship starship, String scope, Planet destinationPlanet)
             throws DAOException {
@@ -76,6 +86,9 @@ public class RequestDAOImpl implements RequestDAO {
         throw new UnsupportedOperationException("Unimplemented method 'addExitRequest'");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addEntryRequest(String description, Starship starship, String scope, Planet originPlanet)
             throws DAOException {
@@ -83,6 +96,9 @@ public class RequestDAOImpl implements RequestDAO {
         throw new UnsupportedOperationException("Unimplemented method 'addEntryRequest'");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getDettaliedRequest(Integer codRequest) throws DAOException {
         // TODO Auto-generated method stub
