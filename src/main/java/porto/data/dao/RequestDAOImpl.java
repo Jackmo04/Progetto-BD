@@ -2,6 +2,8 @@ package porto.data.dao;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -113,6 +115,21 @@ public class RequestDAOImpl implements RequestDAO {
         } catch (Exception e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public List<Request> requestHistory(String plate) throws DAOException {
+        var requests = new ArrayList<Request>();               
+        try (
+                var statement = DAOUtils.prepare(connection, QueryAction.C6_REQUEST_HISTORY, plate);
+                var resultSet = statement.executeQuery();) {
+            while (resultSet.next()) {
+                requests.add(getRequestByCodRequest(resultSet.getInt("CodRichiesta")).get());
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+        return requests;
     }
 
 }
