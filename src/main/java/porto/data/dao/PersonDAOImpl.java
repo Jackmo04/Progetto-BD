@@ -1,7 +1,9 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Random;
@@ -16,6 +18,10 @@ import porto.data.queries.QueryAction;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
+/**
+ * Implementation of the PersonDAO interface.
+ * Provides methods to interact with person data in the database.
+ */
 public class PersonDAOImpl implements PersonDAO {
 
     private final Connection connection;
@@ -132,5 +138,23 @@ public class PersonDAOImpl implements PersonDAO {
         } catch (Exception e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public List<Person> getEquipeOfStarship(String plate) throws DAOException {
+        final List<String> equipe = new ArrayList<>();
+        try (
+                var statement = DAOUtils.prepare(connection, QueryAction.C3_SHOW_EQUIPE_STARSHIP, plate);
+                var resultSet = statement.executeQuery();) {
+            while (resultSet.next()) {
+                equipe.add(resultSet.getString("CUI"));
+
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+        return equipe.stream().map(t -> getFromCUI(t).get())
+                .distinct()
+                .toList();
     }
 }

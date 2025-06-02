@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
@@ -72,11 +73,18 @@ class TestPersonDAO {
         @Test
     public void arrestPerson() {
         new PersonDAOImpl(connection).arrestPerson("STRMTR0000001");
-        // Assuming arrestPerson updates the person's cell number to 1
-        // Verify that the person is now in the cell with number 1
 
         var actual = new PersonDAOImpl(connection).getFromCUI("STRMTR0000001").get().cell().get().numCell();
         assertNotNull(actual);
+    }
+
+            @Test
+    public void getEquipeOfStarship() {
+        var personDao = new PersonDAOImpl(connection);
+        var actual = personDao.getEquipeOfStarship("MFALC001");
+        var expected = List.of(personDao.getFromCUI("CHWBCC000101K").get(),
+        personDao.getFromCUI("SKWLKE510925T").get());
+        assertEquals(expected, actual);
     }
 
 }
