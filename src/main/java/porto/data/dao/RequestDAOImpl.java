@@ -104,7 +104,7 @@ public class RequestDAOImpl implements RequestDAO {
      */
     @Override
     public Optional<Request> getLastRequest(String plate) throws DAOException {
-                try (
+        try (
                 var statement = DAOUtils.prepare(connection, QueryAction.S4_LAST_REQUEST, plate);
                 var resultSet = statement.executeQuery();) {
             if (resultSet.next()) {
@@ -122,7 +122,7 @@ public class RequestDAOImpl implements RequestDAO {
      */
     @Override
     public List<Request> requestHistory(String plate) throws DAOException {
-        var requests = new ArrayList<Request>();               
+        var requests = new ArrayList<Request>();
         try (
                 var statement = DAOUtils.prepare(connection, QueryAction.C6_REQUEST_HISTORY, plate);
                 var resultSet = statement.executeQuery();) {
@@ -140,9 +140,9 @@ public class RequestDAOImpl implements RequestDAO {
      */
     @Override
     public List<Request> pendingRequests() throws DAOException {
-                var requests = new ArrayList<Request>();               
+        var requests = new ArrayList<Request>();
         try (
-                var statement =  DAOUtils.prepare(connection, QueryAction.A1_PENDING_REQUEST);
+                var statement = DAOUtils.prepare(connection, QueryAction.A1_PENDING_REQUEST);
                 var resultSet = statement.executeQuery();) {
             while (resultSet.next()) {
                 requests.add(getRequestByCodRequest(resultSet.getInt("CodRichiesta")).get());
@@ -151,6 +151,35 @@ public class RequestDAOImpl implements RequestDAO {
             throw new DAOException(e);
         }
         return requests;
+    }
+
+    @Override
+    public void acceptEnterRequest(Integer codRequest, String CUIAdmin) throws DAOException {
+        var request = getRequestByCodRequest(codRequest).get();
+        var parking = new ParkingSpaceDAOImpl(connection).getAllFree().stream().toList().getFirst();
+
+        try (
+                var statement = DAOUtils.prepare(connection, QueryAction.A2_ACCEPT_REQUEST, CUIAdmin,
+                        request.codRichiesta());
+                var statement2 = DAOUtils.prepare(connection, QueryAction.A2_ASSIGN_PARKING,
+                        parking.parkingArea().codArea(), parking.spaceNumber(), request.codRichiesta());) {
+            statement.executeUpdate();
+            statement2.executeUpdate();
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public void rejectRequest(Integer codRequest, String CUIAdmin) throws DAOException {
+        var request = getRequestByCodRequest(codRequest).get();
+        try (
+                var statement = DAOUtils.prepare(connection, QueryAction.A2_REJECT_REQUEST, CUIAdmin,
+                        request.codRichiesta());) {
+            statement.executeUpdate();
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
 
 }

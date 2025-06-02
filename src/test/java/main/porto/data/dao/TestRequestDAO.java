@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import porto.data.api.RequestState;
 import porto.data.dao.PlanetDAOImpl;
 import porto.data.dao.RequestDAOImpl;
 import porto.data.utils.DAOUtils;
@@ -68,9 +69,25 @@ class TestRequestDAO {
         var requestDAO = new RequestDAOImpl(connection);
         var actual = requestDAO.pendingRequests();
         var expected = List.of(
-            requestDAO.getRequestByCodRequest(3).get(),
-            requestDAO.getRequestByCodRequest(5).get());
+            requestDAO.getRequestByCodRequest(4).get(),
+            requestDAO.getRequestByCodRequest(6).get());
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void acceptRequest() {
+        var requestDAO = new RequestDAOImpl(connection);
+        requestDAO.acceptEnterRequest(6, "PLPSHV201204N");
+        var expected = requestDAO.getRequestByCodRequest(6).get().state();
+        assertEquals(expected, RequestState.APPROVED);
+    }
+
+        @Test
+    public void rejectRequest() {
+        var requestDAO = new RequestDAOImpl(connection);
+        requestDAO.acceptEnterRequest(6, "PLPSHV201204N");
+        var expected = requestDAO.getRequestByCodRequest(6).get().state();
+        assertEquals(expected, RequestState.REJECTED);
     }
 
 }
