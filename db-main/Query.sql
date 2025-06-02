@@ -155,7 +155,7 @@ AND e.CUIAstronauta = ?;
 -- _____________________________________________
 /*
 	C3 -- Visualizzare tutti i dati dei membri dell'equipaggio di una propria nave
-    {Person} [Mattia] Da fare
+    {Person} [Mattia] Fatto
 */
 SELECT p.CUI
 FROM persone p, equipaggi e, pianeti pn
