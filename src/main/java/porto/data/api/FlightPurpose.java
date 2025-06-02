@@ -8,16 +8,14 @@ public interface FlightPurpose {
 
     /**
      * Gets the code of the flight purpose.
-     *
      * @return the code of the flight purpose
      */
-    Integer codFlightPurpose();
+    int code();
 
     /**
      * Gets the name of the flight purpose.
-     *
      * @return the name of the flight purpose
      */
-    String flightPurposeName();
+    String name();
 
 }

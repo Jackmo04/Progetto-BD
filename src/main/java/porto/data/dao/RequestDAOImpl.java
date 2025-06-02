@@ -1,7 +1,6 @@
 package porto.data.dao;
 
 import java.sql.Connection;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +8,6 @@ import java.util.Set;
 
 import porto.data.RequestImpl;
 import porto.data.api.FlightPurpose;
-import porto.data.api.Person;
 import porto.data.api.Planet;
 import porto.data.api.Request;
 import porto.data.api.RequestState;
@@ -61,7 +59,7 @@ public class RequestDAOImpl implements RequestDAO {
                         .get();
                 var codTipoViaggio = resultSet.getInt("Scopo");
                 var purpose = flightPurpose.stream()
-                        .filter(fp -> fp.codFlightPurpose().equals(codTipoViaggio))
+                        .filter(fp -> fp.code() == codTipoViaggio)
                         .findFirst().get();
                 var departurePlanet = new PlanetDAOImpl(connection)
                         .getFromCodPlanet(resultSet.getString("PianetaProvenienza")).get();
@@ -84,7 +82,7 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public void addExitRequest(String description, Starship starship, String scope, Planet destinationPlanet)
+    public void addExitRequest(String description, FlightPurpose purpose, Starship starship, Planet destinationPlanet)
             throws DAOException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addExitRequest'");
@@ -94,7 +92,7 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public void addEntryRequest(String description, Starship starship, String scope, Planet originPlanet)
+    public void addEntryRequest(String description, FlightPurpose purpose, Starship starship, Planet originPlanet)
             throws DAOException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addEntryRequest'");

@@ -3,6 +3,7 @@ package porto.data.api.dao;
 import java.util.List;
 import java.util.Optional;
 
+import porto.data.api.FlightPurpose;
 import porto.data.api.Planet;
 import porto.data.api.Request;
 import porto.data.api.Starship;
@@ -29,22 +30,22 @@ public interface RequestDAO {
          *
          * @param description the description of the request
          * @param starship the starship associated with the request
-         * @param scope the scope of the request
+         * @param purpose the purpose of the flight
          * @param destinationPlanet the destination planet for the request
          * @throws DAOException if an error occurs while accessing the database
          */
-    public void addExitRequest(String description, Starship starship, String scope, Planet destinationPlanet)
+    public void addExitRequest(String description, FlightPurpose purpose, Starship starship, Planet destinationPlanet)
             throws DAOException;
 
         /**
          * Adds a new entry request to the database.
          * @param description the description of the request
          * @param starship the starship associated with the request
-         * @param scope the scope of the request
+         * @param purpose the purpose of the flight
          * @param originPlanet the origin planet for the request
          * @throws DAOException if an error occurs while accessing the database
          */
-    public void addEntryRequest(String description, Starship starship, String scope, Planet originPlanet)
+    public void addEntryRequest(String description, FlightPurpose purpose, Starship starship, Planet originPlanet)
             throws DAOException;
 
 
