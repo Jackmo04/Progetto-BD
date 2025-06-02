@@ -2,6 +2,7 @@ package porto.data.dao;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import java.util.Set;
 import porto.data.RequestImpl;
 import porto.data.api.FlightPurpose;
 import porto.data.api.Payload;
+import porto.data.api.Person;
 import porto.data.api.Planet;
 import porto.data.api.Request;
 import porto.data.api.RequestState;
@@ -55,8 +57,6 @@ public class RequestDAOImpl implements RequestDAO {
                 var dateTime = resultSet.getTimestamp("DataOra");
                 var description = resultSet.getString("Descrizione");
                 var totalPrice = resultSet.getDouble("CostoTotale");
-                var state = RequestState.fromString(resultSet.getString("Esito"));
-                var dateTimeManaged = Optional.ofNullable(resultSet.getTimestamp("DataEsito"));
                 var starship = new StarshipDAOImpl(connection).fromPlate(resultSet.getString("TargaAstronave"))
                         .get();
                 var codTipoViaggio = resultSet.getInt("Scopo");
@@ -67,10 +67,8 @@ public class RequestDAOImpl implements RequestDAO {
                         .getFromCodPlanet(resultSet.getString("PianetaProvenienza")).get();
                 var destinationPlanet = new PlanetDAOImpl(connection)
                         .getFromCodPlanet(resultSet.getString("PianetaDestinazione")).get();
-                var managedBy = new PersonDAOImpl(connection).getFromCUI(resultSet.getString("GestitaDa"));
-
-                var request = new RequestImpl(codRequestDB, type, dateTime, description, totalPrice, state,
-                        dateTimeManaged, starship, purpose, departurePlanet, destinationPlanet, managedBy);
+                var request = new RequestImpl(codRequestDB, type, dateTime, description, totalPrice, 
+                    starship, purpose, departurePlanet, destinationPlanet);
                 return Optional.of(request);
             } else {
                 return Optional.empty();
@@ -84,31 +82,31 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public void addExitRequest(
+    public Request addExitRequest(
         String description, 
         FlightPurpose purpose, 
         Starship starship, 
         Planet destinationPlanet,
         Set<Payload> payloads
     ) throws DAOException {
-        this.addRequest(description, purpose, starship, destinationPlanet, payloads, Queries.INSERT_EXIT_REQUEST);
+        return this.addRequest(description, purpose, starship, destinationPlanet, payloads, Queries.INSERT_EXIT_REQUEST);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addEntryRequest(
+    public Request addEntryRequest(
         String description,
         FlightPurpose purpose,
         Starship starship,
         Planet originPlanet,
         Set<Payload> payloads
     ) throws DAOException {
-        this.addRequest(description, purpose, starship, originPlanet, payloads, Queries.INSERT_ENTRY_REQUEST);
+        return this.addRequest(description, purpose, starship, originPlanet, payloads, Queries.INSERT_ENTRY_REQUEST);
     }
 
-    private void addRequest(
+    private Request addRequest(
         String description,
         FlightPurpose purpose,
         Starship starship,
@@ -126,15 +124,14 @@ public class RequestDAOImpl implements RequestDAO {
             statement.executeUpdate();
             var resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
-                if (payloads.isEmpty()) {
-                    return;
-                }
                 var codRequest = resultSet.getInt(1);
-                this.addPayloadsToRequest(payloads, codRequest);
+                if (!payloads.isEmpty()) {
+                    this.addPayloadsToRequest(payloads, codRequest);
+                }
+                return getRequestByCodRequest(codRequest).orElseThrow();
             } else {
                 throw new DAOException("Failed to retrieve generated key for request.");
             }
-
         } catch (Exception e) {
             throw new DAOException(e);
         }
@@ -216,7 +213,7 @@ public class RequestDAOImpl implements RequestDAO {
     }
 
     @Override
-    public void acceptEnterRequest(Integer codRequest, String CUIAdmin) throws DAOException {
+    public void acceptEnterRequest(int codRequest, String CUIAdmin) throws DAOException {
         var request = getRequestByCodRequest(codRequest).get();
         var parking = new ParkingSpaceDAOImpl(connection).getAllFree().stream().toList().getFirst();
 
@@ -233,7 +230,7 @@ public class RequestDAOImpl implements RequestDAO {
     }
 
     @Override
-    public void rejectRequest(Integer codRequest, String CUIAdmin) throws DAOException {
+    public void rejectRequest(int codRequest, String CUIAdmin) throws DAOException {
         var request = getRequestByCodRequest(codRequest).get();
         try (
                 var statement = DAOUtils.prepare(connection, QueryAction.A2_REJECT_REQUEST, CUIAdmin,
@@ -242,6 +239,39 @@ public class RequestDAOImpl implements RequestDAO {
         } catch (Exception e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public Optional<RequestState> state(int codRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'state'");
+    }
+
+    @Override
+    public Optional<RequestState> state(Request request) {
+        return this.state(request.codRichiesta());
+    }
+
+    @Override
+    public Optional<Timestamp> dateTimeManaged(int codRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'dateTimeManaged'");
+    }
+
+    @Override
+    public Optional<Timestamp> dateTimeManaged(Request request) {
+        return this.dateTimeManaged(request.codRichiesta());
+    }
+
+    @Override
+    public Optional<Person> managedBy(int codRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'managedBy'");
+    }
+
+    @Override
+    public Optional<Person> managedBy(Request request) {
+        return this.managedBy(request.codRichiesta());
     }
 
 }

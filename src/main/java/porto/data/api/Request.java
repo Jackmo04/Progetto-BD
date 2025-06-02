@@ -1,7 +1,6 @@
 package porto.data.api;
 
 import java.sql.Timestamp;
-import java.util.Optional;
 
 /**
  * Interface representing a request in the Porto system.
@@ -39,24 +38,6 @@ public interface Request {
      * @return the total price
      */
     double totalPrice();
-
-    /**
-     * Returns the state of the request.
-     * @return the request state
-     */
-    RequestState state();
-
-    /**
-     * Returns the date and time when the request was managed, if applicable.
-     * @return the date and time of management
-     */
-    Optional<Timestamp> dateTimeManaged();
-
-    /**
-     * Returns the person who managed the request, if applicable.
-     * @return the person who managed the request
-     */
-    Optional<Person> managedBy();
 
     /**
      * Returns the starship associated with the request.

@@ -96,13 +96,13 @@ class TestRequestDAO {
         assertEquals(expected, RequestState.REJECTED);
     }
 
-    // TODO check totalPrice when changed fields @Jackmo04
     @Test
     public void addEntryRequest() {
         var requestDAO = new RequestDAOImpl(connection);
         var starshipDAO = new StarshipDAOImpl(connection);
         var planetDAO = new PlanetDAOImpl(connection);
 
+        // Without payloads
         requestDAO.addEntryRequest(
             "Richiesta di ingresso per carico di armi",
             new FlightPurposeImpl(1, "Trasporto merci"),
@@ -127,6 +127,9 @@ class TestRequestDAO {
             Optional.empty()
         );
         assertEquals(expected, actual);
+
+        // With payloads
+        // TODO
     }
 
     @Test
@@ -135,6 +138,7 @@ class TestRequestDAO {
         var starshipDAO = new StarshipDAOImpl(connection);
         var planetDAO = new PlanetDAOImpl(connection);
 
+        // Without payloads
         requestDAO.addExitRequest(
             "Richiesta di uscita per carico di armi",
             new FlightPurposeImpl(1, "Trasporto merci"),
@@ -159,6 +163,9 @@ class TestRequestDAO {
             Optional.empty()
         );
         assertEquals(expected, actual);
+
+        // With payloads
+        // TODO
     }
 
 }
