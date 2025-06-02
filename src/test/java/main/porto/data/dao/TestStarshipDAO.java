@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -111,6 +112,15 @@ class TestStarshipDAO {
     public void beforeEach() {
         LOGGER.info("Resetting DAO cache before each test.");
         DAO.clearCache();
+    }
+
+    @AfterEach
+    public void afterEach() throws SQLException {
+        LOGGER.info("Rolling back to savepoint after each test.");
+        if (savepoint != null) {
+            connection.rollback(savepoint);
+        }
+        savepoint = connection.setSavepoint();
     }
 
     @Test
