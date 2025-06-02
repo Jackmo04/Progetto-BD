@@ -13,8 +13,10 @@ public enum RequestState {
      * @throws IllegalArgumentException if the string does not match any request state
      */
     public static RequestState fromString(String state) {
+        if (state == null) {
+            return PENDING;
+        }
         return switch (state.toLowerCase()) {
-            case null -> PENDING;
             case "a" -> APPROVED;
             case "r" -> REJECTED;
             default -> throw new IllegalArgumentException("Unknown request state: " + state);

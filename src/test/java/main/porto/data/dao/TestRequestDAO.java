@@ -67,8 +67,9 @@ class TestRequestDAO {
     public void pendingRquest() {
         var requestDAO = new RequestDAOImpl(connection);
         var actual = requestDAO.pendingRequests();
-        var expected = List.of(requestDAO.getRequestByCodRequest(4).get(),
-                requestDAO.getRequestByCodRequest(6).get());
+        var expected = List.of(
+            requestDAO.getRequestByCodRequest(3).get(),
+            requestDAO.getRequestByCodRequest(5).get());
         assertEquals(expected, actual);
     }
 
