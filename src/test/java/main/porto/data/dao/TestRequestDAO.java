@@ -14,9 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import porto.data.FlightPurposeImpl;
+import porto.data.PayloadImpl;
 import porto.data.RequestImpl;
 import porto.data.api.RequestState;
 import porto.data.api.RequestType;
+import porto.data.dao.PayloadTypeDAOImpl;
 import porto.data.dao.PlanetDAOImpl;
 import porto.data.dao.RequestDAOImpl;
 import porto.data.dao.StarshipDAOImpl;
@@ -113,7 +115,7 @@ class TestRequestDAO {
     }
 
     @Test
-    public void addEntryRequest() {
+    public void addEntryRequestNoPayloads() {
         var requestDAO = new RequestDAOImpl(connection);
         var starshipDAO = new StarshipDAOImpl(connection);
         var planetDAO = new PlanetDAOImpl(connection);
@@ -121,7 +123,7 @@ class TestRequestDAO {
         // Without payloads
         requestDAO.addEntryRequest(
             "Richiesta di ingresso senza carichi",
-            new FlightPurposeImpl(1, "Trasporto merci"),
+            new FlightPurposeImpl(5, "Esplorazione"),
             starshipDAO.fromPlate("MFALC001").get(),
             planetDAO.getFromCodPlanet("HOTH003").get(),
             Set.of()
@@ -133,7 +135,49 @@ class TestRequestDAO {
             RequestType.ENTRY,
             actual.dateTime(),
             "Richiesta di ingresso senza carichi",
-            0.0,
+            180.0,
+            starshipDAO.fromPlate("MFALC001").get(),
+            new FlightPurposeImpl(5, "Esplorazione"),
+            planetDAO.getFromCodPlanet("HOTH003").get(),
+            planetDAO.getFromCodPlanet("DTHSTR0").get()
+        );
+        // Cannot compare code() and dateTime() as they are generated at runtime
+        assertEquals(expected.type(), actual.type());
+        assertEquals(expected.description(), actual.description());
+        assertEquals(expected.totalPrice(), actual.totalPrice());
+        assertEquals(expected.starship(), actual.starship());
+        assertEquals(expected.purpose(), actual.purpose());
+        assertEquals(expected.departurePlanet(), actual.departurePlanet());
+        assertEquals(expected.destinationPlanet(), actual.destinationPlanet());
+    }
+
+    @Test
+    public void addEntryRequestWithPayloads() {
+        var requestDAO = new RequestDAOImpl(connection);
+        var starshipDAO = new StarshipDAOImpl(connection);
+        var planetDAO = new PlanetDAOImpl(connection);
+        var payloadTypeDAO = new PayloadTypeDAOImpl(connection);
+        var payloadType = payloadTypeDAO.getAll().stream().findFirst().orElseThrow();
+        final int payloadQuantity = 10;
+
+        // With payloads
+        requestDAO.addEntryRequest(
+            "Richiesta di ingresso con carichi",
+            new FlightPurposeImpl(1, "Trasporto merci"),
+            starshipDAO.fromPlate("MFALC001").get(),
+            planetDAO.getFromCodPlanet("HOTH003").get(),
+            Set.of(
+                new PayloadImpl(payloadType, payloadQuantity)                
+            )
+        );
+        
+        var actual = requestDAO.getLastRequest("MFALC001").get();
+        var expected = new RequestImpl(
+            0,
+            RequestType.ENTRY,
+            actual.dateTime(),
+            "Richiesta di ingresso con carichi",
+            180.0 + payloadType.unitPrice() * payloadQuantity,
             starshipDAO.fromPlate("MFALC001").get(),
             new FlightPurposeImpl(1, "Trasporto merci"),
             planetDAO.getFromCodPlanet("HOTH003").get(),
@@ -147,9 +191,6 @@ class TestRequestDAO {
         assertEquals(expected.purpose(), actual.purpose());
         assertEquals(expected.departurePlanet(), actual.departurePlanet());
         assertEquals(expected.destinationPlanet(), actual.destinationPlanet());
-
-        // With payloads
-        // TODO
     }
 
     @Test
@@ -161,7 +202,7 @@ class TestRequestDAO {
         // Without payloads
         requestDAO.addExitRequest(
             "Richiesta di uscita senza carichi",
-            new FlightPurposeImpl(1, "Trasporto merci"),
+            new FlightPurposeImpl(5, "Esplorazione"),
             starshipDAO.fromPlate("MFALC001").get(),
             planetDAO.getFromCodPlanet("HOTH003").get(),
             Set.of()
@@ -173,7 +214,49 @@ class TestRequestDAO {
             RequestType.EXIT,
             actual.dateTime(),
             "Richiesta di uscita senza carichi",
-            0.0,
+            180.0,
+            starshipDAO.fromPlate("MFALC001").get(),
+            new FlightPurposeImpl(5, "Esplorazione"),
+            planetDAO.getFromCodPlanet("DTHSTR0").get(),
+            planetDAO.getFromCodPlanet("HOTH003").get()
+        );
+        // Cannot compare code() and dateTime() as they are generated at runtime
+        assertEquals(expected.type(), actual.type());
+        assertEquals(expected.description(), actual.description());
+        assertEquals(expected.totalPrice(), actual.totalPrice());
+        assertEquals(expected.starship(), actual.starship());
+        assertEquals(expected.purpose(), actual.purpose());
+        assertEquals(expected.departurePlanet(), actual.departurePlanet());
+        assertEquals(expected.destinationPlanet(), actual.destinationPlanet());
+    }
+
+    @Test
+    public void addExitRequestWithPayloads() {
+        var requestDAO = new RequestDAOImpl(connection);
+        var starshipDAO = new StarshipDAOImpl(connection);
+        var planetDAO = new PlanetDAOImpl(connection);
+        var payloadTypeDAO = new PayloadTypeDAOImpl(connection);
+        var payloadType = payloadTypeDAO.getAll().stream().findFirst().orElseThrow();
+        final int payloadQuantity = 10;
+
+        // With payloads
+        requestDAO.addExitRequest(
+            "Richiesta di uscita con carichi",
+            new FlightPurposeImpl(1, "Trasporto merci"),
+            starshipDAO.fromPlate("MFALC001").get(),
+            planetDAO.getFromCodPlanet("HOTH003").get(),
+            Set.of(
+                new PayloadImpl(payloadType, payloadQuantity)                
+            )
+        );
+        
+        var actual = requestDAO.getLastRequest("MFALC001").get();
+        var expected = new RequestImpl(
+            0,
+            RequestType.EXIT,
+            actual.dateTime(),
+            "Richiesta di uscita con carichi",
+            180.0 + payloadType.unitPrice() * payloadQuantity,
             starshipDAO.fromPlate("MFALC001").get(),
             new FlightPurposeImpl(1, "Trasporto merci"),
             planetDAO.getFromCodPlanet("DTHSTR0").get(),
@@ -187,9 +270,6 @@ class TestRequestDAO {
         assertEquals(expected.purpose(), actual.purpose());
         assertEquals(expected.departurePlanet(), actual.departurePlanet());
         assertEquals(expected.destinationPlanet(), actual.destinationPlanet());
-
-        // With payloads
-        // TODO
     }
 
 }

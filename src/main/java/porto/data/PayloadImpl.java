@@ -9,7 +9,7 @@ public record PayloadImpl(
     double totalPrice
 ) implements Payload {
 
-    public PayloadImpl(PayloadType type, int quantity, int codRequest) {
+    public PayloadImpl(PayloadType type, int quantity) {
         this(type, quantity, quantity * type.unitPrice());
     }
 }

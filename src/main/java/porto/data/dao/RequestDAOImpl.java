@@ -125,8 +125,20 @@ public class RequestDAOImpl implements RequestDAO {
             var resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 var codRequest = resultSet.getInt(1);
-                if (!payloads.isEmpty()) {
-                    this.addPayloadsToRequest(payloads, codRequest);
+                this.addPayloadsToRequest(payloads, codRequest);
+
+                var totalPayloadPrice = payloads.stream()
+                    .mapToDouble(Payload::totalPrice)
+                    .sum();
+                var shipTax = starship.model().tax();
+                var totalPrice = totalPayloadPrice + shipTax;
+
+                try (
+                    var updateStatement = DAOUtils.prepare(connection, Queries.UPDATE_REQUEST_TOTAL_PRICE, totalPrice, codRequest);
+                ) {
+                    updateStatement.executeUpdate();
+                } catch (Exception e) {
+                    throw new DAOException("Failed to update total price for request.", e);
                 }
                 return getRequestByCodRequest(codRequest).orElseThrow();
             } else {
@@ -142,19 +154,9 @@ public class RequestDAOImpl implements RequestDAO {
             return;
         }
         var payloadDAO = new PayloadDAOImpl(connection);
-        var totalPrice = payloads.stream()
-            .mapToDouble(Payload::totalPrice)
-            .sum();
         payloads.forEach(pl -> {
             payloadDAO.add(pl.type(), pl.quantity(), codRequest);
         });
-        try (
-            var statement = DAOUtils.prepare(connection, Queries.UPDATE_REQUEST_TOTAL_PRICE, totalPrice, codRequest);
-        ) {
-            statement.executeUpdate();
-        } catch (Exception e) {
-            throw new DAOException("Failed to update total price for request.", e);
-        }
     }
 
     /**
