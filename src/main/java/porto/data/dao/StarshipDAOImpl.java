@@ -1,7 +1,9 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -158,6 +160,28 @@ public class StarshipDAOImpl implements StarshipDAO {
             var statement = DAOUtils.prepare(connection, Queries.REMOVE_CREW_MEMBER, plateNumber, memberCUI);
         ) {
             statement.executeUpdate();
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Starship, Integer> get50TransportedMost() throws DAOException {
+        Map<Starship, Integer> starships = new HashMap<>();
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.STARSHIPS_TRANSPORTED_MOST);
+            var resultSet = statement.executeQuery();
+        ) {
+            while (resultSet.next()) {
+                var shipPlate = resultSet.getString("TargaAstronave");
+                var totalPayload = resultSet.getInt("QtaTot");
+                var starship = this.fromPlate(shipPlate).orElseThrow();
+                starships.put(starship, totalPayload);
+            }
+            return starships;
         } catch (Exception e) {
             throw new DAOException(e);
         }

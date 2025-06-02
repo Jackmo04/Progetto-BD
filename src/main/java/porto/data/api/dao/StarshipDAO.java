@@ -1,5 +1,6 @@
 package porto.data.api.dao;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -66,6 +67,14 @@ public interface StarshipDAO {
      * @throws DAOException if an error occurs while accessing the database
      */
     void removeCrewMember(String plateNumber, String memberCUI) throws DAOException;
+
+    /**
+     * Returns a map of the 50 (or less) starships who transported the most loads
+     * and the total amount of they have transported.
+     * @return a map where the key is the Starship and the value is the total amount of payloads transported
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    Map<Starship, Integer> get50TransportedMost() throws DAOException;
 
     /**
      * Clears the cache of starships.

@@ -105,4 +105,13 @@ public final class Queries {
                                                  WHERE a.numeroPosto IS NOT NULL);
     """;
 
+    public static final String STARSHIPS_TRANSPORTED_MOST = """
+        SELECT r.TargaAstronave, SUM(c.Quantita) QtaTot
+        FROM Richieste r, Carichi c
+        WHERE c.CodRichiesta = r.CodRichiesta
+        GROUP BY r.TargaAstronave
+        ORDER BY QtaTot DESC
+        LIMIT 50;
+    """;
+
 }

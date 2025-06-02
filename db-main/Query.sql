@@ -414,7 +414,7 @@ WHERE (p.codArea, p.numeroPosto) NOT IN (SELECT a.codArea, a.numeroPosto
 -- _____________________________________________
 /*
 	A7 -- Visualizzare le 50 astronavi che hanno trasportato più merce.
-    {Starship} [Matteo] Da fare
+    {Starship} [Matteo] Fatto
 */
 SELECT r.TargaAstronave, SUM(c.Quantita) QtaTot
 FROM Richieste r, Carichi c
