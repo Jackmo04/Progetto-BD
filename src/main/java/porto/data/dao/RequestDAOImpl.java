@@ -243,8 +243,18 @@ public class RequestDAOImpl implements RequestDAO {
 
     @Override
     public Optional<RequestState> state(int codRequest) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'state'");
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.REQUEST_STATE_FROM_COD, codRequest);
+            var resultSet = statement.executeQuery();
+        ) {
+            if (resultSet.next()) {
+                return Optional.of(RequestState.fromString(resultSet.getString("Stato")));
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
 
     @Override
@@ -254,8 +264,18 @@ public class RequestDAOImpl implements RequestDAO {
 
     @Override
     public Optional<Timestamp> dateTimeManaged(int codRequest) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'dateTimeManaged'");
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.REQUEST_MANAGED_DATE_FROM_COD, codRequest);
+            var resultSet = statement.executeQuery();
+        ) {
+            if (resultSet.next()) {
+                return Optional.of(resultSet.getTimestamp("DataEsito"));
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
 
     @Override
@@ -265,8 +285,19 @@ public class RequestDAOImpl implements RequestDAO {
 
     @Override
     public Optional<Person> managedBy(int codRequest) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'managedBy'");
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.REQUEST_MANAGED_BY_FROM_COD, codRequest);
+            var resultSet = statement.executeQuery();
+        ) {
+            if (resultSet.next()) {
+                var cui = resultSet.getString("GestitaDa");
+                return new PersonDAOImpl(connection).getFromCUI(cui);
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
 
     @Override

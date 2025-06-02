@@ -140,4 +140,22 @@ public final class Queries {
         WHERE CodRichiesta = ?;
     """;
 
+    public static final String REQUEST_STATE_FROM_COD = """
+        SELECT r.Esito
+        FROM richieste r
+        WHERE r.CodRichiesta = ?;
+    """;
+
+    public static final String REQUEST_MANAGED_DATE_FROM_COD = """
+        SELECT r.DataEsito
+        FROM richieste r
+        WHERE r.CodRichiesta = ?;
+    """;
+
+    public static final String REQUEST_MANAGED_BY_FROM_COD = """
+        SELECT r.GestitaDa
+        FROM richieste r
+        WHERE r.CodRichiesta = ?;
+    """;
+
 }
