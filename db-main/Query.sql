@@ -259,7 +259,7 @@ AND n.Targa = ?;
 	A1 -- Visualizzare tutte le richieste pendenti
     {Request} [?] Da fare
 */
-SELECT CodRichiesta FROM Richieste_pendenti;
+SELECT * FROM Richieste_pendenti;
 
 /* Java [Set<Richiesta> getPending()]
 SELECT * FROM Richieste_pendenti;
