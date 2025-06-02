@@ -46,27 +46,28 @@ public class RequestDAOImpl implements RequestDAO {
     @Override
     public Optional<Request> getRequestByCodRequest(Integer codRequest) throws DAOException {
         try (
-                var statement = DAOUtils.prepare(connection, Queries.REQUEST_FROM_COD, codRequest);
-                var resultSet = statement.executeQuery();) {
+            var statement = DAOUtils.prepare(connection, Queries.REQUEST_FROM_COD, codRequest);
+            var resultSet = statement.executeQuery();
+        ) {
             if (resultSet.next()) {
-                Integer codRequestDB = resultSet.getInt("CodRichiesta");
-                RequestType type = RequestType.fromString(resultSet.getString("EntrataUscita"));
-                Timestamp dateTime = resultSet.getTimestamp("DataOra");
-                String description = resultSet.getString("Descrizione");
-                double totalPrice = resultSet.getDouble("CostoTotale");
-                RequestState state = RequestState.fromString(resultSet.getString("Esito"));
-                Optional<Timestamp> dateTimeManaged = Optional.ofNullable(resultSet.getTimestamp("DataEsito"));
-                Starship starship = new StarshipDAOImpl(connection).fromPlate(resultSet.getString("TargaAstronave"))
+                var codRequestDB = resultSet.getInt("CodRichiesta");
+                var type = RequestType.fromString(resultSet.getString("EntrataUscita"));
+                var dateTime = resultSet.getTimestamp("DataOra");
+                var description = resultSet.getString("Descrizione");
+                var totalPrice = resultSet.getDouble("CostoTotale");
+                var state = RequestState.fromString(resultSet.getString("Esito"));
+                var dateTimeManaged = Optional.ofNullable(resultSet.getTimestamp("DataEsito"));
+                var starship = new StarshipDAOImpl(connection).fromPlate(resultSet.getString("TargaAstronave"))
                         .get();
-                Integer codTipoViaggio = resultSet.getInt("Scopo");
-                FlightPurpose purpose = flightPurpose.stream()
+                var codTipoViaggio = resultSet.getInt("Scopo");
+                var purpose = flightPurpose.stream()
                         .filter(fp -> fp.codFlightPurpose().equals(codTipoViaggio))
                         .findFirst().get();
-                Planet departurePlanet = new PlanetDAOImpl(connection)
+                var departurePlanet = new PlanetDAOImpl(connection)
                         .getFromCodPlanet(resultSet.getString("PianetaProvenienza")).get();
-                Planet destinationPlanet = new PlanetDAOImpl(connection)
+                var destinationPlanet = new PlanetDAOImpl(connection)
                         .getFromCodPlanet(resultSet.getString("PianetaDestinazione")).get();
-                Optional<Person> managedBy = new PersonDAOImpl(connection).getFromCUI(resultSet.getString("GestitaDa"));
+                var managedBy = new PersonDAOImpl(connection).getFromCUI(resultSet.getString("GestitaDa"));
 
                 var request = new RequestImpl(codRequestDB, type, dateTime, description, totalPrice, state,
                         dateTimeManaged, starship, purpose, departurePlanet, destinationPlanet, managedBy);
