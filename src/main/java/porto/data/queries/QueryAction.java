@@ -60,5 +60,25 @@ public final class QueryAction {
     public static final String A1_PENDING_REQUEST = """
                         SELECT * FROM Richieste_pendenti;
                     """;
+    public static final String A2_ACCEPT_REQUEST = """
+                UPDATE richieste
+                SET esito = 'A' , dataEsito = NOW(), gestitaDa = ?
+                WHERE CodRichiesta = ?;
+
+            """;
+        public static final String A2_ASSIGN_PARKING = """
+
+                UPDATE astronavi
+                SET codArea = ?, numeroPosto = ?
+                WHERE targa = (SELECT targaAstronave
+			                    FROM richieste r
+                                WHERE r.codRichiesta = ?
+                                 AND r.esito = 'A');
+            """;
+    public static final String A2_REJECT_REQUEST = """
+                UPDATE richieste
+                SET esito = 'R' , dataEsito = NOW(), gestitaDa = ?
+                WHERE CodRichiesta = ?;
+            """;
 
 }

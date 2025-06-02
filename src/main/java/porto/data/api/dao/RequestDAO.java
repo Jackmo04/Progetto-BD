@@ -73,4 +73,20 @@ public interface RequestDAO {
          */
     public List<Request> pendingRequests() throws DAOException;
 
+        /**
+         * Accepts a request by its unique code and the CUI of the admin processing it.
+         * @param codRequest
+         * @param CUIAdmin
+         * @throws DAOException
+         */
+    public void acceptEnterRequest(Integer codRequest , String CUIAdmin) throws DAOException;
+
+        /**
+         * Rejects a request by its unique code and the CUI of the admin processing it.
+         * @param codRequest
+         * @param CUIAdmin
+         * @throws DAOException
+         */
+    public void rejectRequest(Integer codRequest , String CUIAdmin) throws DAOException;
+
 }

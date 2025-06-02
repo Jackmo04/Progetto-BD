@@ -257,7 +257,7 @@ AND n.Targa = ?;
 -- _____________________________________________
 /*
 	A1 -- Visualizzare tutte le richieste pendenti
-    {Request} [?] Da fare
+    {Request} [Mattia] fatto
 */
 SELECT * FROM Richieste_pendenti;
 
@@ -268,7 +268,9 @@ SELECT * FROM Richieste_pendenti;
 -- _____________________________________________
 /*
 	A2 -- Valutare una richiesta pendente
-    {Request} [?] Da fare
+    {Request} [Mattia] AccessoAlPortoAccettato fatto
+				[Mattia] Rifiutata fatto
+                [Mattia] UscitadAlPortoAccettato da fare
 */
 UPDATE richieste
 SET esito = 'A', dataEsito = NOW(), gestitaDa = 'PLPSHV201204N'
