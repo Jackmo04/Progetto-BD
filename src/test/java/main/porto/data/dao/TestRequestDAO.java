@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.List;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -44,8 +46,20 @@ class TestRequestDAO {
     @Test
     public void lastRequest() {
         var requestDAO = new RequestDAOImpl(connection);
-        var actual = requestDAO.getLastRequest("MFALC001");
-        var expected = requestDAO.getRequestByCodRequest(1);
+        var actual = requestDAO.getLastRequest("CR900004");
+        var expected = requestDAO.getRequestByCodRequest(2);
+        assertEquals(expected, actual);
+
+        var actual1 = requestDAO.getLastRequest("MFALC001");
+        var expected1 = requestDAO.getRequestByCodRequest(1);
+        assertEquals(expected1, actual1);
+    }
+
+    @Test
+    public void requestHistory() {
+        var requestDAO = new RequestDAOImpl(connection);
+        var actual = requestDAO.requestHistory("CR900004");
+        var expected = List.of(requestDAO.getRequestByCodRequest(2).get() , requestDAO.getRequestByCodRequest(3).get());
         assertEquals(expected, actual);
     }
 

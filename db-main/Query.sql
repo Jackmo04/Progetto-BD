@@ -233,15 +233,15 @@ WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
 -- _____________________________________________
 /*
 	C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
-    {Request} [Mattia] Da fare
+    {Request} [Mattia] Fatto
 */
-SELECT DISTINCT r.*
+SELECT DISTINCT r.CodRichiesta
 FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
 AND n.Targa = 'MFALC001';
 
 /* Java [List<Richiesta>]
-SELECT DISTINCT r.*
+SELECT DISTINCT r.CodRichiesta
 FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
 AND n.Targa = ?;

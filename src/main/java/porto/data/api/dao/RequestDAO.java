@@ -1,5 +1,6 @@
 package porto.data.api.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import porto.data.api.Planet;
@@ -54,5 +55,13 @@ public interface RequestDAO {
          * @throws DAOException if an error occurs while accessing the database
          */    
     public Optional<Request> getLastRequest (String  plate) throws DAOException;
+
+        /**
+         * Retrieves the history of requests made for a specific plate.
+         * @param plate the plate of the starship for which to retrieve the request history
+         * @return a list of requests associated with the specified plate
+         * @throws DAOException if an error occurs while accessing the database
+         */
+    public List<Request> requestHistory (String  plate) throws DAOException;
 
 }
