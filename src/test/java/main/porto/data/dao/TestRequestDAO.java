@@ -68,7 +68,7 @@ class TestRequestDAO {
     public void lastRequest() {
         var requestDAO = new RequestDAOImpl(connection);
         var actual = requestDAO.getLastRequest("CR900004");
-        var expected = requestDAO.getRequestByCodRequest(2);
+        var expected = requestDAO.getRequestByCodRequest(3);
         assertEquals(expected, actual);
 
         var actual1 = requestDAO.getLastRequest("MFALC001");

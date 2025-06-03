@@ -406,8 +406,8 @@ INSERT INTO TIPOLOGIE_CARICO (Nome, Descrizione, CostoUnitario) VALUES
 
 INSERT INTO RICHIESTE (EntrataUscita, DataOra, Descrizione, CostoTotale, Esito, DataEsito, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione, GestitaDa) VALUES
 ('E', '2025-05-20 10:00:00', 'Arrivo per scarico spezie', 1680.00, 'R', '2025-05-20',  'MFALC001', 1, 'TATO002', 'DTHSTR0', 'TRKMFF220306M'),
+('E', '2025-05-21 12:00:00', 'Arrivo per missione diplomatica', 350.00, 'A', '2025-05-21',  'CR900004', 2, 'ALDE005', 'DTHSTR0', 'PLPSHV201204N'),
 ('U', '2025-05-21 14:30:00', 'Partenza per missione diplomatica', 350.00, 'A', '2025-05-21',  'CR900004', 2, 'DTHSTR0', 'ALDE005', 'PLPSHV201204N'),
-('E', '2025-05-21 14:30:00', 'Partenza per missione diplomatica', 350.00, 'A', '2025-05-21',  'CR900004', 2, 'ALDE005', 'DTHSTR0', 'PLPSHV201204N'),
 ('E', '2025-05-22 08:00:00', 'Rifornimento e manutenzione', 1600.00, NULL, NULL, 'XWING002', 4, 'HOTH003', 'DTHSTR0', NULL),
 ('U', '2025-05-22 18:00:00', 'Pattuglia settore 7', 1500.00, 'A', '2025-05-22', 'STARD003', 3, 'DTHSTR0', 'GEON008', 'PLPSHV201204N'),
 ('E', '2025-05-23 09:15:00', 'Arrivo carico armi', 5300.00, NULL, NULL, 'TIEF0005', 1, 'NABO004', 'DTHSTR0', NULL);
