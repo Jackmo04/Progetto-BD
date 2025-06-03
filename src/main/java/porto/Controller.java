@@ -2,7 +2,6 @@ package porto;
 
 import java.util.Objects;
 
-import porto.data.deleteme.ProductPreview;
 import porto.data.utils.DAOException;
 import porto.model.Model;
 
@@ -40,44 +39,44 @@ public final class Controller {
         this.model = model;
     }
 
-    public void userRequestedInitialPage() {
-        this.loadInitialPage();
-    }
+    // public void userRequestedInitialPage() {
+    //     this.loadInitialPage();
+    // }
 
-    public void userClickedReloadPreviews() {
-        this.loadInitialPage();
-    }
+    // public void userClickedReloadPreviews() {
+    //     this.loadInitialPage();
+    // }
+    // 
+    // public void userClickedPreview(ProductPreview productPreview) {
+    //     try {
+    //         this.view.loadingProduct();
+    //         var product = this.model.find(productPreview.code);
+    //         if (product.isPresent()) {
+    //             this.view.productPage(product.get());
+    //         } else {
+    //             this.view.failedToLoadProduct(productPreview);
+    //         }
+    //     } catch (DAOException e) {
+    //         this.view.failedToLoadProduct(productPreview);
+    //     }
+    // }
 
-    public void userClickedPreview(ProductPreview productPreview) {
-        try {
-            this.view.loadingProduct();
-            var product = this.model.find(productPreview.code);
-            if (product.isPresent()) {
-                this.view.productPage(product.get());
-            } else {
-                this.view.failedToLoadProduct(productPreview);
-            }
-        } catch (DAOException e) {
-            this.view.failedToLoadProduct(productPreview);
-        }
-    }
+    // public void userClickedBack() {
+    //     if (this.model.loadedPreviews()) {
+    //         this.view.previewPage(this.model.previews());
+    //     } else {
+    //         this.loadInitialPage();
+    //     }
+    // }
 
-    public void userClickedBack() {
-        if (this.model.loadedPreviews()) {
-            this.view.previewPage(this.model.previews());
-        } else {
-            this.loadInitialPage();
-        }
-    }
-
-    void loadInitialPage() {
-        try {
-            this.view.loadingPreviews();
-            var previews = this.model.loadPreviews();
-            this.view.previewPage(previews);
-        } catch (DAOException e) {
-            e.printStackTrace();
-            this.view.failedToLoadPreviews();
-        }
-    }
+    // void loadInitialPage() {
+    //     try {
+    //         this.view.loadingPreviews();
+    //         var previews = this.model.loadPreviews();
+    //         this.view.previewPage(previews);
+    //     } catch (DAOException e) {
+    //         e.printStackTrace();
+    //         this.view.failedToLoadPreviews();
+    //     }
+    // }
 }

@@ -84,65 +84,65 @@ public final class View {
         freshPane(cp -> cp.add(new JLabel("Loading previews...", SwingConstants.CENTER)));
     }
 
-    public void productPage(Product product) {
-        freshPane(cp -> {
-            cp.add(new JLabel(product.name));
-            cp.add(new JLabel(" "));
-            cp.add(new JLabel(product.description));
-            cp.add(new JLabel(" "));
-            product.composition
-                .entrySet()
-                .stream()
-                .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
-                .map(entry -> {
-                    var percent = Math.round(entry.getValue() * 100) + "%";
-                    return "- " + entry.getKey().description + " " + percent;
-                })
-                .forEach(entry -> cp.add(new JLabel(entry)));
+    // public void productPage(Product product) {
+    //     freshPane(cp -> {
+    //         cp.add(new JLabel(product.name));
+    //         cp.add(new JLabel(" "));
+    //         cp.add(new JLabel(product.description));
+    //         cp.add(new JLabel(" "));
+    //         product.composition
+    //             .entrySet()
+    //             .stream()
+    //             .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
+    //             .map(entry -> {
+    //                 var percent = Math.round(entry.getValue() * 100) + "%";
+    //                 return "- " + entry.getKey().description + " " + percent;
+    //             })
+    //             .forEach(entry -> cp.add(new JLabel(entry)));
 
-            cp.add(new JLabel(" "));
-            cp.add(button("Go back", () -> this.getController().userClickedBack()));
-        });
-    }
+    //         cp.add(new JLabel(" "));
+    //         cp.add(button("Go back", () -> this.getController().userClickedBack()));
+    //     });
+    // }
 
-    public void failedToLoadProduct(ProductPreview productPreview) {
-        freshPane(cp -> {
-            cp.add(new JLabel("I couldn't load the page for product", SwingConstants.CENTER));
-            cp.add(new JLabel(productPreview.name, SwingConstants.CENTER));
-            cp.add(new JLabel(" "));
-            cp.add(button("Retry", () -> this.getController().userClickedPreview(productPreview)));
-            cp.add(button("Go back", () -> this.getController().userClickedBack()));
-        });
-    }
+    // public void failedToLoadProduct(ProductPreview productPreview) {
+    //     freshPane(cp -> {
+    //         cp.add(new JLabel("I couldn't load the page for product", SwingConstants.CENTER));
+    //         cp.add(new JLabel(productPreview.name, SwingConstants.CENTER));
+    //         cp.add(new JLabel(" "));
+    //         cp.add(button("Retry", () -> this.getController().userClickedPreview(productPreview)));
+    //         cp.add(button("Go back", () -> this.getController().userClickedBack()));
+    //     });
+    // }
 
-    public void previewPage(List<ProductPreview> productPreviews) {
-        freshPane(cp -> {
-            cp.add(new JLabel("All our products", SwingConstants.CENTER));
-            cp.add(new JLabel(" "));
-            this.addPreviews(cp, productPreviews);
-            cp.add(new JLabel(" "));
-            cp.add(button("Reload", () -> this.getController().userClickedReloadPreviews()));
-        });
-    }
+    // public void previewPage(List<ProductPreview> productPreviews) {
+    //     freshPane(cp -> {
+    //         cp.add(new JLabel("All our products", SwingConstants.CENTER));
+    //         cp.add(new JLabel(" "));
+    //         this.addPreviews(cp, productPreviews);
+    //         cp.add(new JLabel(" "));
+    //         cp.add(button("Reload", () -> this.getController().userClickedReloadPreviews()));
+    //     });
+    // }
 
-    private void addPreviews(Container cp, List<ProductPreview> productPreviews) {
-        productPreviews.forEach(preview -> {
-            var tags = preview.tags
-                .stream()
-                .map(tag -> tag.name)
-                .sorted(String::compareTo)
-                .collect(Collectors.joining(","));
-            var label = "- " + preview.name + " [" + tags + "]";
-            cp.add(clickableLabel(label, () -> this.getController().userClickedPreview(preview)));
-        });
-    }
+    // private void addPreviews(Container cp, List<ProductPreview> productPreviews) {
+    //     productPreviews.forEach(preview -> {
+    //         var tags = preview.tags
+    //             .stream()
+    //             .map(tag -> tag.name)
+    //             .sorted(String::compareTo)
+    //             .collect(Collectors.joining(","));
+    //         var label = "- " + preview.name + " [" + tags + "]";
+    //         cp.add(clickableLabel(label, () -> this.getController().userClickedPreview(preview)));
+    //     });
+    // }
 
-    public void failedToLoadPreviews() {
-        freshPane(cp -> {
-            cp.add(new JLabel("I couldn't load the previews", SwingConstants.CENTER));
-            cp.add(button("Retry", () -> this.getController().userClickedReloadPreviews()));
-        });
-    }
+    // public void failedToLoadPreviews() {
+    //     freshPane(cp -> {
+    //         cp.add(new JLabel("I couldn't load the previews", SwingConstants.CENTER));
+    //         cp.add(button("Retry", () -> this.getController().userClickedReloadPreviews()));
+    //     });
+    // }
 
     private JButton button(String label, Runnable action) {
         var button = new JButton(label);
