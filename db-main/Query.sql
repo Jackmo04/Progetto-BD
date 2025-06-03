@@ -250,7 +250,7 @@ AND n.Targa = ?;
 -- _____________________________________________
 /*
 	C7 -- Visualizzare il costo di una richiesta di accesso o uscita.
-    {Request} [?] Da fare
+    {Request} [?] Eliminare?
 */
 
 
@@ -358,7 +358,7 @@ AND a.numeroPosto IS NOT NULL;
 -- _____________________________________________
 /*
 	A5 -- Visualizzare la percentuale di richieste accettate e rifiutate in un dato intervallo di tempo
-    {Request} [?] Da fare
+    {Request} [Matteo] Da fare
 */
 SELECT 
 	ROUND(cra.num * 100 / crt.num, 2) AS `% Accettate`,

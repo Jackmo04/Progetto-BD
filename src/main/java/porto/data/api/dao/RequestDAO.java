@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import porto.data.api.FlightPurpose;
 import porto.data.api.Payload;
 import porto.data.api.Person;
@@ -155,5 +157,14 @@ public interface RequestDAO {
      * @throws DAOException
      */
     public void rejectRequest(int codRequest, String CUIAdmin) throws DAOException;
+
+    /**
+     * Retrieves the percentage of accepted and rejected requests within a specified date range.
+     * @param startDate the start date of the range
+     * @param endDate the end date of the range
+     * @return an ImmutablePair containing the percentage of accepted requests and rejected requests
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    ImmutablePair<Double, Double> acceptedAndRejectedPercentages(Timestamp startDate, Timestamp endDate) throws DAOException;
 
 }

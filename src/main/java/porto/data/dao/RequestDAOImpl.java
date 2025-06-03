@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import porto.data.RequestImpl;
 import porto.data.api.FlightPurpose;
 import porto.data.api.Payload;
@@ -342,6 +344,30 @@ public class RequestDAOImpl implements RequestDAO {
     @Override
     public Optional<Person> managedBy(Request request) {
         return this.managedBy(request.codRichiesta());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ImmutablePair<Double, Double> acceptedAndRejectedPercentages(
+        Timestamp startDate,
+        Timestamp endDate
+    ) throws DAOException {
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.ACCEPTED_AND_REJECTED_PERCENTAGES, startDate, endDate);
+            var resultSet = statement.executeQuery();
+        ) {
+            if (resultSet.next()) {
+                var accepted = resultSet.getDouble("Accettate");
+                var rejected = resultSet.getDouble("Rifiutate");
+                return ImmutablePair.of(accepted, rejected);
+            } else {
+                return ImmutablePair.of(0.0, 0.0);
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
 
 }

@@ -245,4 +245,17 @@ public final class Queries {
                 SET esito = 'R' , dataEsito = NOW(), gestitaDa = ?
                 WHERE CodRichiesta = ?;
             """;
+
+    public static final String ACCEPTED_AND_REJECTED_PERCENTAGES = """
+        WITH RichiesteInIntervallo AS (
+            SELECT *
+            FROM Richieste
+            WHERE DataOra BETWEEN ? AND ?
+            AND Esito IS NOT NULL
+        )
+        SELECT
+            ROUND(SUM(CASE WHEN Esito = 'A' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS `Accettate`,
+            ROUND(SUM(CASE WHEN Esito = 'R' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS `Rifiutate`
+        FROM RichiesteInIntervallo;
+    """;
 }

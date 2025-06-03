@@ -15,6 +15,7 @@ repositories {
 
 dependencies {
     implementation("com.mysql:mysql-connector-j:9.3.0")
+    implementation("org.apache.commons:commons-lang3:3.17.0")
     testImplementation("org.assertj:assertj-core:3.27.3")
 
     // SLF4J for logging abstraction
