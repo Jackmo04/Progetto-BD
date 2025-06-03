@@ -14,7 +14,6 @@ import porto.data.api.Person;
 import porto.data.api.Role;
 import porto.data.api.dao.PersonDAO;
 import porto.data.queries.Queries;
-import porto.data.queries.QueryAction;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
@@ -84,7 +83,7 @@ public class PersonDAOImpl implements PersonDAO {
             String borndate,
             Ideology ideology, Role role, String bornPlanet) throws DAOException {
         try (
-                var statement = DAOUtils.prepare(connection, QueryAction.S1_ADD_PERSON, CUI, username, password,
+                var statement = DAOUtils.prepare(connection, Queries.ADD_PERSON, CUI, username, password,
                         name, surname, race, borndate,
                         ideology.toString(), role.toString(), bornPlanet);) {
             statement.executeUpdate();
@@ -100,7 +99,7 @@ public class PersonDAOImpl implements PersonDAO {
     public boolean isValidPerson(String cuiUsername, String password) throws DAOException {
 
         try (
-                var statement = DAOUtils.prepare(connection, QueryAction.S2A_ACCESS_DB_REQUEST, cuiUsername, password);
+                var statement = DAOUtils.prepare(connection, Queries.ACCESS_DB_REQUEST, cuiUsername, password);
                 var resultSet = statement.executeQuery();) {
             if (resultSet.next()) {
                 return true; // If we found a person with matching CUI and password, return true
@@ -131,8 +130,8 @@ public class PersonDAOImpl implements PersonDAO {
         var cellToAssign = freeCells.get(new Random().nextInt(freeCells.size())).numCell();
 
         try (
-                var statement = DAOUtils.prepare(connection, QueryAction.A3B_ARREST_PERSON, cellToAssign, CUI);
-                var statement2 = DAOUtils.prepare(connection, QueryAction.A3C_DELETE_FROM_EQUIPE, CUI);) {
+                var statement = DAOUtils.prepare(connection, Queries.ARREST_PERSON, cellToAssign, CUI);
+                var statement2 = DAOUtils.prepare(connection, Queries.DELETE_FROM_EQUIPE, CUI);) {
             statement.executeUpdate();
             statement2.executeUpdate();
         } catch (Exception e) {
@@ -144,7 +143,7 @@ public class PersonDAOImpl implements PersonDAO {
     public List<Person> getEquipeOfStarship(String plate) throws DAOException {
         final List<String> equipe = new ArrayList<>();
         try (
-                var statement = DAOUtils.prepare(connection, QueryAction.C3_SHOW_EQUIPE_STARSHIP, plate);
+                var statement = DAOUtils.prepare(connection, Queries.SHOW_EQUIPE_STARSHIP, plate);
                 var resultSet = statement.executeQuery();) {
             while (resultSet.next()) {
                 equipe.add(resultSet.getString("CUI"));

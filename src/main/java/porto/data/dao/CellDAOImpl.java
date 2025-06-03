@@ -9,7 +9,6 @@ import porto.data.CellImpl;
 import porto.data.api.Cell;
 import porto.data.api.dao.CellDAO;
 import porto.data.queries.Queries;
-import porto.data.queries.QueryAction;
 import porto.data.utils.DAOException;
 import porto.data.utils.DAOUtils;
 
@@ -61,7 +60,7 @@ public class CellDAOImpl implements CellDAO {
     public List<Cell> getAllFreeCell() throws DAOException {
         var listCell = new ArrayList<Cell>();
         try (
-                var statement = DAOUtils.prepare(connection, QueryAction.A3A_FREE_CELL);
+                var statement = DAOUtils.prepare(connection, Queries.FREE_CELL);
                 var resultSet = statement.executeQuery();) {
             while (resultSet.next()) {
                 var numCell = resultSet.getInt("NumCella");

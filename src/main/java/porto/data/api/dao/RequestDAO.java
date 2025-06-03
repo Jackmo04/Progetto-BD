@@ -134,11 +134,19 @@ public interface RequestDAO {
 
     /**
      * Accepts a request by its unique code and the CUI of the admin processing it.
-     * @param codRequest
-     * @param CUIAdmin
+     * @param codRequest the unique code of the request
+     * @param CUIAdmin the CUI of the admin processing the request
      * @throws DAOException
      */
     public void acceptEnterRequest(int codRequest, String CUIAdmin) throws DAOException;
+
+    /**
+     * Accepts a request by its unique code and the CUI of the admin processing it.
+     * @param codRequest  the unique code of the request
+     * @param CUIAdmin the CUI of the admin processing the request
+     * @throws DAOException
+     */
+    public void acceptExitRequest(int codRequest, String CUIAdmin) throws DAOException;
 
     /**
      * Rejects a request by its unique code and the CUI of the admin processing it.
