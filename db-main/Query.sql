@@ -358,7 +358,7 @@ AND a.numeroPosto IS NOT NULL;
 -- _____________________________________________
 /*
 	A5 -- Visualizzare la percentuale di richieste accettate e rifiutate in un dato intervallo di tempo
-    {Request} [Matteo] Da fare
+    {Request} [Matteo] Fatto
 */
 SELECT 
 	ROUND(cra.num * 100 / crt.num, 2) AS `% Accettate`,
@@ -379,7 +379,7 @@ FROM (SELECT COUNT(*) num
 WITH RichiesteInIntervallo AS (
 	SELECT *
     FROM Richieste
-    WHERE DataOra BETWEEN '2025-05-21 14:30:00' AND '2025-05-22 18:00:00'
+    WHERE DataOra BETWEEN '2025-05-20 00:00:00' AND '2025-05-22 00:00:00'
     AND Esito IS NOT NULL
 )
 SELECT

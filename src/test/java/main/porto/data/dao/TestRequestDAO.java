@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -274,6 +277,27 @@ class TestRequestDAO {
         assertEquals(expected.purpose(), actual.purpose());
         assertEquals(expected.departurePlanet(), actual.departurePlanet());
         assertEquals(expected.destinationPlanet(), actual.destinationPlanet());
+    }
+
+    @Test
+    public void testPercentages() {
+        var requestDAO = new RequestDAOImpl(connection);
+
+        var t1 = new Calendar.Builder()
+                .setDate(2025, Calendar.MAY, 20)
+                .setTimeOfDay(0, 0, 0)
+                .build()
+                .getTimeInMillis();
+        var t2 = new Calendar.Builder()
+                .setDate(2025, Calendar.MAY, 22)
+                .setTimeOfDay(0, 0, 0)
+                .build()
+                .getTimeInMillis();
+        
+        var actual = requestDAO.acceptedAndRejectedPercentages(new Timestamp(t1), new Timestamp(t2));
+        var expected = new ImmutablePair<>(66.67, 33.33);
+        assertEquals(expected.getLeft(), actual.getLeft(), 0.01);
+        assertEquals(expected.getRight(), actual.getRight(), 0.01);
     }
 
 }
