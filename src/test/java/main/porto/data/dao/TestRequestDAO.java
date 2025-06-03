@@ -70,11 +70,11 @@ class TestRequestDAO {
     @Test
     public void lastRequest() {
         var requestDAO = new RequestDAOImpl(connection);
-        var actual = requestDAO.getLastRequest("CR900004");
+        var actual = requestDAO.getLastRequestOfStarship("CR900004");
         var expected = requestDAO.getRequestByCodRequest(3);
         assertEquals(expected, actual);
 
-        var actual1 = requestDAO.getLastRequest("MFALC001");
+        var actual1 = requestDAO.getLastRequestOfStarship("MFALC001");
         var expected1 = requestDAO.getRequestByCodRequest(1);
         assertEquals(expected1, actual1);
     }
@@ -82,7 +82,7 @@ class TestRequestDAO {
     @Test
     public void requestHistory() {
         var requestDAO = new RequestDAOImpl(connection);
-        var actual = requestDAO.requestHistory("CR900004");
+        var actual = requestDAO.starshipRequestHistory("CR900004");
         var expected = List.of(
                 requestDAO.getRequestByCodRequest(2).get(),
                 requestDAO.getRequestByCodRequest(3).get());
@@ -106,8 +106,8 @@ class TestRequestDAO {
         final int COD_REQ = 5;
         requestDAO.acceptEnterRequest(COD_REQ, "PLPSHV201204N");
         
-        assertEquals(RequestState.APPROVED, requestDAO.state(COD_REQ).get());
-        assertEquals("PLPSHV201204N", requestDAO.managedBy(COD_REQ).get().CUI());
+        assertEquals(RequestState.APPROVED, requestDAO.getRequestState(COD_REQ).get());
+        assertEquals("PLPSHV201204N", requestDAO.getRequestManagedBy(COD_REQ).get().CUI());
     }
 
         @Test
@@ -117,8 +117,8 @@ class TestRequestDAO {
         final int COD_EXIT_REQ = 4;
 
         requestDAO.acceptExitRequest(COD_EXIT_REQ, "PLPSHV201204N");
-        assertEquals(RequestState.APPROVED, requestDAO.state(COD_EXIT_REQ).get());
-        assertEquals("PLPSHV201204N", requestDAO.managedBy(COD_EXIT_REQ).get().CUI());
+        assertEquals(RequestState.APPROVED, requestDAO.getRequestState(COD_EXIT_REQ).get());
+        assertEquals("PLPSHV201204N", requestDAO.getRequestManagedBy(COD_EXIT_REQ).get().CUI());
     }
 
     @Test
@@ -127,8 +127,8 @@ class TestRequestDAO {
         final int COD_REQ = 5;
         requestDAO.rejectRequest(COD_REQ, "PLPSHV201204N");
 
-        assertEquals(RequestState.REJECTED, requestDAO.state(COD_REQ).get());
-        assertEquals("PLPSHV201204N", requestDAO.managedBy(COD_REQ).get().CUI());
+        assertEquals(RequestState.REJECTED, requestDAO.getRequestState(COD_REQ).get());
+        assertEquals("PLPSHV201204N", requestDAO.getRequestManagedBy(COD_REQ).get().CUI());
     }
 
     @Test
@@ -145,7 +145,7 @@ class TestRequestDAO {
                 planetDAO.getFromCodPlanet("HOTH003").get(),
                 Set.of());
 
-        var actual = requestDAO.getLastRequest("MFALC001").get();
+        var actual = requestDAO.getLastRequestOfStarship("MFALC001").get();
         var expected = new RequestImpl(
                 0,
                 RequestType.ENTRY,
@@ -184,7 +184,7 @@ class TestRequestDAO {
                 Set.of(
                         new PayloadImpl(payloadType, payloadQuantity)));
 
-        var actual = requestDAO.getLastRequest("MFALC001").get();
+        var actual = requestDAO.getLastRequestOfStarship("MFALC001").get();
         var expected = new RequestImpl(
                 0,
                 RequestType.ENTRY,
@@ -219,7 +219,7 @@ class TestRequestDAO {
                 planetDAO.getFromCodPlanet("HOTH003").get(),
                 Set.of());
 
-        var actual = requestDAO.getLastRequest("MFALC001").get();
+        var actual = requestDAO.getLastRequestOfStarship("MFALC001").get();
         var expected = new RequestImpl(
                 0,
                 RequestType.EXIT,
@@ -258,7 +258,7 @@ class TestRequestDAO {
                 Set.of(
                         new PayloadImpl(payloadType, payloadQuantity)));
 
-        var actual = requestDAO.getLastRequest("MFALC001").get();
+        var actual = requestDAO.getLastRequestOfStarship("MFALC001").get();
         var expected = new RequestImpl(
                 0,
                 RequestType.EXIT,

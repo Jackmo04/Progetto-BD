@@ -36,42 +36,42 @@ public interface RequestDAO {
      * @param codRequest the unique code of the request
      * @return an Optional containing the RequestState if the request exists, or empty if not
      */
-    Optional<RequestState> state(int codRequest);
+    Optional<RequestState> getRequestState(int codRequest);
 
     /**
      * Retrieves a request state.
      * @param request the request object
      * @return an Optional containing the RequestState if the request exists, or empty if not
      */
-    Optional<RequestState> state(Request request);
+    Optional<RequestState> getRequestState(Request request);
 
     /**
      * Returns the date and time when the request was managed.
      * @param codRequest the unique code of the request
      * @return an Optional containing the Timestamp if available, or empty if not
      */
-    Optional<Timestamp> dateTimeManaged(int codRequest);
+    Optional<Timestamp> getRequestDateTimeManaged(int codRequest);
 
     /**
      * Returns the date and time when the request was managed.
      * @param request the request object
      * @return an Optional containing the Timestamp if available, or empty if not
      */
-    Optional<Timestamp> dateTimeManaged(Request request);
+    Optional<Timestamp> getRequestDateTimeManaged(Request request);
 
     /**
      * Retrieves the person who managed the request by its unique code.
      * @param codRequest the unique code of the request
      * @return an Optional containing the Person if found, or empty if not found
      */
-    Optional<Person> managedBy(int codRequest);
+    Optional<Person> getRequestManagedBy(int codRequest);
 
     /**
      * Retrieves the person who managed the request.
      * @param request the request object
      * @return an Optional containing the Person if found, or empty if not found
      */
-    Optional<Person> managedBy(Request request);
+    Optional<Person> getRequestManagedBy(Request request);
 
     /**
      * Adds a new exit request to the database.
@@ -116,7 +116,7 @@ public interface RequestDAO {
      * @return the last request made for the specified plate, or null if no request exists
      * @throws DAOException if an error occurs while accessing the database
      */    
-    public Optional<Request> getLastRequest(String plate) throws DAOException;
+    public Optional<Request> getLastRequestOfStarship(String plate) throws DAOException;
 
     /**
      * Retrieves the history of requests made for a specific plate.
@@ -124,7 +124,7 @@ public interface RequestDAO {
      * @return a list of requests associated with the specified plate
      * @throws DAOException if an error occurs while accessing the database
      */
-    public List<Request> requestHistory(String plate) throws DAOException;
+    public List<Request> starshipRequestHistory(String plate) throws DAOException;
 
 
     /**

@@ -1,12 +1,14 @@
 package porto.model;
 
 import java.sql.Connection;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-import porto.data.deleteme.Product;
-import porto.data.deleteme.ProductPreview;
+import porto.data.api.dao.PersonDAO;
+import porto.data.api.dao.RequestDAO;
+import porto.data.api.dao.StarshipDAO;
+import porto.data.dao.PersonDAOImpl;
+import porto.data.dao.RequestDAOImpl;
+import porto.data.dao.StarshipDAOImpl;
 
 // This is the real model implementation that uses the DAOs we've defined to
 // actually load data from the underlying database.
@@ -19,33 +21,37 @@ import porto.data.deleteme.ProductPreview;
 public final class DBModel implements Model {
 
     private final Connection connection;
-    private Optional<List<ProductPreview>> previews;
+    private final PersonDAO personDAO;
+    private final StarshipDAO starshipDAO;
+    private final RequestDAO requestDAO;
 
     public DBModel(Connection connection) {
         Objects.requireNonNull(connection, "Model created with null connection");
         this.connection = connection;
-        this.previews = Optional.empty();
+        this.personDAO = new PersonDAOImpl(connection);
+        this.starshipDAO = new StarshipDAOImpl(connection);
+        this.requestDAO = new RequestDAOImpl(connection);
     }
 
-    @Override
-    public Optional<Product> find(int productCode) {
-        return Product.DAO.find(connection, productCode);
-    }
+    // @Override
+    // public Optional<Product> find(int productCode) {
+    //     return Product.DAO.find(connection, productCode);
+    // }
 
-    @Override
-    public List<ProductPreview> previews() {
-        return this.previews.orElse(List.of());
-    }
+    // @Override
+    // public List<ProductPreview> previews() {
+    //     return this.previews.orElse(List.of());
+    // }
 
-    @Override
-    public boolean loadedPreviews() {
-        return this.previews.isPresent();
-    }
+    // @Override
+    // public boolean loadedPreviews() {
+    //     return this.previews.isPresent();
+    // }
 
-    @Override
-    public List<ProductPreview> loadPreviews() {
-        var previews = ProductPreview.DAO.list(this.connection);
-        this.previews = Optional.of(previews);
-        return previews;
-    }
+    // @Override
+    // public List<ProductPreview> loadPreviews() {
+    //     var previews = ProductPreview.DAO.list(this.connection);
+    //     this.previews = Optional.of(previews);
+    //     return previews;
+    // }
 }

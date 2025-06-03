@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,6 +32,7 @@ import porto.data.utils.DAOUtils;
 public class RequestDAOImpl implements RequestDAO {
 
     private final Connection connection;
+    private final Set<Request> cache = new HashSet<>();
     private final Set<FlightPurpose> flightPurpose;
 
     /**
@@ -53,6 +55,11 @@ public class RequestDAOImpl implements RequestDAO {
                 var resultSet = statement.executeQuery();) {
             if (resultSet.next()) {
                 var codRequestDB = resultSet.getInt("CodRichiesta");
+                if (cache.stream().anyMatch(r -> r.codRichiesta() == codRequestDB)) {
+                    return cache.stream()
+                        .filter(r -> r.codRichiesta() == codRequestDB)
+                        .findFirst();
+                }
                 var type = RequestType.fromString(resultSet.getString("EntrataUscita"));
                 var dateTime = resultSet.getTimestamp("DataOra");
                 var description = resultSet.getString("Descrizione");
@@ -69,6 +76,7 @@ public class RequestDAOImpl implements RequestDAO {
                         .getFromCodPlanet(resultSet.getString("PianetaDestinazione")).get();
                 var request = new RequestImpl(codRequestDB, type, dateTime, description, totalPrice,
                         starship, purpose, departurePlanet, destinationPlanet);
+                cache.add(request);
                 return Optional.of(request);
             } else {
                 return Optional.empty();
@@ -160,9 +168,9 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public Optional<Request> getLastRequest(String plate) throws DAOException {
+    public Optional<Request> getLastRequestOfStarship(String starshipPlate) throws DAOException {
         try (
-                var statement = DAOUtils.prepare(connection, Queries.LAST_REQUEST, plate);
+                var statement = DAOUtils.prepare(connection, Queries.LAST_REQUEST, starshipPlate);
                 var resultSet = statement.executeQuery();) {
             if (resultSet.next()) {
                 return getRequestByCodRequest(resultSet.getInt("CodRichiesta"));
@@ -178,10 +186,10 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public List<Request> requestHistory(String plate) throws DAOException {
+    public List<Request> starshipRequestHistory(String starshipPlate) throws DAOException {
         var requests = new ArrayList<Request>();
         try (
-                var statement = DAOUtils.prepare(connection, Queries.REQUEST_HISTORY, plate);
+                var statement = DAOUtils.prepare(connection, Queries.REQUEST_HISTORY, starshipPlate);
                 var resultSet = statement.executeQuery();) {
             while (resultSet.next()) {
                 requests.add(getRequestByCodRequest(resultSet.getInt("CodRichiesta")).get());
@@ -247,6 +255,7 @@ public class RequestDAOImpl implements RequestDAO {
             throw new DAOException(e);
         }
     }
+
     private void acceptRequest(int codRequest, String CUIAdmin) throws DAOException {
         var request = getRequestByCodRequest(codRequest).get();
         try (
@@ -277,7 +286,7 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public Optional<RequestState> state(int codRequest) {
+    public Optional<RequestState> getRequestState(int codRequest) {
         try (
                 var statement = DAOUtils.prepare(connection, Queries.REQUEST_STATE_FROM_COD, codRequest);
                 var resultSet = statement.executeQuery();) {
@@ -295,12 +304,12 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public Optional<RequestState> state(Request request) {
-        return this.state(request.codRichiesta());
+    public Optional<RequestState> getRequestState(Request request) {
+        return this.getRequestState(request.codRichiesta());
     }
 
     @Override
-    public Optional<Timestamp> dateTimeManaged(int codRequest) {
+    public Optional<Timestamp> getRequestDateTimeManaged(int codRequest) {
         try (
                 var statement = DAOUtils.prepare(connection, Queries.REQUEST_MANAGED_DATE_FROM_COD, codRequest);
                 var resultSet = statement.executeQuery();) {
@@ -318,12 +327,12 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public Optional<Timestamp> dateTimeManaged(Request request) {
-        return this.dateTimeManaged(request.codRichiesta());
+    public Optional<Timestamp> getRequestDateTimeManaged(Request request) {
+        return this.getRequestDateTimeManaged(request.codRichiesta());
     }
 
     @Override
-    public Optional<Person> managedBy(int codRequest) {
+    public Optional<Person> getRequestManagedBy(int codRequest) {
         try (
                 var statement = DAOUtils.prepare(connection, Queries.REQUEST_MANAGED_BY_FROM_COD, codRequest);
                 var resultSet = statement.executeQuery();) {
@@ -342,8 +351,8 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public Optional<Person> managedBy(Request request) {
-        return this.managedBy(request.codRichiesta());
+    public Optional<Person> getRequestManagedBy(Request request) {
+        return this.getRequestManagedBy(request.codRichiesta());
     }
 
     /**
