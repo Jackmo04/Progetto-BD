@@ -270,7 +270,7 @@ SELECT * FROM Richieste_pendenti;
 	A2 -- Valutare una richiesta pendente
     {Request} [Mattia] AccessoAlPortoAccettato fatto
 				[Mattia] Rifiutata fatto
-                [Mattia] UscitadAlPortoAccettato da fare
+                [Mattia] UscitadAlPortoAccettato fatto
 */
 UPDATE richieste
 SET esito = 'A', dataEsito = NOW(), gestitaDa = 'PLPSHV201204N'
