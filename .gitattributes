@@ -1,9 +1,16 @@
-#
-# https://help.github.com/articles/dealing-with-line-endings/
-#
-# Linux start script should use lf
-/gradlew        text eol=lf
+# Normalize text files
+* text=auto eol=lf
 
-# These are Windows script files and should use crlf
-*.bat           text eol=crlf
+# Windows script files
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
 
+# Image files
+*.jpg  -text
+*.jpeg -text
+*.png  -text
+*.gif  -text
+*.bmp  -text
+*.svg  -text
+*.webp -text
