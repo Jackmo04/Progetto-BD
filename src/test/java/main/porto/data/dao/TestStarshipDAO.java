@@ -255,9 +255,9 @@ class TestStarshipDAO {
             .map(entry -> Map.entry(entry.getKey().plateNumber(), entry.getValue()))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         Map<String, Integer> expected = Map.of(
-            "XWING002", 10,
+            "CR900004", 10,
             "MFALC001", 3,
-            "TIEF0005", 3
+            "STARD003", 3
         );
         assertEquals(expected, actual);
 

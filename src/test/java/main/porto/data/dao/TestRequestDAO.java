@@ -80,7 +80,10 @@ class TestRequestDAO {
     public void requestHistory() {
         var requestDAO = new RequestDAOImpl(connection);
         var actual = requestDAO.requestHistory("CR900004");
-        var expected = List.of(requestDAO.getRequestByCodRequest(2).get());
+        var expected = List.of(
+            requestDAO.getRequestByCodRequest(2).get(),
+            requestDAO.getRequestByCodRequest(3).get()
+        );
         assertEquals(expected, actual);
     }
 
@@ -89,8 +92,8 @@ class TestRequestDAO {
         var requestDAO = new RequestDAOImpl(connection);
         var actual = requestDAO.pendingRequests();
         var expected = List.of(
-            requestDAO.getRequestByCodRequest(3).get(),
-            requestDAO.getRequestByCodRequest(5).get());
+            requestDAO.getRequestByCodRequest(4).get(),
+            requestDAO.getRequestByCodRequest(6).get());
         assertEquals(expected, actual);
     }
 
