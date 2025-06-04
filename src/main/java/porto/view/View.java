@@ -30,7 +30,7 @@ public final class View {
         final var initWidth = (int) (screenSize.width * FRAME_SIZE_FACTOR);
         final var initHeight = (int) (screenSize.height * FRAME_SIZE_FACTOR);
         this.mainFrame.setSize(new Dimension(initWidth, initHeight));
-        this.mainFrame.setResizable(false);
+        // this.mainFrame.setResizable(false);
 
         this.cardLayout = new CardLayout();
         this.mainPanel = new JPanel(cardLayout);
