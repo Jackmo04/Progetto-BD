@@ -2,35 +2,16 @@ package porto;
 
 import java.util.Objects;
 
+import org.slf4j.Logger;
+
 import porto.data.utils.DAOException;
 import porto.model.Model;
 import porto.view.View;
-import porto.view.scenes.LoginScene;
 
-// The controller provides a holistic description of how the outside world can
-// interact with our application: each public method is written as
-//
-//   subject + action + object (e.g. user + clicked + preview)
-//
-// So just by reading all the methods we know of all the possible interactions
-// that can happen in our app. This makes it simpler to track all the possible
-// actions that can take place as the application grows.
-//
 public final class Controller {
 
-    // The controller holds a reference to the:
-    //   - model: to have it load new data
-    //   - view: to update it as new data is loaded
-    //
-    //    ┌────── updates ──────┐
-    //    │                     │
-    // ┌──▼─┐                 ┌─┴────────┐ updates ┌──────┐
-    // │view│                 │controller├─────────►model │
-    // └──┬─┘                 └─▲────────┘         └──────┘
-    //    │       notifies      │
-    //    └────── of user's ────┘
-    //            actions
-    //
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(Controller.class);
+
     private final Model model;
     private final View view;
 
@@ -41,44 +22,21 @@ public final class Controller {
         this.model = model;
     }
 
-    public void userLoginPage() {
-        this.view.changeScene(new LoginScene(view));
+    public void initialScene() {
+        this.view.goToLoginScene();
     }
 
-    // public void userClickedReloadPreviews() {
-    //     this.loadInitialPage();
-    // }
-    // 
-    // public void userClickedPreview(ProductPreview productPreview) {
-    //     try {
-    //         this.view.loadingProduct();
-    //         var product = this.model.find(productPreview.code);
-    //         if (product.isPresent()) {
-    //             this.view.productPage(product.get());
-    //         } else {
-    //             this.view.failedToLoadProduct(productPreview);
-    //         }
-    //     } catch (DAOException e) {
-    //         this.view.failedToLoadProduct(productPreview);
-    //     }
-    // }
+    public void userClickedLogin(String CuiUsername, String password) {
+        try {
+            if (this.model.login(CuiUsername, password)) {
+                var loggedUser = this.model.getLoggedUser();
+                LOGGER.info("User {} logged in successfully", loggedUser.username());
+            } else {
+                LOGGER.warn("Login failed for user {}", CuiUsername);
+            }
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    // public void userClickedBack() {
-    //     if (this.model.loadedPreviews()) {
-    //         this.view.previewPage(this.model.previews());
-    //     } else {
-    //         this.loadInitialPage();
-    //     }
-    // }
-
-    // void loadInitialPage() {
-    //     try {
-    //         this.view.loadingPreviews();
-    //         var previews = this.model.loadPreviews();
-    //         this.view.previewPage(previews);
-    //     } catch (DAOException e) {
-    //         e.printStackTrace();
-    //         this.view.failedToLoadPreviews();
-    //     }
-    // }
 }

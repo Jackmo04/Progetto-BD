@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import porto.Controller;
+import porto.view.scenes.LoginScene;
 
 public final class View {
 
@@ -23,7 +24,7 @@ public final class View {
     public View(Runnable onClose) {
         this.controller = Optional.empty();
         this.mainFrame = new JFrame("Porto Morte Nera");
-        this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         var screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         final var initWidth = (int) (screenSize.width * FRAME_SIZE_FACTOR);
@@ -34,6 +35,8 @@ public final class View {
         this.cardLayout = new CardLayout();
         this.mainPanel = new JPanel(cardLayout);
         this.mainFrame.setContentPane(this.mainPanel);
+
+        this.mainPanel.add(new LoginScene(this), "login");
 
         this.mainFrame.setLocationByPlatform(true);
         this.mainFrame.setVisible(true);
@@ -48,7 +51,7 @@ public final class View {
         );
     }
 
-    private Controller getController() {
+    public Controller getController() {
         if (this.controller.isPresent()) {
             return this.controller.get();
         } else {
@@ -68,16 +71,21 @@ public final class View {
         this.controller = Optional.of(controller);
     }
 
-    public final void changeScene(final Scene scene) {
-        Objects.requireNonNull(scene, "Scene cannot be null");
-        if (this.controller.isEmpty()) {
-            throw new IllegalStateException(
-                "Cannot change scene, the controller is not set. " +
-                "Did you forget to call `setController`?"
-            );
-        }
-        this.mainPanel.add(scene.getPanel(), scene.getSceneName());
-        this.cardLayout.show(this.mainPanel, scene.getSceneName());
+    public void goToLoginScene() {
+        this.cardLayout.show(this.mainPanel, "login");
+    }
+
+    public final void failedLogin(String message) {
+        Objects.requireNonNull(message, "Message cannot be null");
+        // if (mainPanel.getName().equals("login")) {
+        //     // Assuming the login scene has a method to display error messages
+        //     ((LoginScene) mainPanel.getComponent(0)).displayError(message);
+        // } else {
+        //     throw new IllegalStateException(
+        //         "Cannot display login error, current scene is not a login scene."
+        //     );
+            
+        // }
     }
 
 }
