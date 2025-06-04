@@ -96,15 +96,15 @@ public class PersonDAOImpl implements PersonDAO {
      * {@inheritDoc}
      */
     @Override
-    public boolean isValidPerson(String cuiUsername, String password) throws DAOException {
-
+    public Optional<Person> loginAndGetUser(String cuiUsername, String password) throws DAOException {
         try (
-                var statement = DAOUtils.prepare(connection, Queries.ACCESS_DB_REQUEST, cuiUsername, password);
-                var resultSet = statement.executeQuery();) {
+            var statement = DAOUtils.prepare(connection, Queries.ACCESS_DB_REQUEST, cuiUsername, password);
+            var resultSet = statement.executeQuery();
+        ) {
             if (resultSet.next()) {
-                return true; // If we found a person with matching CUI and password, return true
+                return Optional.of(this.getFromCUI(resultSet.getString("CUI")).get());
             } else {
-                return false; // No matching person found
+                return Optional.empty();
             }
         } catch (Exception e) {
             throw new DAOException(e);

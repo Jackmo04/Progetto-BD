@@ -64,11 +64,11 @@ class TestPersonDAO {
     @Test
     public void isValidPerson() {
         var personDAO = new PersonDAOImpl(connection);
-        var actual = personDAO.isValidPerson("SKWLKE510925T", "");
+        var actual = personDAO.loginAndGetUser("SKWLKE510925T", "");
         var expected = true;
         assertEquals(expected, actual);
 
-        var actual2 = personDAO.isValidPerson("SKWLKE510925T", "password");
+        var actual2 = personDAO.loginAndGetUser("SKWLKE510925T", "password");
         var expected2 = false;
         assertEquals(expected2, actual2);
     }
