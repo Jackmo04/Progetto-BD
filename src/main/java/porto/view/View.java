@@ -10,9 +10,19 @@ import java.util.Optional;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import porto.Controller;
+import porto.view.scenes.AdminScene;
+import porto.view.scenes.CaptainScene;
+import porto.view.scenes.CrewScene;
 import porto.view.scenes.LoginScene;
+import porto.view.scenes.RegisterScene;
 
 public final class View {
+
+    private static final String SN_REGISTER = "register";
+    private static final String SN_ADMIN = "admin";
+    private static final String SN_CAPTAIN = "capitan";
+    private static final String SN_CREW = "crew";
+    private static final String SN_LOGIN = "login";
 
     private static final double FRAME_SIZE_FACTOR = 0.8;
 
@@ -30,13 +40,17 @@ public final class View {
         final var initWidth = (int) (screenSize.width * FRAME_SIZE_FACTOR);
         final var initHeight = (int) (screenSize.height * FRAME_SIZE_FACTOR);
         this.mainFrame.setSize(new Dimension(initWidth, initHeight));
-        // this.mainFrame.setResizable(false);
-
+        this.mainFrame.setMinimumSize(new Dimension(800, 600));
+        
         this.cardLayout = new CardLayout();
         this.mainPanel = new JPanel(cardLayout);
         this.mainFrame.setContentPane(this.mainPanel);
 
-        this.mainPanel.add(new LoginScene(this), "login");
+        this.mainPanel.add(new LoginScene(this), SN_LOGIN);
+        this.mainPanel.add(new RegisterScene(this), SN_REGISTER);
+        this.mainPanel.add(new CrewScene(this), SN_CREW);
+        this.mainPanel.add(new CaptainScene(this), SN_CAPTAIN);
+        this.mainPanel.add(new AdminScene(this), SN_ADMIN);
 
         this.mainFrame.setLocationByPlatform(true);
         this.mainFrame.setVisible(true);
@@ -72,20 +86,23 @@ public final class View {
     }
 
     public void goToLoginScene() {
-        this.cardLayout.show(this.mainPanel, "login");
+        this.cardLayout.show(this.mainPanel, SN_LOGIN);
     }
 
-    public final void failedLogin(String message) {
-        Objects.requireNonNull(message, "Message cannot be null");
-        // if (mainPanel.getName().equals("login")) {
-        //     // Assuming the login scene has a method to display error messages
-        //     ((LoginScene) mainPanel.getComponent(0)).displayError(message);
-        // } else {
-        //     throw new IllegalStateException(
-        //         "Cannot display login error, current scene is not a login scene."
-        //     );
-            
-        // }
+    public void goToRegisterScene() {
+        this.cardLayout.show(this.mainPanel, SN_REGISTER);
+    }
+
+    public void goToCrewScene() {
+        this.cardLayout.show(this.mainPanel, SN_CREW);
+    }
+
+    public void goToCaptainScene() {
+        this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
+    }
+
+    public void goToAdminScene() {
+        this.cardLayout.show(this.mainPanel, SN_ADMIN);
     }
 
     public void displayLoginError(String message) {

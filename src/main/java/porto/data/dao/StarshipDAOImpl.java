@@ -10,7 +10,7 @@ import java.util.Set;
 
 import porto.data.StarshipImpl;
 import porto.data.api.Person;
-import porto.data.api.Role;
+import porto.data.api.PersonRole;
 import porto.data.api.Starship;
 import porto.data.api.dao.StarshipDAO;
 import porto.data.queries.Queries;
@@ -119,7 +119,7 @@ public class StarshipDAOImpl implements StarshipDAO {
      */
     @Override
     public void addCrewMember(String plateNumber, Person member) throws DAOException {
-        if (member.role() != Role.CREW_MEMBER) {
+        if (member.role() != PersonRole.CREW_MEMBER) {
             throw new IllegalArgumentException("Person must be a crew member to be added to a starship.");
         }
         this.addCrewMember(plateNumber, member.CUI());

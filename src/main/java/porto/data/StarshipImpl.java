@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
-import porto.data.api.Role;
+import porto.data.api.PersonRole;
 import porto.data.api.ShipModel;
 import porto.data.api.Starship;
 
@@ -39,7 +39,7 @@ public record StarshipImpl(
         if (capitan == null) {
             throw new IllegalArgumentException("Capitan cannot be null");
         }
-        if (!capitan.role().equals(Role.CAPTAIN)) {
+        if (!capitan.role().equals(PersonRole.CAPTAIN)) {
             throw new IllegalArgumentException("Capitan must have the role of CAPTAIN");
         }
     }

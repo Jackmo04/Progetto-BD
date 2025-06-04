@@ -6,7 +6,7 @@ import porto.data.api.Cell;
 import porto.data.api.Ideology;
 import porto.data.api.Person;
 import porto.data.api.Planet;
-import porto.data.api.Role;
+import porto.data.api.PersonRole;
 
 /**
  * Implementation of the Person interface representing a person in the system.
@@ -33,7 +33,7 @@ public record PersonImpl(
     String dateOfBirth,
     Boolean isWanted,
     Ideology ideology,
-    Role role,
+    PersonRole role,
     Optional<Cell> cell,
     Planet birthPlanet
 ) implements Person {

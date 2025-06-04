@@ -63,7 +63,7 @@ public interface Person {
      * 
      * @return role.
      */
-    Role role();
+    PersonRole role();
     /**
      * Optional cell associated with the person.
      * 

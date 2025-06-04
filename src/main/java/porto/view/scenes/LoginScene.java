@@ -39,7 +39,7 @@ public class LoginScene extends JPanel {
         title.setFont(new Font(FONT, Font.BOLD, 50));
         mainPanel.add(title);
 
-        mainPanel.add(Box.createVerticalStrut(20));
+        mainPanel.add(Box.createVerticalStrut(30));
 
         final JLabel usernameLabel = new JLabel("CUI / Username", JLabel.CENTER);
         usernameLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -76,7 +76,7 @@ public class LoginScene extends JPanel {
             }
         });
 
-        mainPanel.add(Box.createVerticalStrut(40));
+        mainPanel.add(Box.createVerticalStrut(30));
 
         this.errorLabel = new JLabel("", SwingConstants.CENTER);
         this.errorLabel.setFont(new Font(FONT, Font.PLAIN, 16));
@@ -104,6 +104,24 @@ public class LoginScene extends JPanel {
         mainPanel.add(Box.createVerticalStrut(20));
 
         mainPanel.add(this.errorLabel);
+
+        mainPanel.add(Box.createVerticalStrut(30));
+
+        final JLabel registerLabel = new JLabel("Non hai un account?", SwingConstants.CENTER);
+        registerLabel.setAlignmentX(CENTER_ALIGNMENT);
+        registerLabel.setFont(new Font(FONT, Font.PLAIN, 16));
+        mainPanel.add(registerLabel);
+        mainPanel.add(Box.createVerticalStrut(10));
+
+        final JButton registerButton = new JButton("Registrati");
+        registerButton.setAlignmentX(CENTER_ALIGNMENT);
+        registerButton.setFont(new Font(FONT, Font.BOLD, 20));
+        registerButton.setMaximumSize(new Dimension(300, 40));
+        registerButton.addActionListener(e -> {
+            this.errorLabel.setVisible(false);
+            this.view.getController().userClickedRegisterOnLogin();
+        });
+        mainPanel.add(registerButton);
         
     }
 

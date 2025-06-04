@@ -13,7 +13,7 @@ import porto.data.PlanetImpl;
 import porto.data.ShipModelImpl;
 import porto.data.StarshipImpl;
 import porto.data.api.Ideology;
-import porto.data.api.Role;
+import porto.data.api.PersonRole;
 
 class TestStarship {
 
@@ -38,7 +38,7 @@ class TestStarship {
                     "1980-01-01",
                     false,
                     Ideology.NEUTRAL,
-                    Role.CAPTAIN,
+                    PersonRole.CAPTAIN,
                     Optional.empty(),
                     new PlanetImpl("EARTH001", "Earth")
                 )
@@ -62,7 +62,7 @@ class TestStarship {
                     "1980-01-01",
                     false,
                     Ideology.NEUTRAL,
-                    Role.CREW_MEMBER, // Invalid role: has to be CAPTAIN
+                    PersonRole.CREW_MEMBER, // Invalid role: has to be CAPTAIN
                     Optional.empty(),
                     new PlanetImpl("EARTH001", "Earth")
                 )

@@ -25,7 +25,7 @@ import porto.data.ShipModelImpl;
 import porto.data.StarshipImpl;
 import porto.data.api.Person;
 import porto.data.api.Ideology;
-import porto.data.api.Role;
+import porto.data.api.PersonRole;
 import porto.data.api.Starship;
 import porto.data.api.dao.StarshipDAO;
 import porto.data.dao.StarshipDAOImpl;
@@ -48,7 +48,7 @@ class TestStarshipDAO {
         "1960-03-22",
         false,
         Ideology.IMPERIAL,
-        Role.CAPTAIN,
+        PersonRole.CAPTAIN,
         Optional.empty(),
         new PlanetImpl("DANT010", "Dantooine")
     );
@@ -62,7 +62,7 @@ class TestStarshipDAO {
         "2000-01-01",
         false,
         Ideology.IMPERIAL,
-        Role.CREW_MEMBER,
+        PersonRole.CREW_MEMBER,
         Optional.empty(),
         new PlanetImpl("DTHSTR0", "Morte Nera")
     );

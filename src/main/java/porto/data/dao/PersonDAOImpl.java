@@ -11,7 +11,7 @@ import java.util.Random;
 import porto.data.PersonImpl;
 import porto.data.api.Ideology;
 import porto.data.api.Person;
-import porto.data.api.Role;
+import porto.data.api.PersonRole;
 import porto.data.api.dao.PersonDAO;
 import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
@@ -57,7 +57,7 @@ public class PersonDAOImpl implements PersonDAO {
                 var borndate = resultSet.getString("DataNascita");
                 var wanted = resultSet.getBoolean("Ricercato");
                 var ideology = Ideology.fromString(resultSet.getString("Ideologia"));
-                var role = Role.fromString(resultSet.getString("Ruolo"));
+                var role = PersonRole.fromString(resultSet.getString("Ruolo"));
                 var cell = new CellDAOImpl(connection).getFromNumCell(resultSet.getInt("NumCella"));
                 var planetCod = resultSet.getString("PianetaNascita");
                 var bornPlanet = new PlanetDAOImpl(connection).getFromCodPlanet(planetCod).orElseThrow();
@@ -80,7 +80,7 @@ public class PersonDAOImpl implements PersonDAO {
     @Override
     public void addPerson(String CUI, String username, String password, String name, String surname, String race,
             String borndate,
-            Ideology ideology, Role role, String bornPlanet) throws DAOException {
+            Ideology ideology, PersonRole role, String bornPlanet) throws DAOException {
         try (
                 var statement = DAOUtils.prepare(connection, Queries.ADD_PERSON, CUI, username, password,
                         name, surname, race, borndate,

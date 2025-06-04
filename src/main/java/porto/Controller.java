@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 
+import porto.data.api.Person;
+import porto.data.api.PersonRole;
 import porto.data.utils.DAOException;
 import porto.model.Model;
 import porto.view.View;
@@ -31,13 +33,45 @@ public final class Controller {
             if (this.model.login(CuiUsername, password)) {
                 var loggedUser = this.model.getLoggedUser();
                 LOGGER.info("User {} logged in successfully", loggedUser.username());
+                loginSuccess(loggedUser);
             } else {
                 LOGGER.warn("Login failed for user {}", CuiUsername);
-                this.view.displayLoginError("CUI/Username o password errati!");
+                loginFailed("CUI/Username o password errati!");
             }
         } catch (DAOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void userClickedRegisterOnLogin() {
+        this.view.goToRegisterScene();
+    }
+
+    public Person getLoggedUser() {
+        return this.model.getLoggedUser();
+    }
+
+    private void loginSuccess(Person loggedUser) {
+        switch (loggedUser.role()) {
+            case PersonRole.ADMIN:
+                this.view.goToAdminScene();
+                break;
+
+            case PersonRole.CAPTAIN:
+                this.view.goToCaptainScene();
+                break;
+
+            case PersonRole.CREW_MEMBER:
+                this.view.goToCrewScene();
+                break;
+
+            default:
+                throw new IllegalStateException("Unknown role for logged user: " + loggedUser.role());
+        }
+    }
+
+    private void loginFailed(String message) {
+        this.view.displayLoginError("CUI/Username o password errati!");
     }
 
 }
