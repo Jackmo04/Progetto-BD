@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import porto.data.utils.DAOException;
 import porto.model.Model;
+import porto.view.View;
+import porto.view.scenes.LoginScene;
 
 // The controller provides a holistic description of how the outside world can
 // interact with our application: each public method is written as
@@ -39,9 +41,9 @@ public final class Controller {
         this.model = model;
     }
 
-    // public void userRequestedInitialPage() {
-    //     this.loadInitialPage();
-    // }
+    public void userLoginPage() {
+        this.view.changeScene(new LoginScene(view));
+    }
 
     // public void userClickedReloadPreviews() {
     //     this.loadInitialPage();

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import porto.data.utils.DAOUtils;
 import porto.model.Model;
+import porto.view.View;
 
 public final class App {
 
@@ -17,6 +18,6 @@ public final class App {
         });
         var controller = new Controller(model, view);
         view.setController(controller);
-        // controller.userRequestedInitialPage();
+        controller.userLoginPage();
     }
 }

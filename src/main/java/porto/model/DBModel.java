@@ -2,7 +2,9 @@ package porto.model;
 
 import java.sql.Connection;
 import java.util.Objects;
+import java.util.Optional;
 
+import porto.data.api.Person;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.RequestDAO;
 import porto.data.api.dao.StarshipDAO;
@@ -24,6 +26,7 @@ public final class DBModel implements Model {
     private final PersonDAO personDAO;
     private final StarshipDAO starshipDAO;
     private final RequestDAO requestDAO;
+    private Optional<Person> loggedUser = Optional.empty();
 
     public DBModel(Connection connection) {
         Objects.requireNonNull(connection, "Model created with null connection");
@@ -31,6 +34,17 @@ public final class DBModel implements Model {
         this.personDAO = new PersonDAOImpl(connection);
         this.starshipDAO = new StarshipDAOImpl(connection);
         this.requestDAO = new RequestDAOImpl(connection);
+    }
+
+    public boolean login(String username, String password) {
+        Objects.requireNonNull(username, "Username cannot be null");
+        Objects.requireNonNull(password, "Password cannot be null");
+        this.loggedUser = personDAO.loginAndGetUser(username, password);
+        return this.loggedUser.isPresent();
+    }
+
+    public Person getLoggedUser() {
+        return this.loggedUser.orElseThrow(() -> new IllegalStateException("No user is logged in"));
     }
 
     // @Override
