@@ -51,7 +51,6 @@ public class PersonDAOImpl implements PersonDAO {
             if (resultSet.next()) {
                 var CUI = resultSet.getString("CUI");
                 var username = resultSet.getString("Username");
-                var password = resultSet.getString("Password");
                 var name = resultSet.getString("Nome");
                 var surname = resultSet.getString("Cognome");
                 var razza = resultSet.getString("Razza");
@@ -62,7 +61,7 @@ public class PersonDAOImpl implements PersonDAO {
                 var cell = new CellDAOImpl(connection).getFromNumCell(resultSet.getInt("NumCella"));
                 var planetCod = resultSet.getString("PianetaNascita");
                 var bornPlanet = new PlanetDAOImpl(connection).getFromCodPlanet(planetCod).orElseThrow();
-                var person = new PersonImpl(CUI, username, password, name, surname, razza, borndate, wanted, ideology,
+                var person = new PersonImpl(CUI, username, name, surname, razza, borndate, wanted, ideology,
                         role, cell, bornPlanet);
                 cache.add(person);
                 return Optional.of(person);

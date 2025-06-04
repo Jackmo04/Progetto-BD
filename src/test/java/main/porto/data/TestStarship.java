@@ -31,9 +31,8 @@ class TestStarship {
                 new ShipModelImpl("Model123", "Star Cruiser", 100, 5000.0),
                 new PersonImpl(
                     "CAP123456",
-                    "John Doe",
                     "JD",
-                    "Captain",
+                    "John",
                     "Doe",
                     "Human",
                     "1980-01-01",
@@ -56,9 +55,8 @@ class TestStarship {
                 new ShipModelImpl("Model123", "Star Cruiser", 100, 5000.0),
                 new PersonImpl(
                     "CAP123456",
-                    "John Doe",
                     "JD",
-                    "Captain",
+                    "John",
                     "Doe",
                     "Human",
                     "1980-01-01",

@@ -11,10 +11,9 @@ import porto.data.api.Role;
 /**
  * Implementation of the Person interface representing a person in the system.
  * This record encapsulates the properties of a person including their CUI,
- * username, password, name, surname, etc.
+ * username, name, surname, etc.
  * @param CUI the unique identifier for the person
  * @param username the username of the person
- * @param password the password of the person (TODO: consider removing this field)
  * @param name the first name of the person
  * @param surname the last name of the person
  * @param race the race of the person
@@ -28,7 +27,6 @@ import porto.data.api.Role;
 public record PersonImpl(
     String CUI,
     String username,
-    String password,
     String name,
     String surname,
     String race,

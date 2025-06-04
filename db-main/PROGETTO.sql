@@ -27,7 +27,7 @@ CREATE TABLE AREE_ATTRACCO (
      CONSTRAINT ID_AREE_ATTRACCO_ID PRIMARY KEY (CodArea));
 
 CREATE TABLE ASTRONAVI (
-     Targa CHAR(8) NOT NULL,
+     Targa CHAR(8) NOT NULL CHECK (CHAR_LENGTH(Targa) = 8),
      Nome VARCHAR(20) NOT NULL,
      CodArea INT DEFAULT NULL,
      NumeroPosto INT DEFAULT NULL,
@@ -53,8 +53,8 @@ CREATE TABLE DIMENSIONI_PREZZI (
      CONSTRAINT ID_DIMENSIONI_PREZZI_ID PRIMARY KEY (Superficie));
 
 CREATE TABLE EQUIPAGGI (
-     TargaAstronave CHAR(10) NOT NULL,
-     CUIAstronauta CHAR(20) NOT NULL,
+     TargaAstronave CHAR(8) NOT NULL,
+     CUIAstronauta CHAR(13) NOT NULL,
      CONSTRAINT ID_EQUIPAGGI_ID PRIMARY KEY (CUIAstronauta, TargaAstronave));
 
 CREATE TABLE MODELLI (
@@ -64,11 +64,11 @@ CREATE TABLE MODELLI (
      CONSTRAINT ID_MODELLI_ID PRIMARY KEY (CodModello));
 
 CREATE TABLE PERSONE (
-     CUI CHAR(13) NOT NULL,
-     Username VARCHAR(20) NOT NULL,
-     Password VARCHAR(20) NOT NULL,
-     Nome VARCHAR(25) NOT NULL,
-     Cognome VARCHAR(25) NOT NULL,
+     CUI CHAR(13) NOT NULL CHECK (CHAR_LENGTH(CUI) = 13),
+     Username VARCHAR(20) NOT NULL CHECK (CHAR_LENGTH(Username) > 0),
+     Password VARCHAR(20) NOT NULL CHECK (CHAR_LENGTH(Password) > 0),
+     Nome VARCHAR(25) NOT NULL CHECK (CHAR_LENGTH(Nome) > 0),
+     Cognome VARCHAR(25) NOT NULL CHECK (CHAR_LENGTH(Cognome) > 0),
      Razza VARCHAR(20) NOT NULL,
      DataNascita DATE NOT NULL,
      Ricercato BOOLEAN NOT NULL DEFAULT FALSE,
@@ -97,11 +97,11 @@ CREATE TABLE RICHIESTE (
      CostoTotale NUMERIC(8,2) NOT NULL CHECK (CostoTotale >= 0),
      Esito ENUM('A', 'R'),
      DataEsito DATETIME,
-     TargaAstronave CHAR(10) NOT NULL,
+     TargaAstronave CHAR(8) NOT NULL,
      Scopo INT NOT NULL,
      PianetaProvenienza CHAR(20) NOT NULL,
      PianetaDestinazione CHAR(20) NOT NULL,
-     GestitaDa CHAR(20),
+     GestitaDa CHAR(13),
      CONSTRAINT ID_RICHIESTE_ID PRIMARY KEY (CodRichiesta));
 
 CREATE TABLE TIPOLOGIE_CARICO (
@@ -348,19 +348,19 @@ INSERT INTO CELLE (NumCella, Capienza) VALUES
 (5, 7);
 
 INSERT INTO PERSONE (CUI, Username, Password, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
-('SKWLKE510925T', 'L.Skywalker', '', 'Luke', 'Skywalker', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'TATO002'),
-('SLOHAN420713C', 'H.Solo', '', 'Han', 'Solo', 'Umano', '1942-07-13', FALSE, 'Neutrale', 'Capitano', NULL, 'CORU001'),
-('RGNLLA510925A', 'L.Organa', '', 'Leia', 'Organa', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', 4, 'ALDE005'),
-('SKWNKN410419T', 'D.Vader', '', 'Anakin', 'Skywalker', 'Umano', '1941-04-19', FALSE, 'Imperiale', 'Capitano', NULL, 'TATO002'),
-('PLPSHV201204N', 'E.Palatine', '', 'Sheev', 'Palpatine', 'Umano', '1920-12-04', FALSE, 'Imperiale', 'Admin', NULL, 'NABO004'),
-('CHWBCC000101K', 'Chewie', '', 'Chewbacca', 'unknow', 'Wookiee', '1900-01-01', TRUE, 'Ribelle', 'Astronauta', NULL, 'KASH006'),
-('KNBOBI370825C', 'O.Kenobi', '', 'Obi-Wan', 'Kenobi', 'Umano', '1937-08-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'CORU001'),
-('MULDRT600322D', 'D.Maul', '', 'Darth', 'Maul', 'Zabrak', '1960-03-22', FALSE, 'Imperiale', 'Capitano', NULL, 'DANT010'),
-('TRKMFF220306M', 'G.Tarkin', '', 'Moff', 'Tarkin', 'Umano', '1922-03-06', FALSE, 'Imperiale', 'Admin', NULL, 'MUST007'),
-('STRMTR0000000', 'Trooper0', '', 'Stormtrooper', '00000', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
-('STRMTR0000001', 'Trooper1', 'pippo', 'Stormtrooper', '00001', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
-('STRMTR0000002', 'Trooper2', '', 'Stormtrooper', '00002', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
-('STRMTR0000003', 'Trooper3', '', 'Stormtrooper', '00003', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0');
+('SKWLKE510925T', 'L.Skywalker', '12345', 'Luke', 'Skywalker', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'TATO002'),
+('SLOHAN420713C', 'H.Solo', 'pippo', 'Han', 'Solo', 'Umano', '1942-07-13', FALSE, 'Neutrale', 'Capitano', NULL, 'CORU001'),
+('RGNLLA510925A', 'L.Organa', '12345', 'Leia', 'Organa', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', 4, 'ALDE005'),
+('SKWNKN410419T', 'D.Vader', 'pippo', 'Anakin', 'Skywalker', 'Umano', '1941-04-19', FALSE, 'Imperiale', 'Capitano', NULL, 'TATO002'),
+('PLPSHV201204N', 'E.Palpatine', 'admin', 'Sheev', 'Palpatine', 'Umano', '1920-12-04', FALSE, 'Imperiale', 'Admin', NULL, 'NABO004'),
+('CHWBCC000101K', 'Chewie', '12345', 'Chewbacca', 'unknow', 'Wookiee', '1900-01-01', TRUE, 'Ribelle', 'Astronauta', NULL, 'KASH006'),
+('KNBOBI370825C', 'O.Kenobi', '12345', 'Obi-Wan', 'Kenobi', 'Umano', '1937-08-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'CORU001'),
+('MULDRT600322D', 'D.Maul', 'pippo', 'Darth', 'Maul', 'Zabrak', '1960-03-22', FALSE, 'Imperiale', 'Capitano', NULL, 'DANT010'),
+('TRKMFF220306M', 'G.Tarkin', 'admin', 'Moff', 'Tarkin', 'Umano', '1922-03-06', FALSE, 'Imperiale', 'Admin', NULL, 'MUST007'),
+('STRMTR0000000', 'Trooper0', '12345', 'Stormtrooper', '00000', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
+('STRMTR0000001', 'Trooper1', '12345', 'Stormtrooper', '00001', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
+('STRMTR0000002', 'Trooper2', '12345', 'Stormtrooper', '00002', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
+('STRMTR0000003', 'Trooper3', '12345', 'Stormtrooper', '00003', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0');
 
 INSERT INTO AREE_ATTRACCO (Nome) VALUES
 ('Alpha'),

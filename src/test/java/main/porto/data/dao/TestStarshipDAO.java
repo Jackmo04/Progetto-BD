@@ -42,7 +42,6 @@ class TestStarshipDAO {
     private static final Person CAPITAN_MULDRT = new PersonImpl(
         "MULDRT600322D",
         "D.Maul",
-        "",
         "Darth",
         "Maul",
         "Zabrak",
@@ -57,7 +56,6 @@ class TestStarshipDAO {
     private static final Person CREW_STRMTR = new PersonImpl(
         "STRMTR0000002",
         "Trooper2",
-        "",
         "Stormtrooper",
         "00002",
         "Clone",

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.AfterAll;
@@ -52,7 +53,7 @@ class TestPersonDAO {
     @Test
     public void addPerson() {
         var personDAO = new PersonDAOImpl(connection);
-        personDAO.addPerson("STRMTR0000004", "Trooper4", "", "Stormtrooper",
+        personDAO.addPerson("STRMTR0000004", "Trooper4", "password", "Stormtrooper",
                 "00004", "Clone", "2000-01-01", Ideology.IMPERIAL,
                 Role.CREW_MEMBER, "DTHSTR0");
 
@@ -62,14 +63,15 @@ class TestPersonDAO {
     }
 
     @Test
-    public void isValidPerson() {
+    public void userLogin() {
         var personDAO = new PersonDAOImpl(connection);
-        var actual = personDAO.loginAndGetUser("SKWLKE510925T", "");
-        var expected = true;
+        final String cui = "SKWLKE510925T";
+        var actual = personDAO.loginAndGetUser(cui, "12345");
+        var expected = personDAO.getFromCUI(cui);
         assertEquals(expected, actual);
 
-        var actual2 = personDAO.loginAndGetUser("SKWLKE510925T", "password");
-        var expected2 = false;
+        var actual2 = personDAO.loginAndGetUser("SKWLKE510925T", "wrongPassword");
+        var expected2 = Optional.empty();
         assertEquals(expected2, actual2);
     }
 

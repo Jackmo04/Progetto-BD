@@ -22,12 +22,7 @@ public interface Person {
      */
     String username();
 
-    /**
-     * Password for the person.
-     * 
-     * @return password.
-     */
-    String password();
+
     /**
      * Full name of the person.
      * 
