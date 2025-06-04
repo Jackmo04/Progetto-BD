@@ -33,6 +33,7 @@ public final class Controller {
                 LOGGER.info("User {} logged in successfully", loggedUser.username());
             } else {
                 LOGGER.warn("Login failed for user {}", CuiUsername);
+                this.view.displayLoginError("CUI/Username o password errati!");
             }
         } catch (DAOException e) {
             e.printStackTrace();

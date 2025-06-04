@@ -88,4 +88,15 @@ public final class View {
         // }
     }
 
+    public void displayLoginError(String message) {
+        Objects.requireNonNull(message, "Message cannot be null");
+        if (this.mainPanel.getComponent(0) instanceof LoginScene loginScene) {
+            loginScene.displayLoginFail(message);
+        } else {
+            throw new IllegalStateException(
+                "Cannot display login error, current scene is not a login scene."
+            );
+        }
+    }
+
 }
