@@ -425,8 +425,10 @@ GROUP BY r.TargaAstronave
 ORDER BY QtaTot DESC
 LIMIT 50;
 
-/* Java [Map<Astronave, Integer>] */
+/* Java [Map<Astronave, Integer>] 
 
+A9 -- Visualizzare le persone in porto.
+*/
 select distinct p.*
 from persone p , equipaggi e , astronavi a 
 where ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = a.Targa) OR (p.CUI = a.CUICapitano))

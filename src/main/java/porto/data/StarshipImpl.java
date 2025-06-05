@@ -1,8 +1,5 @@
 package porto.data;
 
-import java.util.Optional;
-
-import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
 import porto.data.api.PersonRole;
 import porto.data.api.ShipModel;

@@ -1,6 +1,5 @@
 package porto.view.utils;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,12 +17,12 @@ import javax.swing.JTextField;
 import porto.data.api.Person;
 import porto.view.View;
 
-public class PersonOfStarship extends JPanel {
+public class PersonOnBoard extends JPanel {
 
     private static final String FONT = "Roboto";
     private final View view;
 
-    public PersonOfStarship(View view) {
+    public PersonOnBoard(View view) {
         this.view = view;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

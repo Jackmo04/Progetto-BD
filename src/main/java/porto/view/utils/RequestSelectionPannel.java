@@ -12,7 +12,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import porto.data.api.Request;
-import porto.data.api.Starship;
 import porto.view.View;
 
 public class RequestSelectionPannel extends JPanel {

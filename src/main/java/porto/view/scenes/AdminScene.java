@@ -7,14 +7,10 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import porto.view.View;
 import porto.view.utils.RequestSelectionPannel;
-import porto.view.utils.ShipSelectionPanel;
 
 public class AdminScene extends JPanel {
 
@@ -50,10 +46,6 @@ public class AdminScene extends JPanel {
         this.add(logoutButton, BorderLayout.SOUTH);
 
     }
-
-    // TODO Implement the Admin scene
-
-
        
 
 }
