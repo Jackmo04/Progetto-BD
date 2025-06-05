@@ -1,5 +1,7 @@
 package porto.view.utils;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 
 public class JComponentsFactory {
@@ -18,6 +20,10 @@ public class JComponentsFactory {
 
     public CustomComponents.CheckBoxPanel createCheckBoxPanel(String labelText) {
         return new CustomComponents.CheckBoxPanel(labelText);
+    }
+
+    public CustomComponents.ButtonAdmin createButton(String text , ActionListener actionListener) {
+        return new CustomComponents.ButtonAdmin(text , actionListener);
     }
 
 }

@@ -1,10 +1,12 @@
 package porto.model;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Set;
 
 import porto.data.api.Person;
 import porto.data.api.Planet;
+import porto.data.api.Request;
 
 public interface Model {
     
@@ -27,5 +29,15 @@ public interface Model {
 
     void registerUser(String cui, String username, String password, String name, String surname, String race,
             String dob, boolean wanted, String ideology, boolean isCaptain, String planet);
+    
+    List<Request> getAllRequestsPendent();
+
+    void judgeRequest ( int request  , boolean judgment );
+
+    void arrestPerson ( String CUI );
+
+    Integer numberOfPeople();
 
 }
+
+

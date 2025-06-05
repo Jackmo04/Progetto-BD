@@ -1,18 +1,26 @@
 package porto.model;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
 import porto.data.api.Ideology;
+import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
 import porto.data.api.Planet;
+import porto.data.api.Request;
+import porto.data.api.RequestType;
 import porto.data.api.PersonRole;
+import porto.data.api.dao.ParkingAreaDAO;
+import porto.data.api.dao.ParkingSpaceDAO;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.PlanetDAO;
 import porto.data.api.dao.RequestDAO;
 import porto.data.api.dao.StarshipDAO;
+import porto.data.dao.ParkingAreaDAOImpl;
+import porto.data.dao.ParkingSpaceDAOImpl;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.dao.PlanetDAOImpl;
 import porto.data.dao.RequestDAOImpl;
@@ -25,6 +33,7 @@ public final class DBModel implements Model {
     private final StarshipDAO starshipDAO;
     private final RequestDAO requestDAO;
     private final PlanetDAO planetDAO;
+    private final ParkingSpaceDAO parkingSpaceDAO;
     private Optional<Person> loggedUser = Optional.empty();
 
     public DBModel(Connection connection) {
@@ -33,6 +42,7 @@ public final class DBModel implements Model {
         this.starshipDAO = new StarshipDAOImpl(connection);
         this.requestDAO = new RequestDAOImpl(connection);
         this.planetDAO = new PlanetDAOImpl(connection);
+        this.parkingSpaceDAO = new ParkingSpaceDAOImpl(connection);
     }
 
     @Override
@@ -91,6 +101,37 @@ public final class DBModel implements Model {
         } catch (DAOException e) {
             throw new RuntimeException("Error registering user", e);
         }
+    }
+
+    @Override
+    public List<Request> getAllRequestsPendent() {
+        return requestDAO.pendingRequests();
+    }
+
+    @Override
+    public void judgeRequest(int requestCod, boolean judgment) {
+        var request = requestDAO.getRequestByCodRequest(requestCod).get();
+
+        if (loggedUser.isPresent()) {
+            var adminCUI = loggedUser.get().CUI();
+            if (judgment && request.type().equals(RequestType.ENTRY)) {
+                requestDAO.acceptEnterRequest(request.codRichiesta(), adminCUI);
+            } else if (judgment && request.type().equals(RequestType.EXIT)) {
+                requestDAO.acceptExitRequest(request.codRichiesta(), adminCUI);
+            } else {
+                requestDAO.rejectRequest(request.codRichiesta(), adminCUI);
+            }
+        }
+    }
+
+    @Override
+    public void arrestPerson(String CUI) {
+        personDAO.arrestPerson(CUI);
+    }
+
+    @Override
+    public Integer numberOfPeople() {
+        parkingSpaceDAO.getNumberOfPeopleOnStation()
     }
 
 }
