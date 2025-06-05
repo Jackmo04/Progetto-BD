@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 
+import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
 import porto.data.api.Planet;
@@ -220,7 +221,7 @@ public final class Controller {
             throw new RuntimeException("Error retrieving request managed by", e);
         }
     }
-    
+
     public List<String> viewAllPendentRequest() {
         var pendentRequest = this.model.getAllRequestsPendent();
         try {
@@ -253,11 +254,15 @@ public final class Controller {
         return this.model.best50Starships();
     }
 
-    public void manageRequest( int codRequest){
-        this.view.goToJudgeScene();
+    public void manageRequest(int codRequest) {
+        this.view.goToJudgeScene(codRequest);
     }
 
     public List<ParkingArea> getAllFreeArea() {
+        return this.model.getAllFreeArea();
+    }
+
+    public List<Request> getAllPendentRequest() {
         return this.model.getAllRequestsPendent();
     }
 

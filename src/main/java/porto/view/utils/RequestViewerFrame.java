@@ -22,7 +22,7 @@ public class RequestViewerFrame extends JFrame {
     public RequestViewerFrame(View view, String title, List<Request> requests) {
         super(title);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(800, 600);
+        this.setSize(1200, 300);
         this.setMaximumSize(this.getSize());
         // this.setLocationRelativeTo(this.getParent());
         this.setLocationByPlatform(true);
@@ -50,7 +50,7 @@ public class RequestViewerFrame extends JFrame {
                 })
                 .toArray(Object[][]::new),
             new String[]{
-                "Codice", "Tipo", "Data/Ora", "Descrizione", "Costo", "Esito",
+                "Codice","Tipo", "Data/Ora", "Descrizione", "Costo", "Esito",
                 "Data/Ora Gestione", "Astronave", "Scopo", "Provenienza", 
                 "Destinazione", "Gestita da"
             }
@@ -59,22 +59,24 @@ public class RequestViewerFrame extends JFrame {
         requestsTable.setRowHeight(30);
         requestsTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         requestsTable.getColumnModel().getColumn(1).setPreferredWidth(50);
-        requestsTable.getColumnModel().getColumn(2).setPreferredWidth(150);
-        requestsTable.getColumnModel().getColumn(3).setPreferredWidth(300);
+        requestsTable.getColumnModel().getColumn(2).setPreferredWidth(20);
+        requestsTable.getColumnModel().getColumn(3).setPreferredWidth(100);
         requestsTable.getColumnModel().getColumn(4).setPreferredWidth(60);
         requestsTable.getColumnModel().getColumn(5).setPreferredWidth(80);
-        requestsTable.getColumnModel().getColumn(6).setPreferredWidth(150);
+        requestsTable.getColumnModel().getColumn(6).setPreferredWidth(100);
         requestsTable.getColumnModel().getColumn(7).setPreferredWidth(75);
         requestsTable.getColumnModel().getColumn(8).setPreferredWidth(150);
         requestsTable.getColumnModel().getColumn(9).setPreferredWidth(100);
         requestsTable.getColumnModel().getColumn(10).setPreferredWidth(100);
         requestsTable.getColumnModel().getColumn(11).setPreferredWidth(150);
+        requestsTable.getColumnModel().getColumn(12).setPreferredWidth(150);
         requestsTable.setFillsViewportHeight(true);
+        
         this.add(new JScrollPane(requestsTable));
         requestsPanel.add(requestsTable.getTableHeader());
         requestsPanel.add(requestsTable);
         requestsPanel.setBorder(BorderFactory.createTitledBorder("Richieste"));
-        this.add(requestsPanel);
+        //this.add(requestsPanel);
 
         this.pack();
         this.setVisible(true);

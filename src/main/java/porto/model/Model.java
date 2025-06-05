@@ -7,8 +7,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import porto.data.api.Ideology;
+import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
 import porto.data.api.Planet;
@@ -162,7 +165,8 @@ public final class Model {
         try {
             return requestDAO.getLastRequestOfStarship(plateNumber);
         } catch (DAOException e) {
-            throw new RuntimeException("Error retrieving last request for starship with plate number: " + plateNumber, e);
+            throw new RuntimeException("Error retrieving last request for starship with plate number: " + plateNumber,
+                    e);
         }
     }
 
@@ -235,5 +239,14 @@ public final class Model {
 
     public Map<Starship, Integer> best50Starships() {
         return this.starshipDAO.get50TransportedMost();
+    }
+
+    public List<ParkingArea> getAllFreeArea() {
+        try {
+            return parkingSpaceDAO.getAllFree().stream().map(t -> t.parkingArea())
+                    .collect(Collectors.toList());
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving all free parking areas", e);
+        }
     }
 }

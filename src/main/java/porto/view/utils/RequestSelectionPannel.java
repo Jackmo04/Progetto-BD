@@ -36,7 +36,7 @@ public class RequestSelectionPannel extends JPanel {
                                 req.dateTime(),
                                 req.starship().name(),
                                 req.departurePlanet().name(),
-                                req.destinationPlanet()
+                                req.destinationPlanet().name()
                         })
                         .toArray(Object[][]::new),
                 new String[] { "CodRichiesta", "Descrizione", "Data Richiesta", "Astronave", "Pianeta Provenienza",
@@ -55,8 +55,8 @@ public class RequestSelectionPannel extends JPanel {
         manageShipButton.addActionListener(e -> {
             int selectedRow = requestTable.getSelectedRow();
             if (selectedRow >= 0) {
-                String requestNumber = (String) requestTable.getValueAt(selectedRow, 0);
-                this.view.getController().manageShip(requestNumber);
+                Integer requestNumber = (Integer) requestTable.getValueAt(selectedRow, 0);
+                this.view.getController().manageRequest(requestNumber);
             } else {
                 throw new IllegalStateException("No request selected for management");
             }

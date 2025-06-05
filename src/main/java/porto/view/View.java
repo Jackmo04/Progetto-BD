@@ -13,6 +13,7 @@ import porto.Controller;
 import porto.view.scenes.AdminScene;
 import porto.view.scenes.CaptainScene;
 import porto.view.scenes.CrewScene;
+import porto.view.scenes.JudgeScene;
 import porto.view.scenes.WelcomeScene;
 import porto.view.scenes.LoginScene;
 import porto.view.scenes.RegisterScene;
@@ -119,8 +120,8 @@ public final class View {
         this.cardLayout.show(this.mainPanel, SN_ADMIN);
     }
 
-        public void goToJudgeScene() {
-        this.mainPanel.add(new CaptainScene(this), SN_CAPTAIN);
+        public void goToJudgeScene(int requestCode) {
+        this.mainPanel.add(new JudgeScene(this , requestCode), SN_CAPTAIN);
         this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
     }
 
