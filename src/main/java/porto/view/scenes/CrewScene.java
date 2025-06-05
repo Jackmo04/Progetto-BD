@@ -17,6 +17,7 @@ import java.util.List;
 
 import porto.data.api.Starship;
 import porto.view.View;
+import porto.view.utils.ShipSelectionPanel;
 
 public class CrewScene extends JPanel {
 
@@ -31,11 +32,7 @@ public class CrewScene extends JPanel {
         final JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(40, 20, 20, 20));
-
-        final JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(0));
-        this.add(scrollPane, BorderLayout.CENTER);
+        this.add(mainPanel, BorderLayout.CENTER);
 
         final String userName = this.view.getController().getLoggedUser().username();
         final JLabel title = new JLabel("Benvenuto, " + userName, JLabel.CENTER);
@@ -44,33 +41,9 @@ public class CrewScene extends JPanel {
         mainPanel.add(title);
         mainPanel.add(Box.createVerticalStrut(30));
 
-        final JPanel shipSelectionPanel = new JPanel();
-        shipSelectionPanel.setLayout(new BoxLayout(shipSelectionPanel, BoxLayout.Y_AXIS));
-        shipSelectionPanel.setBorder(BorderFactory.createTitledBorder("Seleziona la nave da gestire"));
-        shipSelectionPanel.setAlignmentX(CENTER_ALIGNMENT);
-
-        final List<Starship> ships = this.view.getController().getAvailableShips();
-        final JTable shipTable = new JTable(
-            ships.stream()
-                .map(ship -> new Object[]{ship.plateNumber(), ship.name(), ship.model().name()})
-                .toArray(Object[][]::new),
-            new String[]{"Targa", "Nome", "Modello"}
-        );
-        shipTable.setFont(new Font(FONT, Font.PLAIN, 16));
-        shipTable.setRowHeight(30);
-        shipSelectionPanel.add(new JScrollPane(shipTable));
-
-
-        // for (Starship ship : ships) {
-        //     JRadioButton shipEntry = new JRadioButton(ship.toString());
-        //     shipEntry.setActionCommand(ship.plateNumber());
-        //     shipEntry.setAlignmentX(CENTER_ALIGNMENT);
-        //     shipEntry.setFont(new Font(FONT, Font.PLAIN, 20));
-        //     shipSelectionPanel.add(shipEntry);
-        // }
-        shipSelectionPanel.add(Box.createVerticalStrut(20));
+        final JPanel shipSelectionPanel = new ShipSelectionPanel(view);
         mainPanel.add(shipSelectionPanel);
-        mainPanel.add(Box.createVerticalGlue());
+        
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         final JButton logoutButton = new JButton("Logout");

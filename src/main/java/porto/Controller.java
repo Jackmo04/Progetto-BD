@@ -129,4 +129,8 @@ public final class Controller {
         LOGGER.info("User logged out successfully");
     }
 
+    public void manageShip(String plateNumber) {
+        LOGGER.info("Managing ship with plate number: {}", plateNumber);
+    }
+
 }
