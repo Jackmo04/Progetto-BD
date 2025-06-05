@@ -44,12 +44,4 @@ public record StarshipImpl(
         }
     }
 
-    @Override
-    @Deprecated
-    public Optional<ParkingSpace> parkingSpace() {
-        throw new UnsupportedOperationException(
-            "Use ParkingSpaceDAO.ofStarship(String starshipPlateNumber) instead of Starship.parkingSpace()"
-        );
-    }
-
 }

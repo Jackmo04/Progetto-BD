@@ -8,4 +8,9 @@ public record ParkingSpaceImpl (
     int spaceNumber
 ) implements ParkingSpace {
 
+    @Override
+    public String toString() {
+        return "Area " + parkingArea.name() + "" +
+               " - Posteggio " + spaceNumber;
+    }
 }
