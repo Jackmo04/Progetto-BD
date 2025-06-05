@@ -119,6 +119,11 @@ public final class View {
         this.cardLayout.show(this.mainPanel, SN_ADMIN);
     }
 
+        public void goToJudgeScene() {
+        this.mainPanel.add(new CaptainScene(this), SN_CAPTAIN);
+        this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
+    }
+
     public void displayLoginError(String message) {
         Objects.requireNonNull(message, "Message cannot be null");
         if (this.mainPanel.getComponent(0) instanceof LoginScene loginScene) {

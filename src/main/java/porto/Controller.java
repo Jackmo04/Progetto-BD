@@ -10,8 +10,10 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 
+import porto.data.api.ParkingArea;
 import porto.data.api.Person;
 import porto.data.api.Planet;
+import porto.data.api.Request;
 import porto.data.api.Starship;
 import porto.data.utils.DAOException;
 import porto.model.Model;
@@ -120,8 +122,8 @@ public final class Controller {
     public List<Starship> getAvailableShips() {
         try {
             return this.model.getAvailableShips().stream()
-                .sorted(Comparator.comparing(Starship::plateNumber))
-                .toList();
+                    .sorted(Comparator.comparing(Starship::plateNumber))
+                    .toList();
         } catch (DAOException e) {
             LOGGER.error("Error retrieving available ships", e);
             return List.of();
@@ -157,38 +159,36 @@ public final class Controller {
 
     }
 
-    public List<String> viewAllPendentRequest() {
-        var pendentRequest = this.model.getAllRequestsPendent();
-        try {
-            return pendentRequest.stream().map(
-                    t -> "Numero:" + t.codRichiesta() + "Descrizione:" + t.description() + "Price:" + t.totalPrice())
-                    .toList();
-        } catch (DAOException e) {
-            LOGGER.error("Error retrieving pendent requests", e);
-            return new ArrayList<>();
-        }
+    public List<Request> getAllPendentRequest() {
+        return this.model.getAllRequestsPendent();
     }
 
-    public void judgePendentRequest (int requestCod , boolean judge , Optional<Integer> parking){
-        this.model.judgeRequest(requestCod ,judge , parking );
+    public void judgePendentRequest(int requestCod, boolean judge, Optional<Integer> parking) {
+        this.model.judgeRequest(requestCod, judge, parking);
     }
 
-    public void arrestPerson ( String CUI){
+    public void arrestPerson(String CUI) {
         this.model.arrestPerson(CUI);
     }
 
-    public Integer seeNumberPeople (){
+    public Integer seeNumberPeople() {
         return this.model.numberOfPeople();
     };
 
-    public String acceptedRejectedPercentage(Timestamp start , Timestamp to){
+    public String acceptedRejectedPercentage(Timestamp start, Timestamp to) {
         return this.model.acceptedRejectedPercentage(start, to);
     }
 
-    public Map<Starship , Integer> best50TrasporteStarships (){
+    public Map<Starship, Integer> best50TrasporteStarships() {
         return this.model.best50Starships();
     }
 
+    public void manageRequest( int codRequest){
+        this.view.goToJudgeScene();
+    }
+
+    public List<ParkingArea> getAllFreeArea() {
+        return this.model.getAllRequestsPendent();
+    }
+
 }
-
-
