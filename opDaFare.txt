@@ -1,0 +1,49 @@
+[M = Mancante | P = Parziale | F = Finito]
+{MO = Matteo | MA = Mattia}
+
+----------------------------------------------------------------
+
+# Login / Registrazione
+[F]{MO} S1 - Creare un nuovo account
+[F]{MO} S2 -- Accedere al proprio account tramite il CUI o il proprio username
+
+----------------------------------------------------------------
+
+# Crew
+[M]{??} S3 -- Visualizzare le astronavi a cui appartiene l'utente
+
+## Selezionata nave:
+	[M]{??} S4 -- Visualizzare il posteggio della nave
+	[M]{??} S5 -- Visualizzare l’ultima richiesta effettuata dalla nave
+	
+----------------------------------------------------------------
+	
+# Captain
+[M]{??} S3 -- Visualizzare le astronavi a cui appartiene l'utente
+
+## Selezionata nave:
+	[M]{??} S4 -- Visualizzare il posteggio della nave
+	[M]{??} S5 -- Visualizzare l’ultima richiesta effettuata da una nave
+	[M]{??} C1 -- Registrare la propria nave all'applicazione.
+	[M]{??} C2 -- Aggiungere o rimuovere membri all’equipaggio di una nave
+	[M]{??} C3 -- Visualizzare tutti i membri dell'equipaggio di una propria nave
+	[M]{??} C4 -- Richiedere accesso al porto
+	[M]{??} C5 -- Richiedere uscita dal porto
+	[M]{??} C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
+	
+----------------------------------------------------------------
+
+# Admin
+[M]{??} S4 -- Visualizzare il posteggio di una nave
+[M]{??} C3 -- Visualizzare tutti i membri dell'equipaggio di una nave
+[M]{??} C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
+
+[M]{??} A1 -- Visualizzare tutte le richieste pendenti
+[M]{??} A2 -- Valutare una richiesta pendente
+[M]{??} A3 -- Visualizza le celle disponibili
+[M]{??} A4 -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
+[M]{??} A5 -- Visualizzare il numero di persone presenti nel porto attualmente
+[M]{??} A6 -- Visualizzare la percentuale di richieste accettate e rifiutate in un dato intervallo di tempo
+[M]{??} A7 -- Visualizzare posteggi liberi attualmente
+[M]{??} A8 -- Visualizzare le 50 astronavi che hanno trasportato più merce.
+

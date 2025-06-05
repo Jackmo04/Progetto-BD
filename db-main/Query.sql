@@ -15,7 +15,7 @@ INSERT INTO PERSONE (CUI, Username, Password , Nome, Cognome, Razza, DataNascita
 
 -- _____________________________________________
 /*
-	S2a -- Accedere al proprio account tramite il CUI o il proprio username
+	S2 -- Accedere al proprio account tramite il CUI o il proprio username
     {Person} [Mattia] Fatto
 */
 SELECT p.*
@@ -31,7 +31,7 @@ AND p.Password = ?;
 */
 
 /*
-	S2b -- Visualizzare le astronavi a cui appartiene una persona
+	S3 -- Visualizzare le astronavi a cui appartiene una persona
     {Starship} [Matteo] Fatto
 */
 SELECT DISTINCT n.*
@@ -49,7 +49,7 @@ AND p.CUI = ?;
 
 -- _____________________________________________
 /*
-	S3 -- Visualizzare il posteggio della propria nave e l’area di attracco all’interno del porto
+	S4 -- Visualizzare il posteggio della propria nave e l’area di attracco all’interno del porto
     {Starship} [Matteo] Fatto
 */
 SELECT ast.CodArea, ar.Nome AS 'Nome Area', ast.NumeroPosto
@@ -65,7 +65,7 @@ WHERE Targa = ?;
 
 -- _____________________________________________
 /*
-	S4 -- Visualizzare l’ultima richiesta effettuata da una nave
+	S5 -- Visualizzare l’ultima richiesta effettuata da una nave
     {Request} [Mattia] Fatto
 */
 SELECT r.CodRichiesta
@@ -86,7 +86,7 @@ LIMIT 1;
 
 -- _____________________________________________
 /*
-	S5 -- Visualizzare le informazioni dettagliate di una richiesta.
+	S6 -- Visualizzare le informazioni dettagliate di una richiesta. (Da eliminare?)
     {Request} [Mattia] fatta
 */
 SELECT DISTINCT r.CodRichiesta, r.EntrataUscita, r.DataOra, r.Descrizione, r.CostoTotale, r.Esito, r.TargaAstronave, tv.Nome AS TipologiaViaggio,
@@ -299,7 +299,7 @@ WHERE targa = (SELECT targaAstronave
 
 -- _____________________________________________
 /*
-	A3a -- Visualizza le celle disponibili
+	A3 -- Visualizza le celle disponibili
     {Cell} [Mattia] Fatto
 */
 /* old
@@ -323,7 +323,7 @@ HAVING COUNT(p.CUI) < c.Capienza;
 
 -- _____________________________________________
 /*
-	A3b -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
+	A4 -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
     {Person} [Mattia] Fatto
 */
 
@@ -345,7 +345,7 @@ WHERE CUIAstronauta = ?;
 
 -- _____________________________________________
 /*
-	A4 -- Visualizzare il numero di persone presenti nel porto attualmente
+	A5 -- Visualizzare il numero di persone presenti nel porto attualmente
     {ParkingSpace} [Matteo] Fatto
 */
 SELECT COUNT(DISTINCT p.CUI) AS `Astronauti in porto`
@@ -357,7 +357,7 @@ AND a.numeroPosto IS NOT NULL;
 
 -- _____________________________________________
 /*
-	A5 -- Visualizzare la percentuale di richieste accettate e rifiutate in un dato intervallo di tempo
+	A6 -- Visualizzare la percentuale di richieste accettate e rifiutate in un dato intervallo di tempo
     {Request} [Matteo] Fatto
 */
 SELECT 
@@ -402,7 +402,7 @@ FROM RichiesteInIntervallo;
 
 -- _____________________________________________
 /*  
-	A6 -- Visualizzare posteggi liberi attualmente
+	A7 -- Visualizzare posteggi liberi attualmente
     {ParkingSpace} [Matteo] Fatto
 */
 SELECT p.*
@@ -415,7 +415,7 @@ WHERE (p.codArea, p.numeroPosto) NOT IN (SELECT a.codArea, a.numeroPosto
 
 -- _____________________________________________
 /*
-	A7 -- Visualizzare le 50 astronavi che hanno trasportato più merce.
+	A8 -- Visualizzare le 50 astronavi che hanno trasportato più merce.
     {Starship} [Matteo] Fatto
 */
 SELECT r.TargaAstronave, SUM(c.Quantita) QtaTot
