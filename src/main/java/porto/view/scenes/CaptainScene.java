@@ -1,22 +1,111 @@
 package porto.view.scenes;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Font;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+
+import porto.data.api.ParkingSpace;
 import porto.view.View;
+import porto.view.utils.RequestViewerDialog;
 
 public class CaptainScene extends JPanel {
+
+    private static final String FONT = "Roboto";
 
     private final View view;
 
     public CaptainScene(View view) {
         this.view = view;
 
-        // TODO: Replace with actual content
-        this.add(new JLabel("Captain Scene")); 
-        this.add(new JLabel("Nave: " + this.view.getController().getSelectedStarship().plateNumber()));
-    }
+        this.setLayout(new BorderLayout());
 
-    // TODO Implement the Captain scene
+        final JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(40, 20, 20, 20));
+
+        final JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(0));
+        this.add(scrollPane, BorderLayout.CENTER);
+
+        final JLabel title = new JLabel("", JLabel.CENTER);
+        title.setText("Operazioni su " + this.view.getController().getSelectedStarship().plateNumber() + ":");
+        title.setAlignmentX(CENTER_ALIGNMENT);
+        title.setFont(new Font(FONT, Font.BOLD, 30));
+        mainPanel.add(title);
+        mainPanel.add(Box.createVerticalStrut(30));
+
+        // S4 - Show parking space of the starship
+        final JButton parkingButton = new JButton("Visualizza posteggio");
+        parkingButton.setFont(new Font(FONT, Font.BOLD, 16));
+        parkingButton.setAlignmentX(CENTER_ALIGNMENT);
+        parkingButton.addActionListener(e -> {
+            var parkingSpace = this.view.getController().getParkingOfSelectedStarship();
+            JOptionPane.showMessageDialog(this, 
+                parkingSpace.map(ParkingSpace::toString).orElse("La nave non è sulla stazione"),
+                "Posteggio di " + this.view.getController().getSelectedStarship().plateNumber(),
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        });
+        mainPanel.add(parkingButton);
+        mainPanel.add(Box.createVerticalStrut(20));
+
+        // S5 - Show last request of the starship
+        final JButton lastRequestButton = new JButton("Visualizza ultima richiesta effettuata");
+        lastRequestButton.setFont(new Font(FONT, Font.BOLD, 16));
+        lastRequestButton.setAlignmentX(CENTER_ALIGNMENT);
+        lastRequestButton.addActionListener(e -> {
+            var lastRequest = this.view.getController().getLastRequestOfSelectedStarship();
+            if (lastRequest.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "La nave non ha effettuato richieste",
+                    "Ultima richiesta di " + this.view.getController().getSelectedStarship().plateNumber(),
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                new RequestViewerDialog(this.view, 
+                    "Ultima richiesta di " + this.view.getController().getSelectedStarship().plateNumber(),
+                    lastRequest.stream().toList(),
+                    false
+                ).setVisible(true);
+            }
+        });
+        mainPanel.add(lastRequestButton);
+        mainPanel.add(Box.createVerticalStrut(20));
+
+        // C1 - Register a new ship
+        // TODO
+
+        // C2 - Add/Remove a crew member
+        // TODO
+
+        // C3 - View crew members
+        // TODO
+
+        // C4 - Request station access
+        // TODO
+
+        // C5 - Request station departure
+        // TODO
+
+        // C6 - View all requests
+        // TODO
+
+        final JButton backButton = new JButton("Torna indietro");
+        backButton.setFont(new Font(FONT, Font.BOLD, 16));
+        backButton.addActionListener(e -> {
+            this.view.goToWelcomeScene();
+        });
+        this.add(backButton, BorderLayout.SOUTH);
+    }
 
 }

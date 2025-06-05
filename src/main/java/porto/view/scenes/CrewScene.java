@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 
 import porto.data.api.ParkingSpace;
 import porto.view.View;
-import porto.view.utils.RequestViewerFrame;
+import porto.view.utils.RequestViewerDialog;
 
 public class CrewScene extends JPanel {
 
@@ -71,9 +71,10 @@ public class CrewScene extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE
                 );
             } else {
-                new RequestViewerFrame(this.view, 
+                new RequestViewerDialog(this.view, 
                     "Ultima richiesta di " + this.view.getController().getSelectedStarship().plateNumber(),
-                    lastRequest.stream().toList()
+                    lastRequest.stream().toList(),
+                    false
                 ).setVisible(true);
             }
         });
