@@ -1,7 +1,9 @@
 package porto.model;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -12,6 +14,7 @@ import porto.data.api.Person;
 import porto.data.api.Planet;
 import porto.data.api.Request;
 import porto.data.api.RequestType;
+import porto.data.api.Starship;
 import porto.data.api.PersonRole;
 import porto.data.api.dao.ParkingAreaDAO;
 import porto.data.api.dao.ParkingSpaceDAO;
@@ -103,24 +106,31 @@ public final class DBModel implements Model {
         }
     }
 
+
+    // ADMIN OPERATION TO USE
     @Override
     public List<Request> getAllRequestsPendent() {
         return requestDAO.pendingRequests();
     }
 
     @Override
-    public void judgeRequest(int requestCod, boolean judgment) {
+    public void judgeRequest(int requestCod, boolean judgment, Optional<Integer> parking) {
         var request = requestDAO.getRequestByCodRequest(requestCod).get();
 
-        if (loggedUser.isPresent()) {
-            var adminCUI = loggedUser.get().CUI();
-            if (judgment && request.type().equals(RequestType.ENTRY)) {
-                requestDAO.acceptEnterRequest(request.codRichiesta(), adminCUI);
-            } else if (judgment && request.type().equals(RequestType.EXIT)) {
-                requestDAO.acceptExitRequest(request.codRichiesta(), adminCUI);
-            } else {
-                requestDAO.rejectRequest(request.codRichiesta(), adminCUI);
+        try {
+
+            if (loggedUser.isPresent()) {
+                var adminCUI = loggedUser.get().CUI();
+                if (judgment && request.type().equals(RequestType.ENTRY)) {
+                    requestDAO.acceptEnterRequest(request.codRichiesta(), adminCUI, parking.get());
+                } else if (judgment && request.type().equals(RequestType.EXIT)) {
+                    requestDAO.acceptExitRequest(request.codRichiesta(), adminCUI);
+                } else {
+                    requestDAO.rejectRequest(request.codRichiesta(), adminCUI);
+                }
             }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Not all Argumente are Passed for operation", e);
         }
     }
 
@@ -130,8 +140,20 @@ public final class DBModel implements Model {
     }
 
     @Override
-    public Integer numberOfPeople() {
-        parkingSpaceDAO.getNumberOfPeopleOnStation()
+    public int numberOfPeople() {
+        return parkingSpaceDAO.getNumberOfPeopleOnStation();
+    }
+
+    @Override
+    public String acceptedRejectedPercentage(Timestamp start, Timestamp to) {
+        var percetage = requestDAO.acceptedAndRejectedPercentages(start, to);
+        return "Dal:" + start.toString() + " Al:" + to.toString() + " Accettate:" + percetage.getLeft() + " Rifiutate"
+                + percetage.getRight();
+    }
+
+    @Override
+    public Map<Starship, Integer> best50Starships() {
+        return this.starshipDAO.get50TransportedMost();
     }
 
 }

@@ -1,15 +1,19 @@
 package porto;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 
 import porto.data.api.Person;
 import porto.data.api.PersonRole;
 import porto.data.api.Planet;
+import porto.data.api.Starship;
 import porto.data.dao.RequestDAOImpl;
 import porto.data.utils.DAOException;
 import porto.model.Model;
@@ -121,8 +125,8 @@ public final class Controller {
         }
     }
 
-    public void judgePendentRequest (int requestCod , boolean judge){
-        this.model.judgeRequest(requestCod ,judge );
+    public void judgePendentRequest (int requestCod , boolean judge , Optional<Integer> parking){
+        this.model.judgeRequest(requestCod ,judge , parking );
     }
 
     public void arrestPerson ( String CUI){
@@ -130,8 +134,16 @@ public final class Controller {
     }
 
     public Integer seeNumberPeople (){
-        return this.model.numberOfPeople()
+        return this.model.numberOfPeople();
     };
+
+    public String acceptedRejectedPercentage(Timestamp start , Timestamp to){
+        return this.model.acceptedRejectedPercentage(start, to);
+    }
+
+    public Map<Starship , Integer> best50TrasporteStarships (){
+        return this.model.best50Starships();
+    }
 
 
 }

@@ -1,15 +1,19 @@
 package porto.model;
 
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import porto.data.api.Person;
 import porto.data.api.Planet;
 import porto.data.api.Request;
+import porto.data.api.Starship;
 
 public interface Model {
-    
+
     boolean login(String username, String password);
 
     Person getLoggedUser();
@@ -17,9 +21,10 @@ public interface Model {
     Set<Planet> getAllPlanets();
 
     boolean isUserRegistered(String cui, String username);
-    
+
     /**
      * Create a model from a database connection.
+     * 
      * @param connection
      * @return
      */
@@ -29,15 +34,18 @@ public interface Model {
 
     void registerUser(String cui, String username, String password, String name, String surname, String race,
             String dob, boolean wanted, String ideology, boolean isCaptain, String planet);
-    
+
+    // ADMIN OPERATION TO USE
     List<Request> getAllRequestsPendent();
 
-    void judgeRequest ( int request  , boolean judgment );
+    void judgeRequest(int request, boolean judgment, Optional<Integer> parking);
 
-    void arrestPerson ( String CUI );
+    void arrestPerson(String CUI);
 
-    Integer numberOfPeople();
+    int numberOfPeople();
+
+    String acceptedRejectedPercentage(Timestamp start, Timestamp to);
+
+    Map<Starship, Integer> best50Starships();
 
 }
-
-

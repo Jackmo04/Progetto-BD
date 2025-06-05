@@ -104,7 +104,7 @@ class TestRequestDAO {
         var requestDAO = new RequestDAOImpl(connection);
 
         final int COD_REQ = 5;
-        requestDAO.acceptEnterRequest(COD_REQ, "PLPSHV201204N");
+        requestDAO.acceptEnterRequest(COD_REQ, "PLPSHV201204N" , 1);
         
         assertEquals(RequestState.APPROVED, requestDAO.getRequestState(COD_REQ).get());
         assertEquals("PLPSHV201204N", requestDAO.getRequestManagedBy(COD_REQ).get().CUI());
