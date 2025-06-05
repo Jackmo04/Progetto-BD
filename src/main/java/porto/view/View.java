@@ -63,6 +63,10 @@ public final class View {
         );
     }
 
+    public JFrame getMainFrame() {
+        return this.mainFrame;
+    }
+
     public Controller getController() {
         if (this.controller.isPresent()) {
             return this.controller.get();

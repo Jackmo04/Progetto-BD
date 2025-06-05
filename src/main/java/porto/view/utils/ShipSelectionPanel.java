@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 import porto.data.api.Starship;
 import porto.view.View;
@@ -27,7 +29,7 @@ public class ShipSelectionPanel extends JPanel {
         this.setAlignmentX(CENTER_ALIGNMENT);
 
         final List<Starship> ships = this.view.getController().getAvailableShips();
-        final JTable shipTable = new JTable(
+        DefaultTableModel tableModel = new DefaultTableModel(
             ships.stream()
                 .map(ship -> new Object[]{
                     ship.plateNumber(), 
@@ -37,10 +39,18 @@ public class ShipSelectionPanel extends JPanel {
                 })
                 .toArray(Object[][]::new),
             new String[]{"Targa", "Nome", "Modello", "Capitano"}
-        );
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        final JTable shipTable = new JTable(tableModel);
         shipTable.setFont(new Font(FONT, Font.PLAIN, 16));
         shipTable.setRowHeight(30);
-        shipTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        shipTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        shipTable.setRowSelectionAllowed(true);
+        shipTable.setColumnSelectionAllowed(false);
         this.add(new JScrollPane(shipTable));
         this.add(Box.createVerticalStrut(20));
         
