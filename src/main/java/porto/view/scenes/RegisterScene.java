@@ -11,7 +11,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,17 +21,35 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import porto.view.View;
+import porto.view.utils.JComponentsFactory;
 
 public class RegisterScene extends JPanel {
 
     private static final String FONT = "Roboto";
-
+    private static final JComponentsFactory cf = new JComponentsFactory();
+    
     private final View view;
     private final JLabel errorLabel;
+    private final FocusAdapter focusListener;
 
     public RegisterScene(View view) {
         this.view = view;
         this.setLayout(new BorderLayout());
+
+        // Error label
+        this.errorLabel = new JLabel("", SwingConstants.CENTER);
+        this.errorLabel.setFont(new Font(FONT, Font.PLAIN, 16));
+        this.errorLabel.setAlignmentX(CENTER_ALIGNMENT);
+        this.errorLabel.setForeground(Color.RED);
+        this.errorLabel.setVisible(false);
+
+        // Focus listener to hide error label when input fields gain focus
+        this.focusListener = new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                SwingUtilities.invokeLater(() -> errorLabel.setVisible(false));
+            }
+        };
         
         final JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -50,74 +67,69 @@ public class RegisterScene extends JPanel {
         mainPanel.add(Box.createVerticalStrut(30));
 
         // CUI input
-        final JLabel cuiLabel = new FieldLabel("CUI (13 car.)");
+        final JLabel cuiLabel = cf.createFieldLabel("CUI (13 car.)");
         mainPanel.add(cuiLabel);
-        final JTextField cuiInput = new FieldInput(13);
+        final JTextField cuiInput = cf.createFieldInput(13, focusListener);
         mainPanel.add(cuiInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Username input
-        final JLabel usernameLabel = new FieldLabel("Username (1-20 car.)");
+        final JLabel usernameLabel = cf.createFieldLabel("Username (max 20 car.)");
         mainPanel.add(usernameLabel);
-        final JTextField usernameInput = new FieldInput(20);
+        final JTextField usernameInput = cf.createFieldInput(20, focusListener);
         mainPanel.add(usernameInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Password input
-        final JLabel passwordLabel = new FieldLabel("Password (1-20 car.)");
+        final JLabel passwordLabel = cf.createFieldLabel("Password (max 20 car.)");
         mainPanel.add(passwordLabel);
         final JPasswordField passwordInput = new JPasswordField(20);
         passwordInput.setEchoChar('*');
         passwordInput.setFont(new Font(FONT, Font.PLAIN, 16));
         passwordInput.setMaximumSize(new Dimension(300, 40));
         mainPanel.add(passwordInput);
-        passwordInput.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                SwingUtilities.invokeLater(() -> errorLabel.setVisible(false));
-            }
-        });
+        passwordInput.addFocusListener(focusListener);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Name input
-        final JLabel nameLabel = new FieldLabel("Nome (1-25 car.)");
+        final JLabel nameLabel = cf.createFieldLabel("Nome (1-25 car.)");
         mainPanel.add(nameLabel);
-        final JTextField nameInput = new FieldInput(25);
+        final JTextField nameInput = cf.createFieldInput(25, focusListener);
         mainPanel.add(nameInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Surname input
-        final JLabel surnameLabel = new FieldLabel("Cognome (1-25 car.)");
+        final JLabel surnameLabel = cf.createFieldLabel("Cognome (max 25 car.)");
         mainPanel.add(surnameLabel);
-        final JTextField surnameInput = new FieldInput(25);
+        final JTextField surnameInput = cf.createFieldInput(25, focusListener);
         mainPanel.add(surnameInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Race input
-        final JLabel raceLabel = new FieldLabel("Razza (max 20 car.)");
+        final JLabel raceLabel = cf.createFieldLabel("Razza (max 20 car.)");
         mainPanel.add(raceLabel);
-        final JTextField raceInput = new FieldInput(20);
+        final JTextField raceInput = cf.createFieldInput(20, focusListener);
         mainPanel.add(raceInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Date of birth input
-        final JLabel dobLabel = new FieldLabel("Data di nascita (gg/mm/aaaa)");
+        final JLabel dobLabel = cf.createFieldLabel("Data di nascita (gg/mm/aaaa)");
         mainPanel.add(dobLabel);
-        final JTextField dobInput = new FieldInput(10);
+        final JTextField dobInput = cf.createFieldInput(10, focusListener);
         dobInput.setToolTipText("Formato: gg/mm/aaaa");
         mainPanel.add(dobInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Wanted checkbox
-        final JPanel wantedPanel = new CheckBoxPanel("Ricercato");
+        final JPanel wantedPanel = cf.createCheckBoxPanel("Ricercato");
         mainPanel.add(wantedPanel);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Ideology selection
-        final JLabel ideologyLabel = new FieldLabel("Ideologia");
+        final JLabel ideologyLabel = cf.createFieldLabel("Ideologia");
         mainPanel.add(ideologyLabel);
         final String[] ideologies = {"Neutrale", "Imperiale", "Ribelle"};
-        final JComboBox<String> ideologyInput = new SelectionBox(ideologies);
+        final JComboBox<String> ideologyInput = cf.createSelectionBox(ideologies);
         mainPanel.add(ideologyInput);
         mainPanel.add(Box.createVerticalStrut(10));
         
@@ -127,12 +139,7 @@ public class RegisterScene extends JPanel {
 
 
 
-        // Error label
-        this.errorLabel = new JLabel("", SwingConstants.CENTER);
-        this.errorLabel.setFont(new Font(FONT, Font.PLAIN, 16));
-        this.errorLabel.setAlignmentX(CENTER_ALIGNMENT);
-        this.errorLabel.setForeground(Color.RED);
-        this.errorLabel.setVisible(false);
+        
 
         // Register button
         final JButton registerButton = new JButton("Registrati");
@@ -161,60 +168,5 @@ public class RegisterScene extends JPanel {
     }
 
     // TODO Implement the Register scene
-
-    // TODO move to a factory class or similar
-    private class FieldLabel extends JLabel {
-        public FieldLabel(String text) {
-            super(text, JLabel.CENTER);
-            this.setAlignmentX(CENTER_ALIGNMENT);
-            this.setFont(new Font(FONT, Font.PLAIN, 16));
-        }
-    }
-
-    private class FieldInput extends JTextField {
-        public FieldInput(int columns) {
-            super(13);
-            this.setFont(new Font(FONT, Font.PLAIN, 16));
-            this.setMaximumSize(new Dimension(300, 40));
-            this.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    SwingUtilities.invokeLater(() -> errorLabel.setVisible(false));
-                }
-            });
-        }
-    }
-
-    private class SelectionBox extends JComboBox<String> {
-        public SelectionBox(String[] items) {
-            super(items);
-            this.setFont(new Font(FONT, Font.PLAIN, 16));
-            this.setMaximumSize(new Dimension(300, 40));
-            this.setSelectedIndex(0);
-            this.setAlignmentX(CENTER_ALIGNMENT);
-        }
-    }
-
-    private class CheckBoxPanel extends JPanel {
-
-        private final JCheckBox checkBox;
-
-        public CheckBoxPanel(String labelText) {
-            this.setLayout(new BorderLayout());
-            this.setAlignmentX(CENTER_ALIGNMENT);
-            this.setMaximumSize(new Dimension(300, 40));
-            final JLabel label = new FieldLabel(labelText);
-            this.add(label, BorderLayout.WEST);
-            this.checkBox = new JCheckBox();
-            this.checkBox.setAlignmentX(CENTER_ALIGNMENT);
-            this.checkBox.setFont(new Font(FONT, Font.PLAIN, 16));
-            this.checkBox.setMaximumSize(new Dimension(300, 40));
-            this.add(this.checkBox, BorderLayout.EAST);
-        }
-
-        public JCheckBox getCheckBox() {
-            return this.checkBox;
-        }
-    }
 
 }
