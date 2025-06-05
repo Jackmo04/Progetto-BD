@@ -75,6 +75,10 @@ public final class Controller {
         return this.model.getLoggedUser();
     }
 
+    public Starship getSelectedStarship() {
+        return this.model.getSelectedStarship();
+    }
+
     public String[] getPlanetChoices() {
         try {
             return this.model.getAllPlanets()
@@ -91,16 +95,13 @@ public final class Controller {
     private void loginSuccess(Person loggedUser) {
         this.view.userLoggedIn();
         switch (loggedUser.role()) {
-            case PersonRole.ADMIN:
+            case ADMIN:
                 this.view.goToAdminScene();
                 break;
 
-            case PersonRole.CAPTAIN:
-                this.view.goToCaptainScene();
-                break;
-
-            case PersonRole.CREW_MEMBER:
-                this.view.goToCrewScene();
+            case CAPTAIN:
+            case CREW_MEMBER:
+                this.view.goToWelcomeScene();
                 break;
 
             default:
@@ -131,7 +132,26 @@ public final class Controller {
 
     public void manageShip(String plateNumber) {
         LOGGER.info("Managing ship with plate number: {}", plateNumber);
-        
-    }
+        this.model.selectStarship(plateNumber);
 
+        switch (this.model.getLoggedUser().role()) {
+            case CAPTAIN:
+                this.view.goToCaptainScene();
+                break;
+
+            case CREW_MEMBER:
+                this.view.goToCrewScene();
+                break;
+
+            case ADMIN:
+                this.view.goToAdminScene();
+                break;
+
+            default:
+                throw new IllegalStateException("Unknown role for logged user: " + this.model.getLoggedUser().role());
+        }
+
+    }
 }
+
+

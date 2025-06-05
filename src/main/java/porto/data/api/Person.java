@@ -35,6 +35,16 @@ public interface Person {
      * @return surname.
      */
     String surname();
+
+    /**
+     * Full name of the person, combining name and surname.
+     * 
+     * @return full name in the format "name surname".
+     */
+    default String fullName() {
+        return name() + " " + surname();
+    }   
+
     /**
      * 
      * @return race of the person.

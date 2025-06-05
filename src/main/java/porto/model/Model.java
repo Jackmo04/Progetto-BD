@@ -122,4 +122,20 @@ public final class Model {
         this.loggedUser = Optional.empty();
     }
 
+    public void selectStarship(String plateNumber) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        try {
+            this.selectedStarship = starshipDAO.fromPlate(plateNumber);
+            if (this.selectedStarship.isEmpty()) {
+                throw new IllegalArgumentException("No starship found with plate number: " + plateNumber);
+            }
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving starship by plate number", e);
+        }
+    }
+
+    public Starship getSelectedStarship() {
+        return this.selectedStarship.orElseThrow(() -> new IllegalStateException("No starship is selected"));
+    }
+
 }

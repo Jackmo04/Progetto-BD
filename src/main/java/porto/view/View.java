@@ -13,16 +13,18 @@ import porto.Controller;
 import porto.view.scenes.AdminScene;
 import porto.view.scenes.CaptainScene;
 import porto.view.scenes.CrewScene;
+import porto.view.scenes.WelcomeScene;
 import porto.view.scenes.LoginScene;
 import porto.view.scenes.RegisterScene;
 
 public final class View {
 
-    private static final String SN_REGISTER = "register";
-    private static final String SN_ADMIN = "admin";
-    private static final String SN_CAPTAIN = "capitan";
-    private static final String SN_CREW = "crew";
     private static final String SN_LOGIN = "login";
+    private static final String SN_REGISTER = "register";
+    private static final String SN_WELCOME = "welcome";
+    private static final String SN_CREW = "crew";
+    private static final String SN_CAPTAIN = "capitan";
+    private static final String SN_ADMIN = "admin";
 
     private static final double FRAME_SIZE_FACTOR = 0.8;
 
@@ -87,9 +89,7 @@ public final class View {
     }
 
     public void userLoggedIn() {
-        this.mainPanel.add(new CrewScene(this), SN_CREW);
-        this.mainPanel.add(new CaptainScene(this), SN_CAPTAIN);
-        this.mainPanel.add(new AdminScene(this), SN_ADMIN);
+        this.mainPanel.add(new WelcomeScene(this), SN_WELCOME);
     }
 
     public void goToLoginScene() {
@@ -100,15 +100,22 @@ public final class View {
         this.cardLayout.show(this.mainPanel, SN_REGISTER);
     }
 
+    public void goToWelcomeScene() {
+        this.cardLayout.show(this.mainPanel, SN_WELCOME);
+    }
+
     public void goToCrewScene() {
+        this.mainPanel.add(new CrewScene(this), SN_CREW);
         this.cardLayout.show(this.mainPanel, SN_CREW);
     }
 
     public void goToCaptainScene() {
+        this.mainPanel.add(new CaptainScene(this), SN_CAPTAIN);
         this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
     }
 
     public void goToAdminScene() {
+        this.mainPanel.add(new AdminScene(this), SN_ADMIN);
         this.cardLayout.show(this.mainPanel, SN_ADMIN);
     }
 
