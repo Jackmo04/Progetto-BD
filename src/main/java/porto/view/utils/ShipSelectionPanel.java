@@ -29,9 +29,14 @@ public class ShipSelectionPanel extends JPanel {
         final List<Starship> ships = this.view.getController().getAvailableShips();
         final JTable shipTable = new JTable(
             ships.stream()
-                .map(ship -> new Object[]{ship.plateNumber(), ship.name(), ship.model().name()})
+                .map(ship -> new Object[]{
+                    ship.plateNumber(), 
+                    ship.name(), 
+                    ship.model().name(),
+                    ship.capitan().name() + " " + ship.capitan().surname()
+                })
                 .toArray(Object[][]::new),
-            new String[]{"Targa", "Nome", "Modello"}
+            new String[]{"Targa", "Nome", "Modello", "Capitano"}
         );
         shipTable.setFont(new Font(FONT, Font.PLAIN, 16));
         shipTable.setRowHeight(30);

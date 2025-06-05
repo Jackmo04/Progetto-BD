@@ -10,7 +10,7 @@ public final class App {
 
     public static void main(String[] args) throws SQLException {
         var connection = DAOUtils.localMySQLConnection("PortoMorteNera", "root", "");
-        var model = Model.fromConnection(connection);
+        var model = new Model(connection);
         var view = new View(() -> {
             try {
                 connection.close();

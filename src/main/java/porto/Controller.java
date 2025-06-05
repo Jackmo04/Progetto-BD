@@ -131,6 +131,7 @@ public final class Controller {
 
     public void manageShip(String plateNumber) {
         LOGGER.info("Managing ship with plate number: {}", plateNumber);
+        
     }
 
 }
