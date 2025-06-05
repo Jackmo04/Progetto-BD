@@ -172,38 +172,31 @@ public class RegisterScene extends JPanel {
                 cui.isEmpty() || username.isEmpty() || password.isEmpty() || name.isEmpty() || surname.isEmpty() 
                 || race.isEmpty() || dob.isEmpty() || ideology == null || planet == null
             ) {
-                this.errorLabel.setText("Tutti i campi sono obbligatori!");
-                this.errorLabel.setVisible(true);
+                displayRegisterError("Tutti i campi contrassegnati con * sono obbligatori!");
                 return;
             }
             if (cui.length() != cuiInput.getColumns()) {
-                this.errorLabel.setText("CUI deve essere di " + cuiInput.getColumns() + " caratteri!");
-                this.errorLabel.setVisible(true);
+                displayRegisterError("CUI deve essere di " + cuiInput.getColumns() + " caratteri!");
                 return;
             }
             if (username.length() > usernameInput.getColumns()) {
-                this.errorLabel.setText("Username non può superare i " + usernameInput.getColumns() + " caratteri!");
-                this.errorLabel.setVisible(true);
+                displayRegisterError("Username non può superare i " + usernameInput.getColumns() + " caratteri!");
                 return;
             }
             if (password.length() > passwordInput.getColumns()) {
-                this.errorLabel.setText("Password non può superare i " + passwordInput.getColumns() + " caratteri!");
-                this.errorLabel.setVisible(true);
+                displayRegisterError("Password non può superare i " + passwordInput.getColumns() + " caratteri!");
                 return;
             }
             if (name.length() > nameInput.getColumns()) {
-                this.errorLabel.setText("Nome non può superare i " + nameInput.getColumns() + " caratteri!");
-                this.errorLabel.setVisible(true);
+                displayRegisterError("Nome non può superare i " + nameInput.getColumns() + " caratteri!");
                 return;
             }
             if (surname.length() > surnameInput.getColumns()) {
-                this.errorLabel.setText("Cognome non può superare i " + surnameInput.getColumns() + " caratteri!");
-                this.errorLabel.setVisible(true);
+                displayRegisterError("Cognome non può superare i " + surnameInput.getColumns() + " caratteri!");
                 return;
             }
             if (race.length() > raceInput.getColumns()) {
-                this.errorLabel.setText("Razza non può superare i " + raceInput.getColumns() + " caratteri!");
-                this.errorLabel.setVisible(true);
+                displayRegisterError("Razza non può superare i " + raceInput.getColumns() + " caratteri!");
                 return;
             }
             try {
@@ -211,13 +204,11 @@ public class RegisterScene extends JPanel {
                 LocalDate formattedDob = LocalDate.parse(dob, df);
                 dob = Date.valueOf(formattedDob).toString();
                 if (formattedDob.isAfter(LocalDate.now())) {
-                    this.errorLabel.setText("La data di nascita non può essere futura!");
-                    this.errorLabel.setVisible(true);
+                    displayRegisterError("Data di nascita non può essere futura!");
                     return;
                 }
             } catch (Exception ex) {
-                this.errorLabel.setText("Formato data di nascita non valido!");
-                this.errorLabel.setVisible(true);
+                displayRegisterError("Formato data di nascita non valido! Usa gg/mm/aaaa");
                 return;
             }
             this.view.getController().userClickedRegister(
@@ -249,8 +240,7 @@ public class RegisterScene extends JPanel {
         }
         this.errorLabel.setText(string);
         this.errorLabel.setVisible(true);
+        SwingUtilities.invokeLater(() -> this.errorLabel.scrollRectToVisible(this.errorLabel.getBounds()));
     }
-
-    // TODO Implement the Register scene
 
 }
