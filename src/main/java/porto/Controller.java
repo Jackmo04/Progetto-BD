@@ -1,14 +1,19 @@
 package porto;
 
+import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 
+import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
-import porto.data.api.PersonRole;
 import porto.data.api.Planet;
+import porto.data.api.Request;
+import porto.data.api.RequestState;
 import porto.data.api.Starship;
 import porto.data.utils.DAOException;
 import porto.model.Model;
@@ -151,6 +156,67 @@ public final class Controller {
                 throw new IllegalStateException("Unknown role for logged user: " + this.model.getLoggedUser().role());
         }
 
+    }
+
+    public Optional<ParkingSpace> getParkingSpace(String plateNumber) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        try {
+            return this.model.getParkingSpace(plateNumber);
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving parking space for plate number: {}", plateNumber, e);
+            throw new RuntimeException("Error retrieving parking space", e);
+        }
+    }
+
+    public Optional<ParkingSpace> getParkingOfSelectedStarship() {
+        if (this.model.getSelectedStarship() == null) {
+            throw new IllegalStateException("No starship is selected");
+        }
+        String plateNumber = this.model.getSelectedStarship().plateNumber();
+        return getParkingSpace(plateNumber);
+    }
+
+    public Optional<Request> getLastRequestOfSelectedStarship() {
+        if (this.model.getSelectedStarship() == null) {
+            throw new IllegalStateException("No starship is selected");
+        }
+        String plateNumber = this.model.getSelectedStarship().plateNumber();
+        try {
+            return this.model.getLastRequestOfStarship(plateNumber);
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving last request for starship with plate number: {}", plateNumber, e);
+            throw new RuntimeException("Error retrieving last request", e);
+        }
+    }
+
+    public RequestState getRequestState(Request request) {
+        Objects.requireNonNull(request, "Request cannot be null");
+        try {
+            return this.model.getRequestState(request.codRichiesta()).orElseThrow();
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving request state for request: {}", request, e);
+            throw new RuntimeException("Error retrieving request state", e);
+        }
+    }
+
+    public Optional<Timestamp> getRequestDateTimeManaged(Request request) {
+        Objects.requireNonNull(request, "Request cannot be null");
+        try {
+            return this.model.getRequestDateTimeManaged(request.codRichiesta());
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving request date time managed for request: {}", request, e);
+            throw new RuntimeException("Error retrieving request date time managed", e);
+        }
+    }
+
+    public Optional<Person> getRequestManagedBy(Request request) {
+        Objects.requireNonNull(request, "Request cannot be null");
+        try {
+            return this.model.getRequestManagedBy(request.codRichiesta());
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving request managed by for request: {}", request, e);
+            throw new RuntimeException("Error retrieving request managed by", e);
+        }
     }
 }
 

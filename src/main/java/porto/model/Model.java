@@ -1,20 +1,25 @@
 package porto.model;
 
 import java.sql.Connection;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
 import porto.data.api.Ideology;
+import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
 import porto.data.api.Planet;
+import porto.data.api.Request;
+import porto.data.api.RequestState;
 import porto.data.api.Starship;
 import porto.data.api.PersonRole;
+import porto.data.api.dao.ParkingSpaceDAO;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.PlanetDAO;
 import porto.data.api.dao.RequestDAO;
 import porto.data.api.dao.StarshipDAO;
+import porto.data.dao.ParkingSpaceDAOImpl;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.dao.PlanetDAOImpl;
 import porto.data.dao.RequestDAOImpl;
@@ -27,6 +32,7 @@ public final class Model {
     private final StarshipDAO starshipDAO;
     private final RequestDAO requestDAO;
     private final PlanetDAO planetDAO;
+    private final ParkingSpaceDAO parkingSpaceDAO;
     private Optional<Person> loggedUser = Optional.empty();
     private Optional<Starship> selectedStarship = Optional.empty();
 
@@ -36,6 +42,7 @@ public final class Model {
         this.starshipDAO = new StarshipDAOImpl(connection);
         this.requestDAO = new RequestDAOImpl(connection);
         this.planetDAO = new PlanetDAOImpl(connection);
+        this.parkingSpaceDAO = new ParkingSpaceDAOImpl(connection);
     }
 
     public boolean login(String username, String password) {
@@ -136,6 +143,51 @@ public final class Model {
 
     public Starship getSelectedStarship() {
         return this.selectedStarship.orElseThrow(() -> new IllegalStateException("No starship is selected"));
+    }
+
+    public Optional<ParkingSpace> getParkingSpace(String plateNumber) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        try {
+            return parkingSpaceDAO.ofStarship(plateNumber);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving parking space for plate number: " + plateNumber, e);
+        }
+    }
+
+    public Optional<Request> getLastRequestOfStarship(String plateNumber) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        try {
+            return requestDAO.getLastRequestOfStarship(plateNumber);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving last request for starship with plate number: " + plateNumber, e);
+        }
+    }
+
+    public Optional<RequestState> getRequestState(int codrequest) {
+        Objects.requireNonNull(codrequest, "Request cannot be null");
+        try {
+            return requestDAO.getRequestState(codrequest);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving request state for request: " + codrequest, e);
+        }
+    }
+
+    public Optional<Timestamp> getRequestDateTimeManaged(int codRichiesta) {
+        Objects.requireNonNull(codRichiesta, "Request cannot be null");
+        try {
+            return requestDAO.getRequestDateTimeManaged(codRichiesta);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving request date time managed for request: " + codRichiesta, e);
+        }
+    }
+
+    public Optional<Person> getRequestManagedBy(int codRichiesta) {
+        Objects.requireNonNull(codRichiesta, "Request cannot be null");
+        try {
+            return requestDAO.getRequestManagedBy(codRichiesta);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving request managed by for request: " + codRichiesta, e);
+        }
     }
 
 }

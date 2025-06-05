@@ -30,11 +30,4 @@ public interface Starship {
      */
     Person capitan();
 
-    /**
-     * Returns the parking space where the starship is docked.
-     * @return an Optional containing the parking space if present, otherwise empty
-     * @deprecated Use {@link ParkingSpaceDAO#ofStarship(String starshipPlateNumber)} instead.
-     */
-    @Deprecated
-    Optional<ParkingSpace> parkingSpace(); // TODO Remove this method when all references to Starship.parkingSpace() are replaced
 }
