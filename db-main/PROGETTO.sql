@@ -82,7 +82,8 @@ CREATE TABLE PERSONE (
 CREATE TABLE PIANETI (
      CodPianeta CHAR(10) NOT NULL,
      Nome VARCHAR(25) NOT NULL,
-     CONSTRAINT ID_PIANETI_ID PRIMARY KEY (CodPianeta));
+     CONSTRAINT ID_PIANETI_ID PRIMARY KEY (CodPianeta),
+     CONSTRAINT UNIQ_NOME_PIANETA UNIQUE (Nome));
 
 CREATE TABLE POSTEGGI (
      CodArea INT NOT NULL,
@@ -356,7 +357,7 @@ INSERT INTO PERSONE (CUI, Username, Password, Nome, Cognome, Razza, DataNascita,
 ('CHWBCC000101K', 'Chewie', '12345', 'Chewbacca', 'unknow', 'Wookiee', '1900-01-01', TRUE, 'Ribelle', 'Astronauta', NULL, 'KASH006'),
 ('KNBOBI370825C', 'O.Kenobi', '12345', 'Obi-Wan', 'Kenobi', 'Umano', '1937-08-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'CORU001'),
 ('MULDRT600322D', 'D.Maul', 'pippo', 'Darth', 'Maul', 'Zabrak', '1960-03-22', FALSE, 'Imperiale', 'Capitano', NULL, 'DANT010'),
-('TRKMFF220306M', 'G.Tarkin', 'admin', 'Moff', 'Tarkin', 'Umano', '1922-03-06', FALSE, 'Imperiale', 'Admin', NULL, 'MUST007'),
+('TRKMFF220306M', 'M.Tarkin', 'admin', 'Moff', 'Tarkin', 'Umano', '1922-03-06', FALSE, 'Imperiale', 'Admin', NULL, 'MUST007'),
 ('STRMTR0000000', 'Trooper0', '12345', 'Stormtrooper', '00000', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
 ('STRMTR0000001', 'Trooper1', '12345', 'Stormtrooper', '00001', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
 ('STRMTR0000002', 'Trooper2', '12345', 'Stormtrooper', '00002', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),

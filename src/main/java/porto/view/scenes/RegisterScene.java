@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -21,6 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import porto.view.View;
+import porto.view.utils.CustomComponents;
 import porto.view.utils.JComponentsFactory;
 
 public class RegisterScene extends JPanel {
@@ -67,21 +71,21 @@ public class RegisterScene extends JPanel {
         mainPanel.add(Box.createVerticalStrut(30));
 
         // CUI input
-        final JLabel cuiLabel = cf.createFieldLabel("CUI (13 car.)");
+        final JLabel cuiLabel = cf.createFieldLabel("CUI* (13 car.)");
         mainPanel.add(cuiLabel);
         final JTextField cuiInput = cf.createFieldInput(13, focusListener);
         mainPanel.add(cuiInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Username input
-        final JLabel usernameLabel = cf.createFieldLabel("Username (max 20 car.)");
+        final JLabel usernameLabel = cf.createFieldLabel("Username* (max 20 car.)");
         mainPanel.add(usernameLabel);
         final JTextField usernameInput = cf.createFieldInput(20, focusListener);
         mainPanel.add(usernameInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Password input
-        final JLabel passwordLabel = cf.createFieldLabel("Password (max 20 car.)");
+        final JLabel passwordLabel = cf.createFieldLabel("Password* (max 20 car.)");
         mainPanel.add(passwordLabel);
         final JPasswordField passwordInput = new JPasswordField(20);
         passwordInput.setEchoChar('*');
@@ -92,28 +96,28 @@ public class RegisterScene extends JPanel {
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Name input
-        final JLabel nameLabel = cf.createFieldLabel("Nome (1-25 car.)");
+        final JLabel nameLabel = cf.createFieldLabel("Nome* (max 25 car.)");
         mainPanel.add(nameLabel);
         final JTextField nameInput = cf.createFieldInput(25, focusListener);
         mainPanel.add(nameInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Surname input
-        final JLabel surnameLabel = cf.createFieldLabel("Cognome (max 25 car.)");
+        final JLabel surnameLabel = cf.createFieldLabel("Cognome* (max 25 car.)");
         mainPanel.add(surnameLabel);
         final JTextField surnameInput = cf.createFieldInput(25, focusListener);
         mainPanel.add(surnameInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Race input
-        final JLabel raceLabel = cf.createFieldLabel("Razza (max 20 car.)");
+        final JLabel raceLabel = cf.createFieldLabel("Razza* (max 20 car.)");
         mainPanel.add(raceLabel);
         final JTextField raceInput = cf.createFieldInput(20, focusListener);
         mainPanel.add(raceInput);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Date of birth input
-        final JLabel dobLabel = cf.createFieldLabel("Data di nascita (gg/mm/aaaa)");
+        final JLabel dobLabel = cf.createFieldLabel("Data di nascita* (gg/mm/aaaa)");
         mainPanel.add(dobLabel);
         final JTextField dobInput = cf.createFieldInput(10, focusListener);
         dobInput.setToolTipText("Formato: gg/mm/aaaa");
@@ -121,25 +125,30 @@ public class RegisterScene extends JPanel {
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Wanted checkbox
-        final JPanel wantedPanel = cf.createCheckBoxPanel("Ricercato");
-        mainPanel.add(wantedPanel);
+        final CustomComponents.CheckBoxPanel wantedCBPanel = cf.createCheckBoxPanel("Ricercato*");
+        mainPanel.add(wantedCBPanel);
         mainPanel.add(Box.createVerticalStrut(10));
 
         // Ideology selection
-        final JLabel ideologyLabel = cf.createFieldLabel("Ideologia");
+        final JLabel ideologyLabel = cf.createFieldLabel("Ideologia*");
         mainPanel.add(ideologyLabel);
         final String[] ideologies = {"Neutrale", "Imperiale", "Ribelle"};
         final JComboBox<String> ideologyInput = cf.createSelectionBox(ideologies);
         mainPanel.add(ideologyInput);
         mainPanel.add(Box.createVerticalStrut(10));
         
+        // Role selection
+        final CustomComponents.CheckBoxPanel captainCBPanel = cf.createCheckBoxPanel("Sei un capitano?*");
+        mainPanel.add(captainCBPanel);
+        mainPanel.add(Box.createVerticalStrut(10));
 
-        // TODO Continuare con gli altri campi
-
-
-
-
-        
+        // Planet of birth
+        final JLabel planetLabel = cf.createFieldLabel("Pianeta di nascita*");
+        mainPanel.add(planetLabel);
+        final String[] planets = this.view.getController().getPlanetChoices();
+        final JComboBox<String> planetInput = cf.createSelectionBox(planets);
+        mainPanel.add(planetInput);
+        mainPanel.add(Box.createVerticalStrut(10));        
 
         // Register button
         final JButton registerButton = new JButton("Registrati");
@@ -148,14 +157,72 @@ public class RegisterScene extends JPanel {
         registerButton.setMaximumSize(new Dimension(300, 40));
         registerButton.addActionListener(e -> {
             this.errorLabel.setVisible(false);
-            String username = cuiInput.getText().trim();
+            String cui = cuiInput.getText().trim();
+            String username = usernameInput.getText().trim();
             String password = new String(passwordInput.getPassword()).trim();
-            if (username.isEmpty() || password.isEmpty()) {
-                this.errorLabel.setText("Inserisci CUI/Username e password!");
+            String name = nameInput.getText().trim();
+            String surname = surnameInput.getText().trim();
+            String race = raceInput.getText().trim();
+            String dob = dobInput.getText().trim();
+            boolean wanted = wantedCBPanel.checkBox().isSelected();
+            String ideology = (String) ideologyInput.getSelectedItem();
+            boolean isCaptain = captainCBPanel.checkBox().isSelected();
+            String planet = (String) planetInput.getSelectedItem();
+            if (
+                cui.isEmpty() || username.isEmpty() || password.isEmpty() || name.isEmpty() || surname.isEmpty() 
+                || race.isEmpty() || dob.isEmpty() || ideology == null || planet == null
+            ) {
+                this.errorLabel.setText("Tutti i campi sono obbligatori!");
                 this.errorLabel.setVisible(true);
                 return;
             }
-            // onLoginButtonClick(username, password);
+            if (cui.length() != 13) {
+                this.errorLabel.setText("Il CUI deve essere di 13 caratteri!");
+                this.errorLabel.setVisible(true);
+                return;
+            }
+            if (username.length() > 20) {
+                this.errorLabel.setText("L'username non può superare i 20 caratteri!");
+                this.errorLabel.setVisible(true);
+                return;
+            }
+            if (password.length() > 20) {
+                this.errorLabel.setText("La password non può superare i 20 caratteri!");
+                this.errorLabel.setVisible(true);
+                return;
+            }
+            if (name.length() > 25) {
+                this.errorLabel.setText("Il nome non può superare i 25 caratteri!");
+                this.errorLabel.setVisible(true);
+                return;
+            }
+            if (surname.length() > 25) {
+                this.errorLabel.setText("Il cognome non può superare i 25 caratteri!");
+                this.errorLabel.setVisible(true);
+                return;
+            }
+            if (race.length() > 20) {
+                this.errorLabel.setText("La razza non può superare i 20 caratteri!");
+                this.errorLabel.setVisible(true);
+                return;
+            }
+            try {
+                DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate formattedDob = LocalDate.parse(dob, df);
+                dob = Date.valueOf(formattedDob).toString();
+                if (formattedDob.isAfter(LocalDate.now())) {
+                    this.errorLabel.setText("La data di nascita non può essere futura!");
+                    this.errorLabel.setVisible(true);
+                    return;
+                }
+            } catch (Exception ex) {
+                this.errorLabel.setText("Formato data di nascita non valido!");
+                this.errorLabel.setVisible(true);
+                return;
+            }
+            this.view.getController().userClickedRegister(
+                cui, username, password, name, surname, race, dob, wanted, ideology, isCaptain, planet
+            );
         });
         mainPanel.add(registerButton);
 
@@ -165,6 +232,14 @@ public class RegisterScene extends JPanel {
 
         mainPanel.add(Box.createVerticalStrut(30));
 
+    }
+
+    public void displayRegisterError(String string) {
+        if (string == null || string.isBlank()) {
+            throw new IllegalArgumentException("Error message cannot be null or empty");
+        }
+        this.errorLabel.setText(string);
+        this.errorLabel.setVisible(true);
     }
 
     // TODO Implement the Register scene

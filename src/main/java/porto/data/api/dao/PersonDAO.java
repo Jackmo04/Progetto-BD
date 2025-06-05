@@ -6,6 +6,7 @@ import java.util.Optional;
 import porto.data.api.Ideology;
 import porto.data.api.Person;
 import porto.data.api.PersonRole;
+import porto.data.api.Planet;
 import porto.data.utils.DAOException;
 
 /**
@@ -41,7 +42,7 @@ public interface PersonDAO {
      * @throws DAOException if an error occurs while accessing the database
      */
     void addPerson(String CUI, String username, String password ,String name, String surname, String race, String borndate,
-            Ideology ideology, PersonRole role, String bornPlanet) throws DAOException;
+            boolean wanted, Ideology ideology, PersonRole role, Planet bornPlanet) throws DAOException;
 
     /**
      * Retrieves a person by their CUI or username and password.
@@ -76,4 +77,6 @@ public interface PersonDAO {
      * @throws DAOException if an error occurs while accessing the database
      */
     public List<Person> getEquipeOfStarship( String plate) throws DAOException;
+
+    Optional<Person> getFromUsername(String username);
 }

@@ -22,6 +22,14 @@ public interface PlanetDAO {
     Optional<Planet> getFromCodPlanet( String codPlanet) throws DAOException;
 
     /**
+     * Retrieves a planet by its name.
+     * @param name the name of the planet
+     * @return an Optional containing the Planet object if found, or empty if not found
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    Optional<Planet> getFromName(String name) throws DAOException;
+
+    /**
      * Retrieves all planets from the database.
      * @return a Set of all Planet objects
      * @throws DAOException if an error occurs while accessing the database

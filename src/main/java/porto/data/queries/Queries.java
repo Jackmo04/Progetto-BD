@@ -160,8 +160,8 @@ public final class Queries {
 
     public static final String ADD_PERSON = """
                 INSERT INTO PERSONE (CUI, Username,Password , Nome, Cognome,
-                Razza, DataNascita, Ideologia, Ruolo, PianetaNascita) VALUES
-                (?, ?, ? , ?, ?, ?, ?, ?, ?, ?);
+                Razza, DataNascita, Ricercato, Ideologia, Ruolo, PianetaNascita) VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """;
 
     public static final String ACCESS_DB_REQUEST = """
@@ -258,4 +258,16 @@ public final class Queries {
             ROUND(SUM(CASE WHEN Esito = 'R' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS `Rifiutate`
         FROM RichiesteInIntervallo;
     """;
+
+    public static final String PLANET_FROM_NAME = """
+                SELECT p.*
+                FROM pianeti p
+                WHERE p.Nome = ?;
+            """;
+
+    public static final String PERSON_FROM_USERNAME = """
+                SELECT p.*
+                FROM persone p
+                WHERE p.Username = ?;
+            """;
 }

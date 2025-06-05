@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import porto.data.api.Ideology;
 import porto.data.api.PersonRole;
 import porto.data.dao.PersonDAOImpl;
+import porto.data.dao.PlanetDAOImpl;
 import porto.data.utils.DAOUtils;
 
 class TestPersonDAO {
@@ -53,9 +54,11 @@ class TestPersonDAO {
     @Test
     public void addPerson() {
         var personDAO = new PersonDAOImpl(connection);
+        var planetDAO = new PlanetDAOImpl(connection);
+        var planet = planetDAO.getFromCodPlanet("DTHSTR0").get();
         personDAO.addPerson("STRMTR0000004", "Trooper4", "password", "Stormtrooper",
-                "00004", "Clone", "2000-01-01", Ideology.IMPERIAL,
-                PersonRole.CREW_MEMBER, "DTHSTR0");
+                "00004", "Clone", "2000-01-01", false, Ideology.IMPERIAL,
+                PersonRole.CREW_MEMBER, planet);
 
         var actual = personDAO.getFromCUI("STRMTR0000004").get().CUI();
         var expected = "STRMTR0000004";

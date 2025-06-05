@@ -47,10 +47,6 @@ public final class View {
         this.mainFrame.setContentPane(this.mainPanel);
 
         this.mainPanel.add(new LoginScene(this), SN_LOGIN);
-        this.mainPanel.add(new RegisterScene(this), SN_REGISTER);
-        this.mainPanel.add(new CrewScene(this), SN_CREW);
-        this.mainPanel.add(new CaptainScene(this), SN_CAPTAIN);
-        this.mainPanel.add(new AdminScene(this), SN_ADMIN);
 
         this.mainFrame.setLocationByPlatform(true);
         this.mainFrame.setVisible(true);
@@ -85,6 +81,16 @@ public final class View {
         this.controller = Optional.of(controller);
     }
 
+    public void initialScene() {
+        this.mainPanel.add(new RegisterScene(this), SN_REGISTER);
+        this.mainPanel.add(new CrewScene(this), SN_CREW);
+        this.mainPanel.add(new CaptainScene(this), SN_CAPTAIN);
+        this.mainPanel.add(new AdminScene(this), SN_ADMIN);
+
+        // Show the login scene by default
+        goToLoginScene();
+    }
+
     public void goToLoginScene() {
         this.cardLayout.show(this.mainPanel, SN_LOGIN);
     }
@@ -112,6 +118,17 @@ public final class View {
         } else {
             throw new IllegalStateException(
                 "Cannot display login error, current scene is not a login scene."
+            );
+        }
+    }
+
+    public void displayRegisterError(String string) {
+        Objects.requireNonNull(string, "Message cannot be null");
+        if (this.mainPanel.getComponent(1) instanceof RegisterScene registerScene) {
+            registerScene.displayRegisterError(string);
+        } else {
+            throw new IllegalStateException(
+                "Cannot display register error, current scene is not a register scene."
             );
         }
     }

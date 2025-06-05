@@ -12,6 +12,7 @@ import porto.data.PersonImpl;
 import porto.data.api.Ideology;
 import porto.data.api.Person;
 import porto.data.api.PersonRole;
+import porto.data.api.Planet;
 import porto.data.api.dao.PersonDAO;
 import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
@@ -79,12 +80,12 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public void addPerson(String CUI, String username, String password, String name, String surname, String race,
-            String borndate,
-            Ideology ideology, PersonRole role, String bornPlanet) throws DAOException {
+            String borndate, boolean wanted,
+            Ideology ideology, PersonRole role, Planet bornPlanet) throws DAOException {
         try (
                 var statement = DAOUtils.prepare(connection, Queries.ADD_PERSON, CUI, username, password,
-                        name, surname, race, borndate,
-                        ideology.toString(), role.toString(), bornPlanet);) {
+                        name, surname, race, borndate, wanted ? 1 : 0,
+                        ideology.toString(), role.toString(), bornPlanet.codPlanet());) {
             statement.executeUpdate();
         } catch (Exception e) {
             throw new DAOException(e);
@@ -154,5 +155,26 @@ public class PersonDAOImpl implements PersonDAO {
         return equipe.stream().map(t -> getFromCUI(t).get())
                 .distinct()
                 .toList();
+    }
+
+    @Override
+    public Optional<Person> getFromUsername(String username) {
+        if (cache.stream().anyMatch(person -> person.username().equals(username))) {
+            return cache.stream()
+                    .filter(person -> person.username().equals(username))
+                    .findFirst();
+        }
+        try (
+                var statement = DAOUtils.prepare(connection, Queries.PERSON_FROM_USERNAME, username);
+                var resultSet = statement.executeQuery();) {
+            if (resultSet.next()) {
+                var CUI = resultSet.getString("CUI");
+                return getFromCUI(CUI);
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
     }
 }

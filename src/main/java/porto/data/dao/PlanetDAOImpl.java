@@ -62,6 +62,34 @@ public class PlanetDAOImpl implements PlanetDAO {
      * {@inheritDoc}
      */
     @Override
+    public Optional<Planet> getFromName(String name) throws DAOException {
+        if (cache.stream().anyMatch(p -> p.name().equals(name))) {
+            return cache.stream()
+                .filter(p -> p.name().equals(name))
+                .findFirst();
+        }
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.PLANET_FROM_NAME, name);
+            var resultSet = statement.executeQuery();
+        ) {
+            if (resultSet.next()) {
+                var cod = resultSet.getString("CodPianeta");
+                var planetName = resultSet.getString("Nome");
+                var planet = new PlanetImpl(cod, planetName);
+                cache.add(planet);
+                return Optional.of(planet);
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Set<Planet> getAll() throws DAOException {
         try (
             var statement = DAOUtils.prepare(connection, Queries.PLANETS_ALL);
