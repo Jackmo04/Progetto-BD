@@ -275,4 +275,13 @@ public final class Queries {
                 SELECT *
                 FROM astronavi;
             """;
+
+    public static final String ALL_PEOPLE_IN = """
+                select p.*
+                from persone p , equipaggi e , astronavi a 
+                where p.CUI = e.CUIAstronauta
+                and e.TargaAstronave = a.Targa
+                and a.NumeroPosto is not null
+                and p.NumCella is null;
+            """;
 }

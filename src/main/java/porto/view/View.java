@@ -15,6 +15,7 @@ import porto.view.scenes.CaptainScene;
 import porto.view.scenes.CrewScene;
 import porto.view.scenes.JudgeScene;
 import porto.view.scenes.WelcomeScene;
+import porto.view.utils.PersonOfStarship;
 import porto.view.scenes.LoginScene;
 import porto.view.scenes.RegisterScene;
 
@@ -126,6 +127,11 @@ public final class View {
 
         public void goToJudgeScene(int requestCode) {
         this.mainPanel.add(new JudgeScene(this , requestCode), SN_CAPTAIN);
+        this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
+    }
+
+            public void goToEquipeScene() {
+        this.mainPanel.add(new PersonOfStarship(this), SN_CAPTAIN);
         this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
     }
 

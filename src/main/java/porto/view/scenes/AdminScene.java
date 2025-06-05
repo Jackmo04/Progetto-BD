@@ -37,10 +37,11 @@ public class AdminScene extends JPanel {
         mainPanel.add(title);
         mainPanel.add(Box.createVerticalStrut(30));
 
-        final JPanel shipSelectionPanel = new RequestSelectionPannel(view);
-        mainPanel.add(shipSelectionPanel);
+        final JPanel requestSelectionPanel = new RequestSelectionPannel(view);
+        mainPanel.add(requestSelectionPanel);
         
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
 
         final JButton logoutButton = new JButton("Logout");
         logoutButton.addActionListener(e -> {

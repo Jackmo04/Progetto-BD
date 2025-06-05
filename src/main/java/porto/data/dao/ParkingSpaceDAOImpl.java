@@ -1,12 +1,15 @@
 package porto.data.dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import porto.data.ParkingSpaceImpl;
 import porto.data.api.ParkingSpace;
+import porto.data.api.Person;
 import porto.data.api.dao.ParkingSpaceDAO;
 import porto.data.queries.Queries;
 import porto.data.utils.DAOException;
@@ -96,6 +99,25 @@ public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
                 freeSpaces.add(parkingSpace);
             }
             return freeSpaces;
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
+        /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Person> getAllPeopleIn() throws DAOException {
+        List<Person> allPeople = new ArrayList<>();
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.ALL_PEOPLE_IN);
+            var resultSet = statement.executeQuery();
+        ) {
+            while (resultSet.next()) {
+                allPeople.add(new PersonDAOImpl(connection).getFromCUI(resultSet.getString("CUI")).get());
+            }
+            return allPeople;
         } catch (Exception e) {
             throw new DAOException(e);
         }

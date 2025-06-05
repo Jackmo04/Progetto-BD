@@ -23,7 +23,7 @@ public class RequestViewerDialog extends JDialog {
     public RequestViewerDialog(View view, String title, List<Request> requests, boolean selectable) {
         super(view.getMainFrame(), title, ModalityType.APPLICATION_MODAL);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(1200, 300);
+        this.setSize(800, 500);
         this.setMaximumSize(this.getSize());
         this.setLocationRelativeTo(view.getMainFrame());
         this.setResizable(true);

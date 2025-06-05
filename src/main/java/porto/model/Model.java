@@ -249,4 +249,8 @@ public final class Model {
             throw new RuntimeException("Error retrieving all free parking areas", e);
         }
     }
+
+        public List<Person> getPersonOfStarship() {
+        return parkingSpaceDAO.getAllPeopleIn();
+    }
 }

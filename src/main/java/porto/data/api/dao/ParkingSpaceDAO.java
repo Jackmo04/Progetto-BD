@@ -1,9 +1,11 @@
 package porto.data.api.dao;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import porto.data.api.ParkingSpace;
+import porto.data.api.Person;
 import porto.data.utils.DAOException;
 
 public interface ParkingSpaceDAO {
@@ -44,4 +46,6 @@ public interface ParkingSpaceDAO {
      * @return the number of ParkingSpace objects removed from the cache
      */
     int clearCache();
+
+    public List<Person> getAllPeopleIn() throws DAOException ;
 }

@@ -266,4 +266,8 @@ public final class Controller {
         return this.model.getAllRequestsPendent();
     }
 
+    public List<Person> getPersonOfStarship() {
+        return this.model.getPersonOfStarship();
+    }
+
 }

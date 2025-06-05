@@ -426,3 +426,10 @@ ORDER BY QtaTot DESC
 LIMIT 50;
 
 /* Java [Map<Astronave, Integer>] */
+
+select p.*
+from persone p , equipaggi e , astronavi a 
+where p.CUI = e.CUIAstronauta
+and e.TargaAstronave = a.Targa
+and a.NumeroPosto is not null
+and p.NumCella is null;

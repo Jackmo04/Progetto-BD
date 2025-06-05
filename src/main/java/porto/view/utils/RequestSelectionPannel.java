@@ -26,20 +26,24 @@ public class RequestSelectionPannel extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createTitledBorder("Seleziona la nave da gestire"));
         this.setAlignmentX(CENTER_ALIGNMENT);
+        this.setSize(500, 300);
 
         final List<Request> request = this.view.getController().getAllPendentRequest();
         final JTable requestTable = new JTable(
                 request.stream()
                         .map(req -> new Object[] {
                                 req.codRichiesta(),
+                                req.type().toString(),
                                 req.description(),
                                 req.dateTime(),
                                 req.starship().name(),
+                                req.starship().plateNumber(),
                                 req.departurePlanet().name(),
                                 req.destinationPlanet().name()
                         })
                         .toArray(Object[][]::new),
-                new String[] { "CodRichiesta", "Descrizione", "Data Richiesta", "Astronave", "Pianeta Provenienza",
+                new String[] { "CodRichiesta", "tipo", "Descrizione", "Data Richiesta", "Astronave",
+                        "Pianeta Provenienza",
                         "Pianeta Destinazione" });
         requestTable.setFont(new Font(FONT, Font.PLAIN, 16));
         requestTable.setRowHeight(30);
@@ -67,7 +71,22 @@ public class RequestSelectionPannel extends JPanel {
             }
         });
         manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
+
+        final JButton peopleOfShip = new JButton("Persone In Porto");
+        peopleOfShip.setEnabled(true);
+        peopleOfShip.setFont(new Font(FONT, Font.BOLD, 16));
+        peopleOfShip.setToolTipText("Seleziona una richiesta per gestirla");
+        peopleOfShip.setAlignmentX(CENTER_ALIGNMENT);
+        peopleOfShip.addActionListener(e -> {
+            this.view.goToEquipeScene();
+        });
+
+        manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
         this.add(manageShipButton);
+
+        peopleOfShip.setAlignmentX(CENTER_ALIGNMENT);
+        this.add(peopleOfShip);
+
         this.add(Box.createVerticalStrut(20));
     }
 
