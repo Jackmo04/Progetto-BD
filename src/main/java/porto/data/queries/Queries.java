@@ -277,10 +277,9 @@ public final class Queries {
             """;
 
     public static final String ALL_PEOPLE_IN = """
-                select p.*
+                select distinct p.*
                 from persone p , equipaggi e , astronavi a 
-                where p.CUI = e.CUIAstronauta
-                and e.TargaAstronave = a.Targa
+                where ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = a.Targa) OR (p.CUI = a.CUICapitano))
                 and a.NumeroPosto is not null
                 and p.NumCella is null;
             """;

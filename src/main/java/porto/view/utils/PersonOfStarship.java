@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import porto.data.api.Person;
 import porto.view.View;
@@ -26,11 +27,15 @@ public class PersonOfStarship extends JPanel {
         this.view = view;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createTitledBorder("Seleziona la nave da gestire"));
+        this.setBorder(BorderFactory.createTitledBorder("Seleziona la persona da gestire"));
         this.setAlignmentX(CENTER_ALIGNMENT);
         this.setSize(500, 300);
-
         final List<Person> people = this.view.getController().getPersonOfStarship();
+
+        final JTextField totalPeople = new JTextField("Numero di perone totali:" + view.getController().seeNumberPeople());
+        totalPeople.setEditable(false);
+
+
         final JTable personTable = new JTable(
                 people.stream()
                         .map(pers -> new Object[] {
@@ -46,6 +51,7 @@ public class PersonOfStarship extends JPanel {
         personTable.setFont(new Font(FONT, Font.PLAIN, 16));
         personTable.setRowHeight(30);
         personTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        this.add(totalPeople);
         this.add(new JScrollPane(personTable));
         this.add(Box.createVerticalStrut(20));
 

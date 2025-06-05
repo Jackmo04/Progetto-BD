@@ -427,9 +427,8 @@ LIMIT 50;
 
 /* Java [Map<Astronave, Integer>] */
 
-select p.*
+select distinct p.*
 from persone p , equipaggi e , astronavi a 
-where p.CUI = e.CUIAstronauta
-and e.TargaAstronave = a.Targa
+where ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = a.Targa) OR (p.CUI = a.CUICapitano))
 and a.NumeroPosto is not null
 and p.NumCella is null;
