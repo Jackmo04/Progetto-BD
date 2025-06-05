@@ -315,7 +315,7 @@ public class RequestDAOImpl implements RequestDAO {
                 var statement = DAOUtils.prepare(connection, Queries.REQUEST_MANAGED_DATE_FROM_COD, codRequest);
                 var resultSet = statement.executeQuery();) {
             if (resultSet.next()) {
-                return Optional.of(resultSet.getTimestamp("DataEsito"));
+                return Optional.ofNullable(resultSet.getTimestamp("DataEsito"));
             } else {
                 return Optional.empty();
             }
@@ -339,7 +339,7 @@ public class RequestDAOImpl implements RequestDAO {
                 var resultSet = statement.executeQuery();) {
             if (resultSet.next()) {
                 var cui = resultSet.getString("GestitaDa");
-                return new PersonDAOImpl(connection).getFromCUI(cui);
+                return cui == null ? Optional.empty() : new PersonDAOImpl(connection).getFromCUI(cui);
             } else {
                 return Optional.empty();
             }

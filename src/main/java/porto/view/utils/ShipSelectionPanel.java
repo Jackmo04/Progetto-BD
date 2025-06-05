@@ -54,7 +54,7 @@ public class ShipSelectionPanel extends JPanel {
         this.add(new JScrollPane(shipTable));
         this.add(Box.createVerticalStrut(20));
         
-        final JButton manageShipButton = new JButton("Gestisci nave selzionata");
+        final JButton manageShipButton = new JButton("Gestisci nave selezionata");
         manageShipButton.setEnabled(false);
         manageShipButton.setFont(new Font(FONT, Font.BOLD, 16));
         manageShipButton.setToolTipText("Seleziona una nave per gestirla");
