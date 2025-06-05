@@ -1,20 +1,26 @@
 package porto.model;
 
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
 import porto.data.api.Ideology;
 import porto.data.api.Person;
-import porto.data.api.Planet;
-import porto.data.api.Starship;
 import porto.data.api.PersonRole;
+import porto.data.api.Planet;
+import porto.data.api.Request;
+import porto.data.api.RequestType;
+import porto.data.api.Starship;
+import porto.data.api.dao.ParkingSpaceDAO;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.PlanetDAO;
 import porto.data.api.dao.RequestDAO;
 import porto.data.api.dao.StarshipDAO;
+import porto.data.dao.ParkingSpaceDAOImpl;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.dao.PlanetDAOImpl;
 import porto.data.dao.RequestDAOImpl;
@@ -27,6 +33,7 @@ public final class Model {
     private final StarshipDAO starshipDAO;
     private final RequestDAO requestDAO;
     private final PlanetDAO planetDAO;
+    private final ParkingSpaceDAO parkinSpaceDAO;
     private Optional<Person> loggedUser = Optional.empty();
     private Optional<Starship> selectedStarship = Optional.empty();
 
@@ -34,6 +41,7 @@ public final class Model {
         Objects.requireNonNull(connection, "Model created with null connection");
         this.personDAO = new PersonDAOImpl(connection);
         this.starshipDAO = new StarshipDAOImpl(connection);
+        this.parkinSpaceDAO = new ParkingSpaceDAOImpl(connection);
         this.requestDAO = new RequestDAOImpl(connection);
         this.planetDAO = new PlanetDAOImpl(connection);
     }
@@ -138,4 +146,47 @@ public final class Model {
         return this.selectedStarship.orElseThrow(() -> new IllegalStateException("No starship is selected"));
     }
 
+    // ADMIN OPERATION TO USE
+
+    public List<Request> getAllRequestsPendent() {
+        return requestDAO.pendingRequests();
+    }
+
+    public void judgeRequest(int requestCod, boolean judgment, Optional<Integer> parking) {
+        var request = requestDAO.getRequestByCodRequest(requestCod).get();
+
+        try {
+
+            if (loggedUser.isPresent()) {
+                var adminCUI = loggedUser.get().CUI();
+                if (judgment && request.type().equals(RequestType.ENTRY)) {
+                    requestDAO.acceptEnterRequest(request.codRichiesta(), adminCUI, parking.get());
+                } else if (judgment && request.type().equals(RequestType.EXIT)) {
+                    requestDAO.acceptExitRequest(request.codRichiesta(), adminCUI);
+                } else {
+                    requestDAO.rejectRequest(request.codRichiesta(), adminCUI);
+                }
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Not all Argumente are Passed for operation", e);
+        }
+    }
+
+    public void arrestPerson(String CUI) {
+        personDAO.arrestPerson(CUI);
+    }
+
+    public int numberOfPeople() {
+        return parkinSpaceDAO.getNumberOfPeopleOnStation();
+    }
+
+    public String acceptedRejectedPercentage(Timestamp start, Timestamp to) {
+        var percetage = requestDAO.acceptedAndRejectedPercentages(start, to);
+        return "Dal:" + start.toString() + " Al:" + to.toString() + " Accettate:" + percetage.getLeft() + " Rifiutate"
+                + percetage.getRight();
+    }
+
+    public Map<Starship, Integer> best50Starships() {
+        return this.starshipDAO.get50TransportedMost();
+    }
 }
