@@ -97,7 +97,12 @@ public class LoginScene extends JPanel {
                 this.errorLabel.setVisible(true);
                 return;
             }
-            onLoginButtonClick(username, password);
+            var isSuccessful = onLoginButtonClick(username, password);
+            if (isSuccessful) {
+                this.errorLabel.setVisible(false);
+                usernameInput.setText("");
+                passwordInput.setText("");
+            }
         });
         mainPanel.add(loginButton);
 
@@ -125,8 +130,8 @@ public class LoginScene extends JPanel {
         
     }
 
-    public void onLoginButtonClick(String username, String password) {
-        this.view.getController().userClickedLogin(username, password);
+    public boolean onLoginButtonClick(String username, String password) {
+        return this.view.getController().userClickedLogin(username, password);
     }
 
     /**

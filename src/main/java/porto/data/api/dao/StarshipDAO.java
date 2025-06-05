@@ -81,4 +81,6 @@ public interface StarshipDAO {
      * @return the number of starships cleared from the cache
      */
     int clearCache();
+
+    Set<Starship> getAll();
 }

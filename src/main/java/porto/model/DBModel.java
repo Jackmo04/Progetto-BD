@@ -1,6 +1,7 @@
 package porto.model;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -8,6 +9,7 @@ import java.util.Set;
 import porto.data.api.Ideology;
 import porto.data.api.Person;
 import porto.data.api.Planet;
+import porto.data.api.Starship;
 import porto.data.api.PersonRole;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.PlanetDAO;
@@ -91,6 +93,39 @@ public final class DBModel implements Model {
         } catch (DAOException e) {
             throw new RuntimeException("Error registering user", e);
         }
+    }
+
+    @Override
+    public Set<Starship> getAvailableShips() {
+        if (this.loggedUser.isEmpty()) {
+            throw new IllegalStateException("No user is logged in");
+        }
+        var user = this.loggedUser.get();
+        switch (user.role()) {
+            case CREW_MEMBER:
+            case CAPTAIN:
+                try {
+                    return starshipDAO.ofPerson(user.CUI());
+                } catch (DAOException e) {
+                    throw new RuntimeException("Error retrieving ships for crew/captain", e);
+                }
+            case ADMIN:
+                try {
+                    return starshipDAO.getAll();
+                } catch (DAOException e) {
+                    throw new RuntimeException("Error retrieving all ships for admin", e);
+                }
+            default:
+                throw new IllegalStateException("Unknown role for logged user: " + loggedUser.get().role());
+        }
+    }
+
+    @Override
+    public void logout() {
+        if (this.loggedUser.isEmpty()) {
+            throw new IllegalStateException("No user is logged in to logout");
+        }
+        this.loggedUser = Optional.empty();
     }
 
 }

@@ -197,4 +197,33 @@ public class StarshipDAOImpl implements StarshipDAO {
         return size;
     }
 
+    @Override
+    public Set<Starship> getAll() {
+        try (
+            var statement = DAOUtils.prepare(connection, Queries.ALL_STARSHIPS);
+            var resultSet = statement.executeQuery();
+        ) {
+            Set<Starship> ships = new HashSet<>();
+            while (resultSet.next()) {
+                var plateNumber = resultSet.getString("Targa");
+                if (cache.stream().anyMatch(ship -> ship.plateNumber().equals(plateNumber))) {
+                    ships.add(cache.stream().filter(ship -> ship.plateNumber().equals(plateNumber)).findFirst().orElseThrow());
+                } else {
+                    var name = resultSet.getString("Nome");
+                    var modelCode = resultSet.getString("CodModello");
+                    var model = new ShipModelDAOImpl(connection).getFromCode(modelCode).orElseThrow();
+                    var capitanCUI = resultSet.getString("CUIcapitano");
+                    var capitan = new PersonDAOImpl(connection).getFromCUI(capitanCUI).orElseThrow();
+                    
+                    var ship = new StarshipImpl(plateNumber, name, model, capitan);
+                    cache.add(ship);
+                    ships.add(ship);
+                }
+            }
+            return ships;
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
+
 }

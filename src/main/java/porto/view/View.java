@@ -83,12 +83,13 @@ public final class View {
 
     public void initialScene() {
         this.mainPanel.add(new RegisterScene(this), SN_REGISTER);
+        goToLoginScene();
+    }
+
+    public void userLoggedIn() {
         this.mainPanel.add(new CrewScene(this), SN_CREW);
         this.mainPanel.add(new CaptainScene(this), SN_CAPTAIN);
         this.mainPanel.add(new AdminScene(this), SN_ADMIN);
-
-        // Show the login scene by default
-        goToLoginScene();
     }
 
     public void goToLoginScene() {

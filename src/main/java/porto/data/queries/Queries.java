@@ -270,4 +270,9 @@ public final class Queries {
                 FROM persone p
                 WHERE p.Username = ?;
             """;
+
+    public static final String ALL_STARSHIPS = """
+                SELECT *
+                FROM astronavi;
+            """;
 }

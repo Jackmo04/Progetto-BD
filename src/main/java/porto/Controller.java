@@ -1,6 +1,7 @@
 package porto;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import porto.data.api.Person;
 import porto.data.api.PersonRole;
 import porto.data.api.Planet;
+import porto.data.api.Starship;
 import porto.data.utils.DAOException;
 import porto.model.Model;
 import porto.view.View;
@@ -30,12 +32,13 @@ public final class Controller {
         this.view.initialScene();
     }
 
-    public void userClickedLogin(String CuiUsername, String password) {
+    public boolean userClickedLogin(String CuiUsername, String password) {
         try {
             if (this.model.login(CuiUsername, password)) {
                 var loggedUser = this.model.getLoggedUser();
                 LOGGER.info("User {} logged in successfully", loggedUser.username());
                 loginSuccess(loggedUser);
+                return true;
             } else {
                 LOGGER.warn("Login failed for user {}", CuiUsername);
                 loginFailed("CUI/Username o password errati!");
@@ -43,22 +46,25 @@ public final class Controller {
         } catch (DAOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void userClickedRegister(String cui, String username, String password, String name, String surname,
+    public boolean userClickedRegister(String cui, String username, String password, String name, String surname,
             String race, String dob, boolean wanted, String ideology, boolean isCaptain, String planet) {
         if (this.model.isUserRegistered(cui, username)) {
             LOGGER.warn("User {} with CUI {} is already registered", username, cui);
             this.view.displayRegisterError("CUI o Username già registrati!");
-            return;
+            return false;
         }
         try {
             this.model.registerUser(cui, username, password, name, surname, race, dob, wanted, ideology, isCaptain, planet);
             LOGGER.info("User {} registered successfully", username);
+            return true;
         } catch (DAOException e) {
             LOGGER.error("Error during user registration", e);
             this.view.displayRegisterError("Errore durante la registrazione!");
         }
+        return false;
     }
 
     public void userClickedRegisterOnLogin() {
@@ -83,6 +89,7 @@ public final class Controller {
     }
 
     private void loginSuccess(Person loggedUser) {
+        this.view.userLoggedIn();
         switch (loggedUser.role()) {
             case PersonRole.ADMIN:
                 this.view.goToAdminScene();
@@ -103,6 +110,23 @@ public final class Controller {
 
     private void loginFailed(String message) {
         this.view.displayLoginError("CUI/Username o password errati!");
+    }
+
+    public List<Starship> getAvailableShips() {
+        try {
+            return this.model.getAvailableShips().stream()
+                .sorted(Comparator.comparing(Starship::plateNumber))
+                .toList();
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving available ships", e);
+            return List.of();
+        }
+    }
+
+    public void logout() {
+        this.model.logout();
+        this.view.goToLoginScene();
+        LOGGER.info("User logged out successfully");
     }
 
 }

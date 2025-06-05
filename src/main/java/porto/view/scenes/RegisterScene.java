@@ -211,9 +211,13 @@ public class RegisterScene extends JPanel {
                 displayRegisterError("Formato data di nascita non valido! Usa gg/mm/aaaa");
                 return;
             }
-            this.view.getController().userClickedRegister(
+            var success = this.view.getController().userClickedRegister(
                 cui, username, password, name, surname, race, dob, wanted, ideology, isCaptain, planet
             );
+            if (success) {
+                clearRegistrationForm(cuiInput, usernameInput, passwordInput, nameInput, surnameInput, raceInput, dobInput,
+                        wantedCBPanel, ideologyInput, captainCBPanel, planetInput);
+            }
         });
         mainPanel.add(Box.createVerticalStrut(20));
         mainPanel.add(registerButton);
@@ -227,11 +231,31 @@ public class RegisterScene extends JPanel {
         backButton.setFont(new Font(FONT, Font.BOLD, 20));
         backButton.setMaximumSize(new Dimension(300, 40));
         backButton.addActionListener(e -> {
-            this.errorLabel.setVisible(false);
+            clearRegistrationForm(cuiInput, usernameInput, passwordInput, nameInput, surnameInput, raceInput, dobInput,
+                        wantedCBPanel, ideologyInput, captainCBPanel, planetInput);
             this.view.goToLoginScene();
         });
         this.add(backButton, BorderLayout.SOUTH);
 
+    }
+
+    private void clearRegistrationForm(final JTextField cuiInput, final JTextField usernameInput,
+            final JPasswordField passwordInput, final JTextField nameInput, final JTextField surnameInput,
+            final JTextField raceInput, final JTextField dobInput, final CustomComponents.CheckBoxPanel wantedCBPanel,
+            final JComboBox<String> ideologyInput, final CustomComponents.CheckBoxPanel captainCBPanel,
+            final JComboBox<String> planetInput) {
+        this.errorLabel.setVisible(false);
+        cuiInput.setText("");
+        usernameInput.setText("");
+        passwordInput.setText("");
+        nameInput.setText("");
+        surnameInput.setText("");
+        raceInput.setText("");
+        dobInput.setText("");
+        wantedCBPanel.checkBox().setSelected(false);
+        ideologyInput.setSelectedIndex(0);
+        captainCBPanel.checkBox().setSelected(false);
+        planetInput.setSelectedIndex(0);
     }
 
     public void displayRegisterError(String string) {
