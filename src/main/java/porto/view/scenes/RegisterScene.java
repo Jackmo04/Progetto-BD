@@ -122,7 +122,7 @@ public class RegisterScene extends JPanel {
         final JTextField dobInput = cf.createFieldInput(10, focusListener);
         dobInput.setToolTipText("Formato: gg/mm/aaaa");
         mainPanel.add(dobInput);
-        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(Box.createVerticalStrut(20));
 
         // Wanted checkbox
         final CustomComponents.CheckBoxPanel wantedCBPanel = cf.createCheckBoxPanel("Ricercato*");
@@ -135,10 +135,10 @@ public class RegisterScene extends JPanel {
         final String[] ideologies = {"Neutrale", "Imperiale", "Ribelle"};
         final JComboBox<String> ideologyInput = cf.createSelectionBox(ideologies);
         mainPanel.add(ideologyInput);
-        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(Box.createVerticalStrut(20));
         
         // Role selection
-        final CustomComponents.CheckBoxPanel captainCBPanel = cf.createCheckBoxPanel("Sei un capitano?*");
+        final CustomComponents.CheckBoxPanel captainCBPanel = cf.createCheckBoxPanel("Capitano*");
         mainPanel.add(captainCBPanel);
         mainPanel.add(Box.createVerticalStrut(10));
 
@@ -176,33 +176,33 @@ public class RegisterScene extends JPanel {
                 this.errorLabel.setVisible(true);
                 return;
             }
-            if (cui.length() != 13) {
-                this.errorLabel.setText("Il CUI deve essere di 13 caratteri!");
+            if (cui.length() != cuiInput.getColumns()) {
+                this.errorLabel.setText("CUI deve essere di " + cuiInput.getColumns() + " caratteri!");
                 this.errorLabel.setVisible(true);
                 return;
             }
-            if (username.length() > 20) {
-                this.errorLabel.setText("L'username non può superare i 20 caratteri!");
+            if (username.length() > usernameInput.getColumns()) {
+                this.errorLabel.setText("Username non può superare i " + usernameInput.getColumns() + " caratteri!");
                 this.errorLabel.setVisible(true);
                 return;
             }
-            if (password.length() > 20) {
-                this.errorLabel.setText("La password non può superare i 20 caratteri!");
+            if (password.length() > passwordInput.getColumns()) {
+                this.errorLabel.setText("Password non può superare i " + passwordInput.getColumns() + " caratteri!");
                 this.errorLabel.setVisible(true);
                 return;
             }
-            if (name.length() > 25) {
-                this.errorLabel.setText("Il nome non può superare i 25 caratteri!");
+            if (name.length() > nameInput.getColumns()) {
+                this.errorLabel.setText("Nome non può superare i " + nameInput.getColumns() + " caratteri!");
                 this.errorLabel.setVisible(true);
                 return;
             }
-            if (surname.length() > 25) {
-                this.errorLabel.setText("Il cognome non può superare i 25 caratteri!");
+            if (surname.length() > surnameInput.getColumns()) {
+                this.errorLabel.setText("Cognome non può superare i " + surnameInput.getColumns() + " caratteri!");
                 this.errorLabel.setVisible(true);
                 return;
             }
-            if (race.length() > 20) {
-                this.errorLabel.setText("La razza non può superare i 20 caratteri!");
+            if (race.length() > raceInput.getColumns()) {
+                this.errorLabel.setText("Razza non può superare i " + raceInput.getColumns() + " caratteri!");
                 this.errorLabel.setVisible(true);
                 return;
             }
@@ -224,13 +224,22 @@ public class RegisterScene extends JPanel {
                 cui, username, password, name, surname, race, dob, wanted, ideology, isCaptain, planet
             );
         });
+        mainPanel.add(Box.createVerticalStrut(20));
         mainPanel.add(registerButton);
 
         mainPanel.add(Box.createVerticalStrut(20));
 
         mainPanel.add(this.errorLabel);
 
-        mainPanel.add(Box.createVerticalStrut(30));
+        final JButton backButton = new JButton("Torna al login");
+        backButton.setAlignmentX(CENTER_ALIGNMENT);
+        backButton.setFont(new Font(FONT, Font.BOLD, 20));
+        backButton.setMaximumSize(new Dimension(300, 40));
+        backButton.addActionListener(e -> {
+            this.errorLabel.setVisible(false);
+            this.view.goToLoginScene();
+        });
+        this.add(backButton, BorderLayout.SOUTH);
 
     }
 

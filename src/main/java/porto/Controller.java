@@ -105,6 +105,4 @@ public final class Controller {
         this.view.displayLoginError("CUI/Username o password errati!");
     }
 
-    
-
 }
