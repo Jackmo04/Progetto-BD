@@ -1,7 +1,9 @@
 package porto.view.scenes;
 
-import javax.swing.JPanel;
+import java.awt.BorderLayout;
 
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 import porto.view.View;
 
 public class AdminScene extends JPanel {
@@ -11,7 +13,10 @@ public class AdminScene extends JPanel {
     public AdminScene(View view) {
         this.view = view;
         
-        // TODO Initialize the Admin scene components here
+        this.setLayout(new BorderLayout());
+        JPanel boxButtonPannel = new JPanel();
+        boxButtonPannel.setLayout(new BoxLayout(boxButtonPannel, BoxLayout.Y_AXIS));
+
     }
 
     // TODO Implement the Admin scene

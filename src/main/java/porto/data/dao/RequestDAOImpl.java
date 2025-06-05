@@ -57,8 +57,8 @@ public class RequestDAOImpl implements RequestDAO {
                 var codRequestDB = resultSet.getInt("CodRichiesta");
                 if (cache.stream().anyMatch(r -> r.codRichiesta() == codRequestDB)) {
                     return cache.stream()
-                        .filter(r -> r.codRichiesta() == codRequestDB)
-                        .findFirst();
+                            .filter(r -> r.codRichiesta() == codRequestDB)
+                            .findFirst();
                 }
                 var type = RequestType.fromString(resultSet.getString("EntrataUscita"));
                 var dateTime = resultSet.getTimestamp("DataOra");
@@ -222,15 +222,16 @@ public class RequestDAOImpl implements RequestDAO {
      * {@inheritDoc}
      */
     @Override
-    public void acceptEnterRequest(int codRequest, String CUIAdmin) throws DAOException {
+    public void acceptEnterRequest(int codRequest, String CUIAdmin, Integer codArea) throws DAOException {
         var request = getRequestByCodRequest(codRequest).get();
-        var parking = new ParkingSpaceDAOImpl(connection).getAllFree().stream().toList().getFirst();
+        var parking = new ParkingSpaceDAOImpl(connection).getAllFree().stream()
+                .filter(t -> t.parkingArea().codArea() == codArea).toList().getFirst();
 
         try {
             acceptRequest(request.codRichiesta(), CUIAdmin);
             try (
-                var statement2 = DAOUtils.prepare(connection, Queries.ASSIGN_PARKING,
-                        parking.parkingArea().codArea(), parking.spaceNumber(), request.codRichiesta());) {
+                    var statement2 = DAOUtils.prepare(connection, Queries.ASSIGN_PARKING,
+                            parking.parkingArea().codArea(), parking.spaceNumber(), request.codRichiesta());) {
                 statement2.executeUpdate();
             }
         } catch (Exception e) {
@@ -248,7 +249,7 @@ public class RequestDAOImpl implements RequestDAO {
         try {
             acceptRequest(request.codRichiesta(), CUIAdmin);
             try (
-                var statement2 = DAOUtils.prepare(connection, Queries.RELEASES_PARKING, request.codRichiesta());) {
+                    var statement2 = DAOUtils.prepare(connection, Queries.RELEASES_PARKING, request.codRichiesta());) {
                 statement2.executeUpdate();
             }
         } catch (Exception e) {
@@ -360,13 +361,12 @@ public class RequestDAOImpl implements RequestDAO {
      */
     @Override
     public ImmutablePair<Double, Double> acceptedAndRejectedPercentages(
-        Timestamp startDate,
-        Timestamp endDate
-    ) throws DAOException {
+            Timestamp startDate,
+            Timestamp endDate) throws DAOException {
         try (
-            var statement = DAOUtils.prepare(connection, Queries.ACCEPTED_AND_REJECTED_PERCENTAGES, startDate, endDate);
-            var resultSet = statement.executeQuery();
-        ) {
+                var statement = DAOUtils.prepare(connection, Queries.ACCEPTED_AND_REJECTED_PERCENTAGES, startDate,
+                        endDate);
+                var resultSet = statement.executeQuery();) {
             if (resultSet.next()) {
                 var accepted = resultSet.getDouble("Accettate");
                 var rejected = resultSet.getDouble("Rifiutate");

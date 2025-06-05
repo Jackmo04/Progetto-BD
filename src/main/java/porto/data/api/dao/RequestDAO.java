@@ -140,7 +140,7 @@ public interface RequestDAO {
      * @param CUIAdmin the CUI of the admin processing the request
      * @throws DAOException
      */
-    public void acceptEnterRequest(int codRequest, String CUIAdmin) throws DAOException;
+    public void acceptEnterRequest(int codRequest, String CUIAdmin , Integer codArea) throws DAOException;
 
     /**
      * Accepts a request by its unique code and the CUI of the admin processing it.

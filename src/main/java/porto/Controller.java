@@ -1,11 +1,12 @@
 package porto;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 
@@ -62,7 +63,8 @@ public final class Controller {
             return false;
         }
         try {
-            this.model.registerUser(cui, username, password, name, surname, race, dob, wanted, ideology, isCaptain, planet);
+            this.model.registerUser(cui, username, password, name, surname, race, dob, wanted, ideology, isCaptain,
+                    planet);
             LOGGER.info("User {} registered successfully", username);
             return true;
         } catch (DAOException e) {
@@ -87,10 +89,10 @@ public final class Controller {
     public String[] getPlanetChoices() {
         try {
             return this.model.getAllPlanets()
-                .stream()
-                .map(Planet::name)
-                .sorted(Comparator.naturalOrder())
-                .toArray(String[]::new);
+                    .stream()
+                    .map(Planet::name)
+                    .sorted(Comparator.naturalOrder())
+                    .toArray(String[]::new);
         } catch (DAOException e) {
             LOGGER.error("Error retrieving planets names", e);
             return new String[0];
@@ -218,6 +220,39 @@ public final class Controller {
             throw new RuntimeException("Error retrieving request managed by", e);
         }
     }
+    
+    public List<String> viewAllPendentRequest() {
+        var pendentRequest = this.model.getAllRequestsPendent();
+        try {
+            return pendentRequest.stream().map(
+                    t -> "Numero:" + t.codRichiesta() + "Descrizione:" + t.description() + "Price:" + t.totalPrice())
+                    .toList();
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving pendent requests", e);
+            return new ArrayList<>();
+        }
+    }
+
+    public void judgePendentRequest (int requestCod , boolean judge , Optional<Integer> parking){
+        this.model.judgeRequest(requestCod ,judge , parking );
+    }
+
+    public void arrestPerson ( String CUI){
+        this.model.arrestPerson(CUI);
+    }
+
+    public Integer seeNumberPeople (){
+        return this.model.numberOfPeople();
+    };
+
+    public String acceptedRejectedPercentage(Timestamp start , Timestamp to){
+        return this.model.acceptedRejectedPercentage(start, to);
+    }
+
+    public Map<Starship , Integer> best50TrasporteStarships (){
+        return this.model.best50Starships();
+    }
+
 }
 
 
