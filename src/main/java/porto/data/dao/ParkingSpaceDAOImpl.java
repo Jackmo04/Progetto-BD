@@ -146,4 +146,10 @@ public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
             throw new DAOException(e);
         }
     }
+
+    @Override
+    public List<Person> getAllPeopleIn() throws DAOException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAllPeopleIn'");
+    }
 }
