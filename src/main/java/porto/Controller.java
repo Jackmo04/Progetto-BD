@@ -419,8 +419,10 @@ public final class Controller {
     }
 
     public boolean hasPendingRequest() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hasPendingRequest'");
+        return this.getAllPendentRequest().stream()
+            .map(Request::starship)
+            .map(Starship::plateNumber)
+            .anyMatch(plate -> plate.equals(this.model.getSelectedStarship().plateNumber()));
     }
 
     public List<Starship> getStarshipOnBoard() {

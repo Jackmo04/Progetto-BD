@@ -129,11 +129,17 @@ public class CaptainScene extends JPanel {
         mainPanel.add(requestsPanel);
 
         // C5 - Request station access
-        final JButton requestAccessButton = new JButton("Richiedi accesso");
+        final JButton requestAccessButton = new JButton("Richiedi atterraggio");
         requestAccessButton.setFont(new Font(FONT, Font.BOLD, 16));
         requestAccessButton.setAlignmentX(CENTER_ALIGNMENT);
         requestAccessButton.addActionListener(e -> {
-            if (this.view.getController().hasPendingRequest()) {
+            if (this.view.getController().getParkingOfSelectedStarship().isPresent()) {
+                JOptionPane.showMessageDialog(this, 
+                    "La nave è già sulla stazione!",
+                    "Richiesta di atterraggio sulla stazione",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            } else if (this.view.getController().hasPendingRequest()) {
                 JOptionPane.showMessageDialog(this, 
                     "La nave ha già effettuato una richiesta. Attendere la risposta della stazione.",
                     "Richiesta di accesso alla stazione",
@@ -146,11 +152,17 @@ public class CaptainScene extends JPanel {
         requestsPanel.add(requestAccessButton);
 
         // C6 - Request station departure
-        final JButton requestDepartureButton = new JButton("Richiedi partenza");
+        final JButton requestDepartureButton = new JButton("Richiedi decollo");
         requestDepartureButton.setFont(new Font(FONT, Font.BOLD, 16));
         requestDepartureButton.setAlignmentX(CENTER_ALIGNMENT);
         requestDepartureButton.addActionListener(e -> {
-            if (this.view.getController().hasPendingRequest()) {
+            if (this.view.getController().getParkingOfSelectedStarship().isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "La nave non è sulla stazione!",
+                    "Richiesta di decoolo dalla stazione",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            } else if (this.view.getController().hasPendingRequest()) {
                 JOptionPane.showMessageDialog(this, 
                     "La nave ha già effettuato una richiesta. Attendere la risposta della stazione.",
                     "Richiesta di partenza dalla stazione",
