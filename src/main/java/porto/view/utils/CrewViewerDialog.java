@@ -17,13 +17,13 @@ import javax.swing.table.DefaultTableModel;
 import porto.data.api.Person;
 import porto.view.View;
 
-public class CrewRemoverDialog extends JDialog {
+public class CrewViewerDialog extends JDialog {
 
     private static final String FONT = "Roboto";
 
     private final View view;
 
-    public CrewRemoverDialog(View view, String title) {
+    public CrewViewerDialog(View view, String title, boolean removeMode) {
         super(view.getMainFrame(), title, ModalityType.APPLICATION_MODAL);
         this.view = view;
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -34,7 +34,9 @@ public class CrewRemoverDialog extends JDialog {
         
         final JPanel crewPanel = new JPanel();
         crewPanel.setLayout(new BoxLayout(crewPanel, BoxLayout.Y_AXIS));
-        crewPanel.setBorder(BorderFactory.createTitledBorder("Seleziona un membro dell'equipaggio da rimuovere"));
+        crewPanel.setBorder(BorderFactory.createTitledBorder(removeMode 
+            ? "Seleziona un membro dell'equipaggio da rimuovere" 
+            : "Equipaggio della nave"));
 
         final List<Person> crew = view.getController().getCrewMembersOfSelectedShip();
         final JTable crewTable = new SelectionTable(
@@ -71,28 +73,48 @@ public class CrewRemoverDialog extends JDialog {
         crewPanel.add(crewTable);
         crewPanel.add(Box.createVerticalStrut(20));
 
-        final JButton removeButton = new JButton("Rimuovi membro");
-        removeButton.setEnabled(false);
-        removeButton.setFont(new Font(FONT, Font.BOLD, 16));
-        removeButton.setToolTipText("Seleziona un membro dell'equipaggio per rimuoverlo");
-        removeButton.setAlignmentX(CENTER_ALIGNMENT);
-        removeButton.addActionListener(e -> {
-            int selectedRow = crewTable.getSelectedRow();
-            if (selectedRow >= 0) {
-                String cui = (String) crewTable.getValueAt(selectedRow, 0);
-                this.view.getController().removeCrewMemberFromSelectedShip(cui);
-                this.refreshCrew(crewTable);
-            } else {
-                throw new IllegalStateException("No crew member selected for management");
-            }
-        });
-        crewTable.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                removeButton.setEnabled(crewTable.getSelectedRow() >= 0);
-            }
-        });
-        removeButton.setAlignmentX(CENTER_ALIGNMENT);
-        crewPanel.add(removeButton);
+        final JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        buttonPanel.setAlignmentX(CENTER_ALIGNMENT);
+
+        final JButton refreshButton = new JButton("Aggiorna");
+        refreshButton.setFont(new Font(FONT, Font.BOLD, 16));
+        refreshButton.setToolTipText("Aggiorna la lista dei membri dell'equipaggio");
+        refreshButton.setAlignmentX(CENTER_ALIGNMENT);
+        refreshButton.addActionListener(e -> this.refreshCrew(crewTable));
+        buttonPanel.add(refreshButton);
+
+        if (removeMode) {
+            final JButton removeButton = new JButton("Rimuovi membro");
+            removeButton.setEnabled(false);
+            removeButton.setFont(new Font(FONT, Font.BOLD, 16));
+            removeButton.setToolTipText("Seleziona un membro dell'equipaggio per rimuoverlo");
+            removeButton.setAlignmentX(CENTER_ALIGNMENT);
+            removeButton.addActionListener(e -> {
+                int selectedRow = crewTable.getSelectedRow();
+                if (selectedRow >= 0) {
+                    String cui = (String) crewTable.getValueAt(selectedRow, 0);
+                    this.view.getController().removeCrewMemberFromSelectedShip(cui);
+                    this.refreshCrew(crewTable);
+                } else {
+                    throw new IllegalStateException("No crew member selected for management");
+                }
+            });
+            crewTable.getSelectionModel().addListSelectionListener(e -> {
+                if (!e.getValueIsAdjusting()) {
+                    removeButton.setEnabled(crewTable.getSelectedRow() >= 0);
+                }
+            });
+            removeButton.setAlignmentX(CENTER_ALIGNMENT);
+            buttonPanel.add(Box.createHorizontalGlue());
+            buttonPanel.add(removeButton);
+        } else {
+            crewTable.setRowSelectionAllowed(false);
+            crewTable.setColumnSelectionAllowed(false);
+            crewTable.setEnabled(false);
+        }
+
+        crewPanel.add(buttonPanel);
         crewPanel.add(Box.createVerticalStrut(20));
 
         this.add(crewPanel);
@@ -121,8 +143,22 @@ public class CrewRemoverDialog extends JDialog {
                     "CUI", "Nome", "Cognome", "Data di Nascita", "Razza", 
                     "Pianeta di Nascita", "Ideologia", "Ricercato", "Arrestato"
                 }
-            )
+            ) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            }
         );
+        table.getColumnModel().getColumn(0).setPreferredWidth(170);
+        table.getColumnModel().getColumn(1).setPreferredWidth(150);
+        table.getColumnModel().getColumn(2).setPreferredWidth(150);
+        table.getColumnModel().getColumn(3).setPreferredWidth(120);
+        table.getColumnModel().getColumn(4).setPreferredWidth(100);
+        table.getColumnModel().getColumn(5).setPreferredWidth(120);
+        table.getColumnModel().getColumn(6).setPreferredWidth(100);
+        table.getColumnModel().getColumn(7).setPreferredWidth(60);
+        table.getColumnModel().getColumn(8).setPreferredWidth(60);
     }
 
 }

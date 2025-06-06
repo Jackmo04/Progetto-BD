@@ -120,7 +120,12 @@ public class ShipSelectionPanel extends JPanel {
                     })
                     .toArray(Object[][]::new),
                 new String[]{"Targa", "Nome", "Modello", "Capitano"}
-            )
+            ) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            }
         );
     }
 

@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 import porto.data.api.ParkingSpace;
 import porto.view.View;
 import porto.view.utils.CrewAddDialog;
-import porto.view.utils.CrewRemoverDialog;
+import porto.view.utils.CrewViewerDialog;
 import porto.view.utils.RequestViewerDialog;
 
 public class CaptainScene extends JPanel {
@@ -106,14 +106,29 @@ public class CaptainScene extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE
                 );
             } else {
-                new CrewRemoverDialog(view, "Rimozione membri equipaggio").setVisible(true);
+                new CrewViewerDialog(view, "Rimozione membri equipaggio", true).setVisible(true);
             }
         });
         mainPanel.add(crewRemoveButton);
         mainPanel.add(Box.createVerticalStrut(20));
 
         // C4 - View crew members
-        // TODO
+        final JButton crewViewButton = new JButton("Visualizza membri dell'equipaggio");
+        crewViewButton.setFont(new Font(FONT, Font.BOLD, 16));
+        crewViewButton.setAlignmentX(CENTER_ALIGNMENT);
+        crewViewButton.addActionListener(e -> {
+            if (this.view.getController().getCrewMembersOfSelectedShip().isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "L'equipaggio della nave è vuoto",
+                    "Visualizzazione membri equipaggio",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                new CrewViewerDialog(view, "Visualizzazione membri equipaggio", false).setVisible(true);
+            }
+        });
+        mainPanel.add(crewViewButton);
+        mainPanel.add(Box.createVerticalStrut(20));
 
         // C5 - Request station access
         // TODO
