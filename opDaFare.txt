@@ -20,7 +20,7 @@
 	
 # Captain
 [F]{MO} S3 -- Visualizzare le astronavi a cui appartiene l'utente
-[M]{MO} C1 -- Registrare la propria nave all'applicazione.
+[F]{MO} C1 -- Registrare la propria nave all'applicazione.
 
 ## Selezionata nave:
 	[F]{MO} S4 -- Visualizzare il posteggio della nave
