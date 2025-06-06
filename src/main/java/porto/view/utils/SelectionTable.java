@@ -5,6 +5,7 @@ import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class SelectionTable extends JTable {
 
@@ -23,5 +24,10 @@ public class SelectionTable extends JTable {
         this.setRowSelectionAllowed(true);
         this.setColumnSelectionAllowed(false);
         this.setEnabled(true);
+    }
+
+    @Override
+    public void setModel(TableModel model) {
+        super.setModel(model);
     }
 }

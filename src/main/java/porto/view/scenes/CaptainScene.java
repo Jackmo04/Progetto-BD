@@ -82,9 +82,6 @@ public class CaptainScene extends JPanel {
         mainPanel.add(lastRequestButton);
         mainPanel.add(Box.createVerticalStrut(20));
 
-        // C1 - Register a new ship
-        // TODO
-
         // C2 - Add/Remove a crew member
         // TODO
 

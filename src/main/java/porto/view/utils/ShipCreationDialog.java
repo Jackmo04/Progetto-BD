@@ -121,23 +121,23 @@ public class ShipCreationDialog extends JDialog {
                 return;
             }
 
+            if(view.getController().isStarshipRegistered(plateNumber)) {
+                displayShipRegisterError("Una nave con questa targa è già registrata.");
+                return;
+            }
             if (view.getController().registerStarshipToCurrentUser(plateNumber, shipName, shipModelCode)) {
                 clearForm(plateInput, nameInput, modelInput);
                 this.dispose();
             } else {
-                displayShipRegisterError("Errore durante la registrazione dell'astronave.");
+                displayShipRegisterError("Errore durante la registrazione della nave.");
             }
         });
-
-
-
-
-
-
-
-
+        contentPanel.add(registerButton);
+        contentPanel.add(Box.createVerticalStrut(20));
 
         contentPanel.add(this.errorLabel);
+
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
 
     }
 

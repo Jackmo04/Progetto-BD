@@ -284,6 +284,11 @@ public final class Controller {
         }
     }
 
+    public boolean isStarshipRegistered(String plateNumber) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        return this.model.isStarshipRegistered(plateNumber);
+    }
+
     public boolean registerStarshipToCurrentUser(String plateNumber, String shipName, String shipModelCode) {
         Objects.requireNonNull(plateNumber, "Plate number cannot be null");
         Objects.requireNonNull(shipName, "Ship name cannot be null");
@@ -293,7 +298,6 @@ public final class Controller {
         }
         if (this.model.isStarshipRegistered(plateNumber)) {
             LOGGER.warn("Starship with plate number {} is already registered", plateNumber);
-            this.view.displayRegisterError("Targa già registrata!");
             return false;
         }
 
@@ -303,7 +307,6 @@ public final class Controller {
             return true;
         } catch (DAOException e) {
             LOGGER.error("Error registering starship with plate number: {}", plateNumber, e);
-            this.view.displayRegisterError("Errore durante la registrazione dell'astronave!");
             return false;
         }
     }
