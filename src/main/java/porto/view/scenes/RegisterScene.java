@@ -33,25 +33,25 @@ public class RegisterScene extends JPanel {
     private static final JComponentsFactory cf = new JComponentsFactory();
     
     private final View view;
-    private final JLabel errorLabel;
+    private final JLabel infoLabel;
     private final FocusAdapter focusListener;
 
     public RegisterScene(View view) {
         this.view = view;
         this.setLayout(new BorderLayout());
 
-        // Error label
-        this.errorLabel = new JLabel("", SwingConstants.CENTER);
-        this.errorLabel.setFont(new Font(FONT, Font.PLAIN, 16));
-        this.errorLabel.setAlignmentX(CENTER_ALIGNMENT);
-        this.errorLabel.setForeground(Color.RED);
-        this.errorLabel.setVisible(false);
+        // Info label
+        this.infoLabel = new JLabel("", SwingConstants.CENTER);
+        this.infoLabel.setFont(new Font(FONT, Font.PLAIN, 16));
+        this.infoLabel.setAlignmentX(CENTER_ALIGNMENT);
+        this.infoLabel.setForeground(Color.RED);
+        this.infoLabel.setVisible(false);
 
         // Focus listener to hide error label when input fields gain focus
         this.focusListener = new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                SwingUtilities.invokeLater(() -> errorLabel.setVisible(false));
+                SwingUtilities.invokeLater(() -> infoLabel.setVisible(false));
             }
         };
         
@@ -156,7 +156,7 @@ public class RegisterScene extends JPanel {
         registerButton.setFont(new Font(FONT, Font.BOLD, 20));
         registerButton.setMaximumSize(new Dimension(300, 40));
         registerButton.addActionListener(e -> {
-            this.errorLabel.setVisible(false);
+            this.infoLabel.setVisible(false);
             String cui = cuiInput.getText().trim();
             String username = usernameInput.getText().trim();
             String password = new String(passwordInput.getPassword()).trim();
@@ -217,6 +217,7 @@ public class RegisterScene extends JPanel {
             if (success) {
                 clearRegistrationForm(cuiInput, usernameInput, passwordInput, nameInput, surnameInput, raceInput, dobInput,
                         wantedCBPanel, ideologyInput, captainCBPanel, planetInput);
+                displayRegisterSuccess("Registrazione avvenuta con successo! Ora puoi effettuare il login.");
             }
         });
         mainPanel.add(Box.createVerticalStrut(20));
@@ -224,7 +225,7 @@ public class RegisterScene extends JPanel {
 
         mainPanel.add(Box.createVerticalStrut(20));
 
-        mainPanel.add(this.errorLabel);
+        mainPanel.add(this.infoLabel);
 
         final JButton backButton = new JButton("Torna al login");
         backButton.setAlignmentX(CENTER_ALIGNMENT);
@@ -244,7 +245,7 @@ public class RegisterScene extends JPanel {
             final JTextField raceInput, final JTextField dobInput, final CustomComponents.CheckBoxPanel wantedCBPanel,
             final JComboBox<String> ideologyInput, final CustomComponents.CheckBoxPanel captainCBPanel,
             final JComboBox<String> planetInput) {
-        this.errorLabel.setVisible(false);
+        this.infoLabel.setVisible(false);
         cuiInput.setText("");
         usernameInput.setText("");
         passwordInput.setText("");
@@ -262,9 +263,20 @@ public class RegisterScene extends JPanel {
         if (string == null || string.isBlank()) {
             throw new IllegalArgumentException("Error message cannot be null or empty");
         }
-        this.errorLabel.setText(string);
-        this.errorLabel.setVisible(true);
-        SwingUtilities.invokeLater(() -> this.errorLabel.scrollRectToVisible(this.errorLabel.getBounds()));
+        this.infoLabel.setText(string);
+        this.infoLabel.setForeground(Color.RED);
+        this.infoLabel.setVisible(true);
+        SwingUtilities.invokeLater(() -> this.infoLabel.scrollRectToVisible(this.infoLabel.getBounds()));
+    }
+
+    public void displayRegisterSuccess(String string) {
+        if (string == null || string.isBlank()) {
+            throw new IllegalArgumentException("Success message cannot be null or empty");
+        }
+        this.infoLabel.setText(string);
+        this.infoLabel.setForeground(new Color(0, 128, 0));
+        this.infoLabel.setVisible(true);
+        SwingUtilities.invokeLater(() -> this.infoLabel.scrollRectToVisible(this.infoLabel.getBounds()));
     }
 
 }
