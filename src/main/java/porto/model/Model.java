@@ -252,4 +252,12 @@ public final class Model {
     public List<Person> getPersonOfStarship() {
         return parkingSpaceDAO.getAllPeopleIn();
     }
+
+    public List<Starship> getStarshipOnBoard() {
+        return parkingSpaceDAO.getAllStarshipIn();
+    }
+
+        public List<Person> getStarshipEquipe(String plate) {
+        return personDAO.getEquipeOfStarship(plate);
+    }
 }

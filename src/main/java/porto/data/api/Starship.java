@@ -1,9 +1,5 @@
 package porto.data.api;
 
-import java.util.Optional;
-
-import porto.data.api.dao.ParkingSpaceDAO;
-
 public interface Starship {
 
     /**

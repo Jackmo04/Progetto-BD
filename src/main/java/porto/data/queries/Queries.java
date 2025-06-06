@@ -283,4 +283,9 @@ public final class Queries {
                 and a.NumeroPosto is not null
                 and p.NumCella is null;
             """;
+        public static final String ALL_STARSHIP_IN = """
+                select distinct a.*
+                from astronavi a 
+                where a.NumeroPosto is not null;
+            """;
 }

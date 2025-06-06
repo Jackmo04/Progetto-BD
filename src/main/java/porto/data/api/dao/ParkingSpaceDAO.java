@@ -6,6 +6,7 @@ import java.util.Set;
 
 import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
+import porto.data.api.Starship;
 import porto.data.utils.DAOException;
 
 public interface ParkingSpaceDAO {
@@ -47,5 +48,7 @@ public interface ParkingSpaceDAO {
      */
     int clearCache();
 
-    public List<Person> getAllPeopleIn() throws DAOException ;
+    List<Person> getAllPeopleIn() throws DAOException ;
+
+    List<Starship> getAllStarshipIn() throws DAOException ;
 }
