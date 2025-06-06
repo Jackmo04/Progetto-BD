@@ -15,17 +15,14 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import porto.view.View;
-import porto.view.utils.CustomComponents;
 import porto.view.utils.JComponentsFactory;
 
 public class StatiScene extends JPanel {
@@ -107,9 +104,11 @@ public class StatiScene extends JPanel {
         mainPanel.add(dobFinalInput);
         mainPanel.add(Box.createVerticalStrut(20));
 
+        // Result label
+        final JLabel result = cf.createFieldLabel("");
 
         // Register button
-        final JButton registerButton = new JButton("Registrati");
+        final JButton registerButton = new JButton("Calcola Percentuale Accettate e Rifiutate");
         registerButton.setAlignmentX(CENTER_ALIGNMENT);
         registerButton.setFont(new Font(FONT, Font.BOLD, 20));
         registerButton.setMaximumSize(new Dimension(300, 40));
@@ -141,12 +140,19 @@ public class StatiScene extends JPanel {
                 displayRegisterError("Formato data di nascita non valido! Usa gg/mm/aaaa");
                 return;
             }
-            var success = this.view.getController().acceptedRejectedPercentage(tsStart, tsEnd);
+            String success = this.view.getController().acceptedRejectedPercentage(tsStart, tsEnd);
+            System.out.println(success);
+            if (success == null || success.isBlank()) {
+                displayRegisterError("Errore durante il calcolo delle percentuali!");
+                return;
+            }
+            result.setText(success);
+            result.setVisible(true);
         });
         mainPanel.add(Box.createVerticalStrut(20));
         mainPanel.add(registerButton);
 
-        final JLabel result = cf.createFieldLabel("");
+        
         mainPanel.add(result);
         result.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -163,41 +169,12 @@ public class StatiScene extends JPanel {
 
     }
 
-    private void clearRegistrationForm(final JTextField cuiInput, final JTextField usernameInput,
-            final JPasswordField passwordInput, final JTextField nameInput, final JTextField surnameInput,
-            final JTextField raceInput, final JTextField dobInput, final CustomComponents.CheckBoxPanel wantedCBPanel,
-            final JComboBox<String> ideologyInput, final CustomComponents.CheckBoxPanel captainCBPanel,
-            final JComboBox<String> planetInput) {
-        this.infoLabel.setVisible(false);
-        cuiInput.setText("");
-        usernameInput.setText("");
-        passwordInput.setText("");
-        nameInput.setText("");
-        surnameInput.setText("");
-        raceInput.setText("");
-        dobInput.setText("");
-        wantedCBPanel.checkBox().setSelected(false);
-        ideologyInput.setSelectedIndex(0);
-        captainCBPanel.checkBox().setSelected(false);
-        planetInput.setSelectedIndex(0);
-    }
-
     public void displayRegisterError(String string) {
         if (string == null || string.isBlank()) {
             throw new IllegalArgumentException("Error message cannot be null or empty");
         }
         this.infoLabel.setText(string);
         this.infoLabel.setForeground(Color.RED);
-        this.infoLabel.setVisible(true);
-        SwingUtilities.invokeLater(() -> this.infoLabel.scrollRectToVisible(this.infoLabel.getBounds()));
-    }
-
-    public void displayRegisterSuccess(String string) {
-        if (string == null || string.isBlank()) {
-            throw new IllegalArgumentException("Success message cannot be null or empty");
-        }
-        this.infoLabel.setText(string);
-        this.infoLabel.setForeground(new Color(0, 128, 0));
         this.infoLabel.setVisible(true);
         SwingUtilities.invokeLater(() -> this.infoLabel.scrollRectToVisible(this.infoLabel.getBounds()));
     }
