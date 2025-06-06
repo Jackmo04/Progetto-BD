@@ -104,11 +104,23 @@ public class StarshipDAOImpl implements StarshipDAO {
         var name = starship.name();
         var modelCode = starship.model().codModel();
         var capitanCUI = starship.capitan().CUI();
+        this.addStarship(plateNumber, name, modelCode, capitanCUI);
+        cache.add(starship);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addStarship(String plateNumber, String name, String codModel, String captainCUI) throws DAOException {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        Objects.requireNonNull(name, "Name cannot be null");
+        Objects.requireNonNull(codModel, "Model code cannot be null");
+        Objects.requireNonNull(captainCUI, "Captain CUI cannot be null");
         try (
-            var statement = DAOUtils.prepare(connection, Queries.INSERT_STARSHIP, plateNumber, name, modelCode, capitanCUI);
+            var statement = DAOUtils.prepare(connection, Queries.INSERT_STARSHIP, plateNumber, name, codModel, captainCUI);
         ) {
             statement.executeUpdate();
-            cache.add(starship);
         } catch (Exception e) {
             throw new DAOException(e);
         }

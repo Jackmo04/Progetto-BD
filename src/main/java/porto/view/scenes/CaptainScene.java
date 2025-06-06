@@ -1,6 +1,8 @@
 package porto.view.scenes;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -15,6 +17,8 @@ import javax.swing.SwingUtilities;
 
 import porto.data.api.ParkingSpace;
 import porto.view.View;
+import porto.view.utils.CrewAddDialog;
+import porto.view.utils.CrewViewerDialog;
 import porto.view.utils.RequestViewerDialog;
 
 public class CaptainScene extends JPanel {
@@ -82,22 +86,68 @@ public class CaptainScene extends JPanel {
         mainPanel.add(lastRequestButton);
         mainPanel.add(Box.createVerticalStrut(20));
 
-        // C1 - Register a new ship
+        final JPanel crewPanel = new JPanel();
+        crewPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        crewPanel.setBorder(BorderFactory.createTitledBorder("Gestione equipaggio"));
+        crewPanel.setAlignmentX(CENTER_ALIGNMENT);
+        crewPanel.setMaximumSize(new Dimension(400, 100));
+        mainPanel.add(crewPanel);
+
+        // C4 - View crew members
+        final JButton crewViewButton = new JButton("Visualizza");
+        crewViewButton.setFont(new Font(FONT, Font.BOLD, 16));
+        crewViewButton.setAlignmentX(CENTER_ALIGNMENT);
+        crewViewButton.addActionListener(e -> {
+            if (this.view.getController().getCrewMembersOfSelectedShip().isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "L'equipaggio della nave è vuoto",
+                    "Visualizzazione membri equipaggio",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                new CrewViewerDialog(view, "Visualizzazione membri equipaggio", false).setVisible(true);
+            }
+        });
+        crewPanel.add(crewViewButton);
+        // crewPanel.add(Box.createHorizontalStrut(20));
+
+        // C2 - Add a crew member
+        final JButton crewAddButton = new JButton("Aggiungi");
+        crewAddButton.setFont(new Font(FONT, Font.BOLD, 16));
+        crewAddButton.setAlignmentX(CENTER_ALIGNMENT);
+        crewAddButton.addActionListener(e -> {
+            new CrewAddDialog(view, "Aggiunta membri equipaggio").setVisible(true);
+        });
+        crewPanel.add(crewAddButton);
+        // crewPanel.add(Box.createHorizontalStrut(20));
+
+        // C3 - Remove a crew member
+        final JButton crewRemoveButton = new JButton("Rimuovi");
+        crewRemoveButton.setFont(new Font(FONT, Font.BOLD, 16));
+        crewRemoveButton.setAlignmentX(CENTER_ALIGNMENT);
+        crewRemoveButton.addActionListener(e -> {
+            if (this.view.getController().getCrewMembersOfSelectedShip().isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "L'equipaggio della nave è vuoto",
+                    "Rimozione membri equipaggio",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                new CrewViewerDialog(view, "Rimozione membri equipaggio", true).setVisible(true);
+            }
+        });
+        crewPanel.add(crewRemoveButton);
+        mainPanel.add(Box.createVerticalStrut(20));
+        mainPanel.add(Box.createVerticalGlue());
+
+
+        // C5 - Request station access
         // TODO
 
-        // C2 - Add/Remove a crew member
+        // C6 - Request station departure
         // TODO
 
-        // C3 - View crew members
-        // TODO
-
-        // C4 - Request station access
-        // TODO
-
-        // C5 - Request station departure
-        // TODO
-
-        // C6 - View all requests
+        // C7 - View all requests
         // TODO
 
         final JButton backButton = new JButton("Torna indietro");

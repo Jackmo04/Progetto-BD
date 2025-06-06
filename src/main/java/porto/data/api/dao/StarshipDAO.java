@@ -34,6 +34,16 @@ public interface StarshipDAO {
     void addStarship(Starship starship) throws DAOException;
 
     /**
+     * Adds a starship to the database and cache.
+     * @param plateNumber the plate number of the starship
+     * @param name the name of the starship
+     * @param codModel the code of the ship model
+     * @param captainCUI the CUI of the captain of the starship
+     * @throws DAOException if an error occurs while accessing the database
+     */
+    void addStarship(String plateNumber, String name, String codModel, String captainCUI) throws DAOException;
+
+    /**
      * Adds a crew member to a starship.
      * @param plateNumber the plate number of the starship
      * @param member the person to add as a crew member

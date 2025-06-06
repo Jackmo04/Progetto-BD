@@ -1,6 +1,8 @@
 package porto.view.utils;
 
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -10,9 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import porto.data.api.PersonRole;
 import porto.data.api.Starship;
 import porto.view.View;
 
@@ -20,6 +22,7 @@ public class ShipSelectionPanel extends JPanel {
 
     private static final String FONT = "Roboto";
     private final View view;
+    private List<Starship> ships;
 
     public ShipSelectionPanel(View view) {
         this.view = view;
@@ -28,8 +31,8 @@ public class ShipSelectionPanel extends JPanel {
         this.setBorder(BorderFactory.createTitledBorder("Seleziona la nave da gestire"));
         this.setAlignmentX(CENTER_ALIGNMENT);
 
-        final List<Starship> ships = this.view.getController().getAvailableShips();
-        DefaultTableModel tableModel = new DefaultTableModel(
+        this.ships = this.view.getController().getAvailableShips();
+        final JTable shipTable = new SelectionTable(
             ships.stream()
                 .map(ship -> new Object[]{
                     ship.plateNumber(), 
@@ -39,20 +42,41 @@ public class ShipSelectionPanel extends JPanel {
                 })
                 .toArray(Object[][]::new),
             new String[]{"Targa", "Nome", "Modello", "Capitano"}
-        ) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        final JTable shipTable = new JTable(tableModel);
-        shipTable.setFont(new Font(FONT, Font.PLAIN, 16));
-        shipTable.setRowHeight(30);
-        shipTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        shipTable.setRowSelectionAllowed(true);
-        shipTable.setColumnSelectionAllowed(false);
+        );
         this.add(new JScrollPane(shipTable));
         this.add(Box.createVerticalStrut(20));
+
+        final JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        buttonPanel.setAlignmentX(CENTER_ALIGNMENT);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+        this.add(buttonPanel);
+        buttonPanel.add(Box.createHorizontalGlue());
+        final JButton createShipButton = new JButton("Crea nuova nave");
+        createShipButton.setFont(new Font(FONT, Font.BOLD, 16));
+        createShipButton.setToolTipText("Crea una nuova nave");
+        createShipButton.setAlignmentX(CENTER_ALIGNMENT);
+        createShipButton.addActionListener(e -> {
+            ShipCreationDialog dialog = new ShipCreationDialog(this.view, "Crea nuova nave");
+            dialog.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent windowEvent) {
+                    refreshShips(shipTable);
+                }
+            });
+            dialog.setVisible(true);
+        });
+        buttonPanel.add(createShipButton);
+        buttonPanel.add(Box.createHorizontalStrut(20));
+
+        final JButton refreshButton = new JButton("Aggiorna elenco navi");
+        refreshButton.setFont(new Font(FONT, Font.BOLD, 16));
+        refreshButton.setToolTipText("Aggiorna l'elenco delle navi disponibili");
+        refreshButton.setAlignmentX(CENTER_ALIGNMENT);
+        refreshButton.addActionListener(e -> {
+            this.refreshShips(shipTable);
+            shipTable.clearSelection();
+        });
         
         final JButton manageShipButton = new JButton("Gestisci nave selezionata");
         manageShipButton.setEnabled(false);
@@ -74,8 +98,35 @@ public class ShipSelectionPanel extends JPanel {
             }
         });
         manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
-        this.add(manageShipButton);
+        buttonPanel.add(refreshButton);
+        buttonPanel.add(Box.createHorizontalStrut(20));
+        buttonPanel.add(manageShipButton);
+        buttonPanel.add(Box.createHorizontalGlue());
         this.add(Box.createVerticalStrut(20));
+
+        createShipButton.setVisible(!(this.view.getController().getLoggedUser().role() == PersonRole.CREW_MEMBER));
+    }
+
+    public void refreshShips(JTable shipTable) {
+        this.ships = this.view.getController().getAvailableShips();
+        shipTable.setModel(
+            new DefaultTableModel(
+                ships.stream()
+                    .map(ship -> new Object[]{
+                        ship.plateNumber(), 
+                        ship.name(), 
+                        ship.model().name(),
+                        ship.capitan().name() + " " + ship.capitan().surname()
+                    })
+                    .toArray(Object[][]::new),
+                new String[]{"Targa", "Nome", "Modello", "Capitano"}
+            ) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            }
+        );
     }
 
 }

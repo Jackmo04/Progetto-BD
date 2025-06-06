@@ -51,4 +51,5 @@ public interface ParkingSpaceDAO {
     List<Person> getAllPeopleIn() throws DAOException ;
 
     List<Starship> getAllStarshipIn() throws DAOException ;
+    List<Person> getAllPeopleOnStation() throws DAOException ;
 }

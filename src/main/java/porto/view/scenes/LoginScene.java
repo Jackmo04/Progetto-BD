@@ -91,7 +91,13 @@ public class LoginScene extends JPanel {
         loginButton.addActionListener(e -> {
             this.errorLabel.setVisible(false);
             String username = usernameInput.getText().trim();
+            if (username.length() > 20) {
+                username = username.substring(0, 20);
+            }
             String password = new String(passwordInput.getPassword()).trim();
+            if (password.length() > 20) {
+                password = password.substring(0, 20);
+            }
             if (username.isEmpty() || password.isEmpty()) {
                 this.errorLabel.setText("Inserisci CUI/Username e password!");
                 this.errorLabel.setVisible(true);

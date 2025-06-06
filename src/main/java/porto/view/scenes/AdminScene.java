@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import porto.view.View;
-import porto.view.utils.RequestSelectionPannel;
+import porto.view.utils.RequestSelectionPanel;
 
 public class AdminScene extends JPanel {
 
@@ -33,7 +33,7 @@ public class AdminScene extends JPanel {
         mainPanel.add(title);
         mainPanel.add(Box.createVerticalStrut(30));
 
-        final JPanel requestSelectionPanel = new RequestSelectionPannel(view);
+        final JPanel requestSelectionPanel = new RequestSelectionPanel(view);
         mainPanel.add(requestSelectionPanel);
         
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

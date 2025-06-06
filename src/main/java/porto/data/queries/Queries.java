@@ -247,17 +247,17 @@ public final class Queries {
             """;
 
     public static final String ACCEPTED_AND_REJECTED_PERCENTAGES = """
-        WITH RichiesteInIntervallo AS (
-            SELECT *
-            FROM Richieste
-            WHERE DataOra BETWEEN ? AND ?
-            AND Esito IS NOT NULL
-        )
-        SELECT
-            ROUND(SUM(CASE WHEN Esito = 'A' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS `Accettate`,
-            ROUND(SUM(CASE WHEN Esito = 'R' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS `Rifiutate`
-        FROM RichiesteInIntervallo;
-    """;
+                WITH RichiesteInIntervallo AS (
+                    SELECT *
+                    FROM Richieste
+                    WHERE DataOra BETWEEN ? AND ?
+                    AND Esito IS NOT NULL
+                )
+                SELECT
+                    ROUND(SUM(CASE WHEN Esito = 'A' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS `Accettate`,
+                    ROUND(SUM(CASE WHEN Esito = 'R' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS `Rifiutate`
+                FROM RichiesteInIntervallo;
+            """;
 
     public static final String PLANET_FROM_NAME = """
                 SELECT p.*
@@ -278,14 +278,22 @@ public final class Queries {
 
     public static final String ALL_PEOPLE_IN = """
                 select distinct p.*
-                from persone p , equipaggi e , astronavi a 
+                from persone p , equipaggi e , astronavi a
                 where ((p.CUI = e.CUIAstronauta AND e.TargaAstronave = a.Targa) OR (p.CUI = a.CUICapitano))
                 and a.NumeroPosto is not null
                 and p.NumCella is null;
             """;
-        public static final String ALL_STARSHIP_IN = """
-                select distinct a.*
-                from astronavi a 
-                where a.NumeroPosto is not null;
+
+    public static final String ALL_STARSHIP_IN = """
+                            select distinct a.*
+                            from astronavi a
+                            where a.NumeroPosto is not null;
+            """;
+
+    public static final String CELL_OF_PERSON = """
+                SELECT c.*
+                FROM celle c, persone p
+                WHERE p.NumCella = c.NumCella
+                AND p.CUI = ?;
             """;
 }

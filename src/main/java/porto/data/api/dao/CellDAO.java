@@ -29,4 +29,6 @@ public interface CellDAO
      * @throws DAOException if an error occurs during the addition
      */
     List<Cell> getAllFreeCell() throws DAOException;
+
+    Optional<Cell> getOfPerson(String CUI) throws DAOException;
 }

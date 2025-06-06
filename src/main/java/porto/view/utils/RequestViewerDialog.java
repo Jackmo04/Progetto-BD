@@ -1,6 +1,5 @@
 package porto.view.utils;
 
-import java.awt.Font;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -18,8 +17,6 @@ import porto.view.View;
 
 public class RequestViewerDialog extends JDialog {
 
-    private static final String FONT = "Roboto";
-
     public RequestViewerDialog(View view, String title, List<Request> requests, boolean selectable) {
         super(view.getMainFrame(), title, ModalityType.APPLICATION_MODAL);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -32,7 +29,7 @@ public class RequestViewerDialog extends JDialog {
         requestsPanel.setLayout(new BoxLayout(requestsPanel, BoxLayout.Y_AXIS));
         requestsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        final JTable requestsTable = new JTable(
+        final JTable requestsTable = new ViewingTable(
             requests.stream()
                 .map(req -> new Object[]{
                     req.codRichiesta(),
@@ -54,30 +51,23 @@ public class RequestViewerDialog extends JDialog {
                 "Destinazione", "Gestita da"
             }
         );
-        requestsTable.setFont(new Font(FONT, Font.PLAIN, 12));
-        requestsTable.setRowHeight(30);
         requestsTable.getColumnModel().getColumn(0).setPreferredWidth(50);
         requestsTable.getColumnModel().getColumn(1).setPreferredWidth(50);
-        requestsTable.getColumnModel().getColumn(2).setPreferredWidth(20);
-        requestsTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        requestsTable.getColumnModel().getColumn(2).setPreferredWidth(130);
+        requestsTable.getColumnModel().getColumn(3).setPreferredWidth(150);
         requestsTable.getColumnModel().getColumn(4).setPreferredWidth(60);
-        requestsTable.getColumnModel().getColumn(5).setPreferredWidth(80);
-        requestsTable.getColumnModel().getColumn(6).setPreferredWidth(150);
+        requestsTable.getColumnModel().getColumn(5).setPreferredWidth(60);
+        requestsTable.getColumnModel().getColumn(6).setPreferredWidth(130);
         requestsTable.getColumnModel().getColumn(7).setPreferredWidth(150);
         requestsTable.getColumnModel().getColumn(8).setPreferredWidth(100);
         requestsTable.getColumnModel().getColumn(9).setPreferredWidth(100);
         requestsTable.getColumnModel().getColumn(10).setPreferredWidth(150);
-        requestsTable.setFillsViewportHeight(true);
-        requestsTable.setRowSelectionAllowed(selectable);
-        requestsTable.setColumnSelectionAllowed(false);
-        requestsTable.setEnabled(false);
 
-        
         this.add(new JScrollPane(requestsTable));
         requestsPanel.add(requestsTable.getTableHeader());
         requestsPanel.add(requestsTable);
         requestsPanel.setBorder(BorderFactory.createTitledBorder("Richieste"));
-        //this.add(requestsPanel);
+        this.add(requestsPanel);
 
         this.pack();
 

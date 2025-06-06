@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
+import porto.data.api.PersonRole;
 import porto.data.api.Planet;
 import porto.data.api.Request;
 import porto.data.api.RequestState;
@@ -266,8 +267,140 @@ public final class Controller {
         return this.model.getAllRequestsPendent();
     }
 
-    public List<Person> getPersonOfStarship() {
-        return this.model.getPersonOfStarship();
+    public List<Person> getPeopleOnStation() {
+        return this.model.getPeopleOnStation();
+    }
+
+    public String[] getModelChoices() {
+        try {
+            return this.model.getAllShipModels()
+                .stream()
+                .map(model -> model.codModel())
+                .sorted(Comparator.naturalOrder())
+                .toArray(String[]::new);
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving starship models codes", e);
+            return new String[0];
+        }
+    }
+
+    public boolean isStarshipRegistered(String plateNumber) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        return this.model.isStarshipRegistered(plateNumber);
+    }
+
+    public boolean registerStarshipToCurrentUser(String plateNumber, String shipName, String shipModelCode) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        Objects.requireNonNull(shipName, "Ship name cannot be null");
+        Objects.requireNonNull(shipModelCode, "Ship model code cannot be null");
+        if (this.model.getLoggedUser().role() != PersonRole.CAPTAIN) {
+            throw new IllegalStateException("Only captains can register starships");
+        }
+        if (this.model.isStarshipRegistered(plateNumber)) {
+            LOGGER.warn("Starship with plate number {} is already registered", plateNumber);
+            return false;
+        }
+
+        try {
+            this.model.registerStarship(plateNumber, shipName, shipModelCode, this.model.getLoggedUser().CUI());
+            LOGGER.info("Starship {} registered successfully", plateNumber);
+            return true;
+        } catch (DAOException e) {
+            LOGGER.error("Error registering starship with plate number: {}", plateNumber, e);
+            return false;
+        }
+    }
+
+    public List<Person> getCrewMembersOfSelectedShip() {
+        if (this.model.getSelectedStarship() == null) {
+            throw new IllegalStateException("No starship is selected");
+        }
+        try {
+            return this.model.getCrewMembersOfShip(this.model.getSelectedStarship().plateNumber())
+                .stream()
+                .sorted(Comparator.comparing(Person::CUI))
+                .toList();
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving crew members of selected ship", e);
+        }
+    }
+
+    public boolean isCrewMemberOfSelectedShip(String cui) {
+        Objects.requireNonNull(cui, "CUI cannot be null");
+        if (this.model.getSelectedStarship() == null) {
+            throw new IllegalStateException("No starship is selected");
+        }
+        try {
+            return getCrewMembersOfSelectedShip()
+                .stream()
+                .anyMatch(person -> person.CUI().equals(cui));
+        } catch (DAOException e) {
+            LOGGER.error("Error checking if crew member with CUI {} is part of selected ship", cui, e);
+            return false;
+        }
+    }
+
+    public boolean isValidCrewMemberCUI(String cui) {
+        Objects.requireNonNull(cui, "CUI cannot be null");
+        if (cui.isBlank()) {
+            return false;
+        }
+        try {
+            return this.model.isValidCrewMemberCUI(cui);
+        } catch (DAOException e) {
+            LOGGER.error("Error validating crew member CUI: {}", cui, e);
+            return false;
+        }
+    }
+
+    public boolean addCrewMemberToSelectedShip(String cui) {
+        Objects.requireNonNull(cui, "CUI cannot be null");
+        if (this.model.getSelectedStarship() == null) {
+            throw new IllegalStateException("No starship is selected");
+        }
+        if (isCrewMemberOfSelectedShip(cui)) {
+            LOGGER.warn("Crew member with CUI {} is already part of selected ship", cui);
+            return false;
+        }
+        if (!isValidCrewMemberCUI(cui)) {
+            LOGGER.warn("Invalid CUI for crew member: {}", cui);
+            return false;
+        }
+        try {
+            this.model.addCrewMemberToShip(this.model.getSelectedStarship().plateNumber(), cui);
+            LOGGER.info("Crew member with CUI {} added to ship {}", cui, this.model.getSelectedStarship().plateNumber());
+            return true;
+        } catch (DAOException e) {
+            LOGGER.error("Error adding crew member with CUI {} to selected ship", cui, e);
+            throw new RuntimeException("Error adding crew member", e);
+        }
+    }
+
+    public boolean isArrested(String cui) {
+    Objects.requireNonNull(cui, "CUI cannot be null");
+        try {
+            return this.model.isArrested(cui);
+        } catch (DAOException e) {
+            LOGGER.error("Error checking if person with CUI {} is arrested", cui, e);
+            throw new RuntimeException("Error checking arrest status", e);
+        }
+    }
+
+    public void removeCrewMemberFromSelectedShip(String cui) {
+    Objects.requireNonNull(cui, "CUI cannot be null");
+        if (this.model.getSelectedStarship() == null) {
+            throw new IllegalStateException("No starship is selected");
+        }
+        if (!isCrewMemberOfSelectedShip(cui)) {
+            throw new IllegalStateException("Crew member with CUI " + cui + " is not part of the selected ship");
+        }
+        try {
+            this.model.removeCrewMemberFromShip(this.model.getSelectedStarship().plateNumber(), cui);
+            LOGGER.info("Crew member with CUI {} removed from ship {}", cui, this.model.getSelectedStarship().plateNumber());
+        } catch (DAOException e) {
+            LOGGER.error("Error removing crew member with CUI {} from selected ship", cui, e);
+            throw new RuntimeException("Error removing crew member", e);
+        }
     }
 
         public List<Starship> getStarshipOnBoard() {
