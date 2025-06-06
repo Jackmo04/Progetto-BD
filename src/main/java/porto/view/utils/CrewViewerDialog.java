@@ -58,6 +58,7 @@ public class CrewViewerDialog extends JDialog {
                 "Pianeta di Nascita", "Ideologia", "Ricercato", "Arrestato"
             }
         );
+        crewTable.setFont(new Font(FONT, Font.PLAIN, 12));
         crewTable.getColumnModel().getColumn(0).setPreferredWidth(170);
         crewTable.getColumnModel().getColumn(1).setPreferredWidth(150);
         crewTable.getColumnModel().getColumn(2).setPreferredWidth(150);
