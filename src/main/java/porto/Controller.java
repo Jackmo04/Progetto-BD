@@ -387,8 +387,20 @@ public final class Controller {
     }
 
     public void removeCrewMemberFromSelectedShip(String cui) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeCrewMemberFromSelectedShip'");
+    Objects.requireNonNull(cui, "CUI cannot be null");
+        if (this.model.getSelectedStarship() == null) {
+            throw new IllegalStateException("No starship is selected");
+        }
+        if (!isCrewMemberOfSelectedShip(cui)) {
+            throw new IllegalStateException("Crew member with CUI " + cui + " is not part of the selected ship");
+        }
+        try {
+            this.model.removeCrewMemberFromShip(this.model.getSelectedStarship().plateNumber(), cui);
+            LOGGER.info("Crew member with CUI {} removed from ship {}", cui, this.model.getSelectedStarship().plateNumber());
+        } catch (DAOException e) {
+            LOGGER.error("Error removing crew member with CUI {} from selected ship", cui, e);
+            throw new RuntimeException("Error removing crew member", e);
+        }
     }
 
 }

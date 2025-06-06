@@ -336,4 +336,17 @@ public final class Model {
             throw new RuntimeException("Error checking if person is arrested with CUI: " + cui, e);
         }
     }
+
+    public void removeCrewMemberFromShip(String plateNumber, String cui) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        Objects.requireNonNull(cui, "CUI cannot be null");
+        try {
+            if (!isValidCrewMemberCUI(cui)) {
+                throw new IllegalArgumentException("Invalid crew member CUI: " + cui);
+            }
+            starshipDAO.removeCrewMember(plateNumber, cui);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error removing crew member from ship", e);
+        }
+    }
 }

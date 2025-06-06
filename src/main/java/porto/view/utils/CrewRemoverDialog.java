@@ -1,7 +1,6 @@
 package porto.view.utils;
 
 import java.awt.Font;
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -13,19 +12,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 import porto.data.api.Person;
-import porto.data.api.Request;
 import porto.view.View;
 
-public class CrewSelectorDialog extends JDialog {
+public class CrewRemoverDialog extends JDialog {
 
     private static final String FONT = "Roboto";
 
     private final View view;
 
-    public CrewSelectorDialog(View view, String title) {
+    public CrewRemoverDialog(View view, String title) {
         super(view.getMainFrame(), title, ModalityType.APPLICATION_MODAL);
         this.view = view;
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -36,7 +34,7 @@ public class CrewSelectorDialog extends JDialog {
         
         final JPanel crewPanel = new JPanel();
         crewPanel.setLayout(new BoxLayout(crewPanel, BoxLayout.Y_AXIS));
-        crewPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        crewPanel.setBorder(BorderFactory.createTitledBorder("Seleziona un membro dell'equipaggio da rimuovere"));
 
         final List<Person> crew = view.getController().getCrewMembersOfSelectedShip();
         final JTable crewTable = new SelectionTable(
@@ -45,7 +43,7 @@ public class CrewSelectorDialog extends JDialog {
                     member.CUI(),
                     member.name(),
                     member.surname(),
-                    member.dateOfBirth().toString(),
+                    member.dateOfBirth(),
                     member.race(),
                     member.birthPlanet().name(),
                     member.ideology().toString(),
@@ -58,19 +56,20 @@ public class CrewSelectorDialog extends JDialog {
                 "Pianeta di Nascita", "Ideologia", "Ricercato", "Arrestato"
             }
         );
-        // crewTable.getColumnModel().getColumn(0).setPreferredWidth(100);
-        // crewTable.getColumnModel().getColumn(1).setPreferredWidth(50);
-        // crewTable.getColumnModel().getColumn(2).setPreferredWidth(130);
-        // crewTable.getColumnModel().getColumn(3).setPreferredWidth(150);
-        // crewTable.getColumnModel().getColumn(4).setPreferredWidth(60);
-        // crewTable.getColumnModel().getColumn(5).setPreferredWidth(60);
-        // crewTable.getColumnModel().getColumn(6).setPreferredWidth(130);
-        // crewTable.getColumnModel().getColumn(7).setPreferredWidth(150);
-        // crewTable.getColumnModel().getColumn(8).setPreferredWidth(100);
+        crewTable.getColumnModel().getColumn(0).setPreferredWidth(170);
+        crewTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+        crewTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+        crewTable.getColumnModel().getColumn(3).setPreferredWidth(120);
+        crewTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+        crewTable.getColumnModel().getColumn(5).setPreferredWidth(120);
+        crewTable.getColumnModel().getColumn(6).setPreferredWidth(100);
+        crewTable.getColumnModel().getColumn(7).setPreferredWidth(60);
+        crewTable.getColumnModel().getColumn(8).setPreferredWidth(60);
 
         this.add(new JScrollPane(crewTable));
         crewPanel.add(crewTable.getTableHeader());
         crewPanel.add(crewTable);
+        crewPanel.add(Box.createVerticalStrut(20));
 
         final JButton removeButton = new JButton("Rimuovi membro");
         removeButton.setEnabled(false);
@@ -82,8 +81,9 @@ public class CrewSelectorDialog extends JDialog {
             if (selectedRow >= 0) {
                 String cui = (String) crewTable.getValueAt(selectedRow, 0);
                 this.view.getController().removeCrewMemberFromSelectedShip(cui);
+                this.refreshCrew(crewTable);
             } else {
-                throw new IllegalStateException("No ship selected for management");
+                throw new IllegalStateException("No crew member selected for management");
             }
         });
         crewTable.getSelectionModel().addListSelectionListener(e -> {
@@ -92,10 +92,37 @@ public class CrewSelectorDialog extends JDialog {
             }
         });
         removeButton.setAlignmentX(CENTER_ALIGNMENT);
+        crewPanel.add(removeButton);
+        crewPanel.add(Box.createVerticalStrut(20));
 
         this.add(crewPanel);
 
         this.pack();
+    }
+
+    public void refreshCrew(JTable table) {
+        List<Person> crew = view.getController().getCrewMembersOfSelectedShip();
+        table.setModel(
+            new DefaultTableModel(
+                crew.stream()
+                    .map(member -> new Object[]{
+                        member.CUI(),
+                        member.name(),
+                        member.surname(),
+                        member.dateOfBirth().toString(),
+                        member.race(),
+                        member.birthPlanet().name(),
+                        member.ideology().toString(),
+                        member.isWanted() ? "Sì" : "No",
+                        view.getController().isArrested(member.CUI()) ? "Sì" : "No"
+                    })
+                    .toArray(Object[][]::new),
+                new String[]{
+                    "CUI", "Nome", "Cognome", "Data di Nascita", "Razza", 
+                    "Pianeta di Nascita", "Ideologia", "Ricercato", "Arrestato"
+                }
+            )
+        );
     }
 
 }

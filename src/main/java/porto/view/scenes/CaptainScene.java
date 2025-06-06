@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import porto.data.api.ParkingSpace;
 import porto.view.View;
 import porto.view.utils.CrewAddDialog;
+import porto.view.utils.CrewRemoverDialog;
 import porto.view.utils.RequestViewerDialog;
 
 public class CaptainScene extends JPanel {
@@ -98,7 +99,15 @@ public class CaptainScene extends JPanel {
         crewRemoveButton.setFont(new Font(FONT, Font.BOLD, 16));
         crewRemoveButton.setAlignmentX(CENTER_ALIGNMENT);
         crewRemoveButton.addActionListener(e -> {
-            
+            if (this.view.getController().getCrewMembersOfSelectedShip().isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "L'equipaggio della nave è vuoto",
+                    "Rimozione membri equipaggio",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                new CrewRemoverDialog(view, "Rimozione membri equipaggio").setVisible(true);
+            }
         });
         mainPanel.add(crewRemoveButton);
         mainPanel.add(Box.createVerticalStrut(20));
