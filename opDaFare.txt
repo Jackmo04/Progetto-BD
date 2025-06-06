@@ -38,13 +38,13 @@
 [M]{??} C3 -- Visualizzare tutti i membri dell'equipaggio di una nave
 [M]{??} C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
 
-[M]{MA} A1 -- Visualizzare tutte le richieste pendenti
-[M]{MA} A2 -- Valutare una richiesta pendente
-[M]{MA} A3 -- Visualizza le celle disponibili \\ Viene Usata  intrinseca all'arresta persona A4 , altrimenti bisogna passarla come per le richieste in entrata
-[M]{MA} A4 -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
-[M]{MA} A5 -- Visualizzare il numero di persone presenti nel porto attualmente
+[F]{MA} A1 -- Visualizzare tutte le richieste pendenti
+[F]{MA} A2 -- Valutare una richiesta pendente
+[F]{MA} A3 -- Visualizza le celle disponibili \\ Viene Usata  intrinseca all'arresta persona A4 , altrimenti bisogna passarla come per le richieste in entrata
+[F]{MA} A4 -- Arrestare un astronauta rimuovendolo dall’equipaggio della propria astronave
+[F]{MA} A5 -- Visualizzare il numero di persone presenti nel porto attualmente
 [M]{??} A6 -- Visualizzare la percentuale di richieste accettate e rifiutate in un dato intervallo di tempo
-[M]{MA} A7 -- Visualizzare posteggi liberi attualmente
+[F]{MA} A7 -- Visualizzare posteggi liberi attualmente
 [M]{??} A8 -- Visualizzare le 50 astronavi che hanno trasportato più merce.
-[M]{MA} A9 -- Visualizzare tutte le persone in porto attualemnte.
+[F]{MA} A9 -- Visualizzare tutte le persone in porto attualmente.
 
