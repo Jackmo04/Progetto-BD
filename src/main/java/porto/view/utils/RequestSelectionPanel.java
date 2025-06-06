@@ -14,12 +14,12 @@ import javax.swing.JTable;
 import porto.data.api.Request;
 import porto.view.View;
 
-public class RequestSelectionPannel extends JPanel {
+public class RequestSelectionPanel extends JPanel {
 
     private static final String FONT = "Roboto";
     private final View view;
 
-    public RequestSelectionPannel(View view) {
+    public RequestSelectionPanel(View view) {
         this.view = view;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

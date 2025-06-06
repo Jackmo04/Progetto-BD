@@ -283,4 +283,11 @@ public final class Queries {
                 and a.NumeroPosto is not null
                 and p.NumCella is null;
             """;
+
+    public static final String CELL_OF_PERSON = """
+                SELECT c.*
+                FROM celle c, persone p
+                WHERE p.NumCella = c.NumCella
+                AND p.CUI = ?;
+            """;
 }

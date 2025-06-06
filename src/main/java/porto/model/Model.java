@@ -20,12 +20,14 @@ import porto.data.api.Starship;
 import porto.data.api.PersonRole;
 import porto.data.api.RequestType;
 import porto.data.api.ShipModel;
+import porto.data.api.dao.CellDAO;
 import porto.data.api.dao.ParkingSpaceDAO;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.PlanetDAO;
 import porto.data.api.dao.RequestDAO;
 import porto.data.api.dao.ShipModelDAO;
 import porto.data.api.dao.StarshipDAO;
+import porto.data.dao.CellDAOImpl;
 import porto.data.dao.ParkingSpaceDAOImpl;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.dao.PlanetDAOImpl;
@@ -42,6 +44,7 @@ public final class Model {
     private final PlanetDAO planetDAO;
     private final ParkingSpaceDAO parkingSpaceDAO;
     private final ShipModelDAO shipModelDAO;
+    private final CellDAO cellDAO;
     private Optional<Person> loggedUser = Optional.empty();
     private Optional<Starship> selectedStarship = Optional.empty();
 
@@ -53,6 +56,7 @@ public final class Model {
         this.planetDAO = new PlanetDAOImpl(connection);
         this.parkingSpaceDAO = new ParkingSpaceDAOImpl(connection);
         this.shipModelDAO = new ShipModelDAOImpl(connection);
+        this.cellDAO = new CellDAOImpl(connection);
     }
 
     public boolean login(String username, String password) {
@@ -321,6 +325,15 @@ public final class Model {
             starshipDAO.addCrewMember(plateNumber, cui);
         } catch (DAOException e) {
             throw new RuntimeException("Error adding crew member to ship", e);
+        }
+    }
+
+    public boolean isArrested(String cui) {
+        Objects.requireNonNull(cui, "CUI cannot be null");
+        try {
+            return cellDAO.getOfPerson(cui).isPresent();
+        } catch (DAOException e) {
+            throw new RuntimeException("Error checking if person is arrested with CUI: " + cui, e);
         }
     }
 }

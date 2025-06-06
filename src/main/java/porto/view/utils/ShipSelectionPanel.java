@@ -1,6 +1,8 @@
 package porto.view.utils;
 
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -56,6 +58,12 @@ public class ShipSelectionPanel extends JPanel {
         createShipButton.setAlignmentX(CENTER_ALIGNMENT);
         createShipButton.addActionListener(e -> {
             ShipCreationDialog dialog = new ShipCreationDialog(this.view, "Crea nuova nave");
+            dialog.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent windowEvent) {
+                    refreshShips(shipTable);
+                }
+            });
             dialog.setVisible(true);
         });
         buttonPanel.add(createShipButton);
@@ -66,20 +74,8 @@ public class ShipSelectionPanel extends JPanel {
         refreshButton.setToolTipText("Aggiorna l'elenco delle navi disponibili");
         refreshButton.setAlignmentX(CENTER_ALIGNMENT);
         refreshButton.addActionListener(e -> {
-            this.refreshShips();
-            shipTable.setModel(
-                new DefaultTableModel(
-                    ships.stream()
-                        .map(ship -> new Object[]{
-                            ship.plateNumber(), 
-                            ship.name(), 
-                            ship.model().name(),
-                            ship.capitan().name() + " " + ship.capitan().surname()
-                        })
-                        .toArray(Object[][]::new),
-                    new String[]{"Targa", "Nome", "Modello", "Capitano"}
-                )
-            );
+            this.refreshShips(shipTable);
+            shipTable.clearSelection();
         });
         
         final JButton manageShipButton = new JButton("Gestisci nave selezionata");
@@ -111,8 +107,21 @@ public class ShipSelectionPanel extends JPanel {
         createShipButton.setVisible(!(this.view.getController().getLoggedUser().role() == PersonRole.CREW_MEMBER));
     }
 
-    public void refreshShips() {
+    public void refreshShips(JTable shipTable) {
         this.ships = this.view.getController().getAvailableShips();
+        shipTable.setModel(
+            new DefaultTableModel(
+                ships.stream()
+                    .map(ship -> new Object[]{
+                        ship.plateNumber(), 
+                        ship.name(), 
+                        ship.model().name(),
+                        ship.capitan().name() + " " + ship.capitan().surname()
+                    })
+                    .toArray(Object[][]::new),
+                new String[]{"Targa", "Nome", "Modello", "Capitano"}
+            )
+        );
     }
 
 }

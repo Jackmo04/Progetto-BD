@@ -376,4 +376,19 @@ public final class Controller {
         }
     }
 
+    public boolean isArrested(String cui) {
+    Objects.requireNonNull(cui, "CUI cannot be null");
+        try {
+            return this.model.isArrested(cui);
+        } catch (DAOException e) {
+            LOGGER.error("Error checking if person with CUI {} is arrested", cui, e);
+            throw new RuntimeException("Error checking arrest status", e);
+        }
+    }
+
+    public void removeCrewMemberFromSelectedShip(String cui) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeCrewMemberFromSelectedShip'");
+    }
+
 }

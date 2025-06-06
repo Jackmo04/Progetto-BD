@@ -73,4 +73,25 @@ public class CellDAOImpl implements CellDAO {
         }
         return listCell;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<Cell> getOfPerson(String CUI) throws DAOException {
+        try (
+                var statement = DAOUtils.prepare(connection, Queries.CELL_OF_PERSON, CUI);
+                var resultSet = statement.executeQuery();) {
+            if (resultSet.next()) {
+                var numCell = resultSet.getInt("NumCella");
+                var capacity = resultSet.getInt("Capienza");
+                var cell = new CellImpl(numCell, capacity);
+                return Optional.of(cell);
+            } else {
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            throw new DAOException(e);
+        }
+    }
 }

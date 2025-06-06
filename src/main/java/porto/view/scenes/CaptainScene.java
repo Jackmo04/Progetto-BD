@@ -94,6 +94,14 @@ public class CaptainScene extends JPanel {
         mainPanel.add(Box.createVerticalStrut(20));
 
         // C3 - Remove a crew member
+        final JButton crewRemoveButton = new JButton("Rimuovi membri dall'equipaggio");
+        crewRemoveButton.setFont(new Font(FONT, Font.BOLD, 16));
+        crewRemoveButton.setAlignmentX(CENTER_ALIGNMENT);
+        crewRemoveButton.addActionListener(e -> {
+            
+        });
+        mainPanel.add(crewRemoveButton);
+        mainPanel.add(Box.createVerticalStrut(20));
 
         // C4 - View crew members
         // TODO
