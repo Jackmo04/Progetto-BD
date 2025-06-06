@@ -19,15 +19,18 @@ import porto.data.api.RequestState;
 import porto.data.api.Starship;
 import porto.data.api.PersonRole;
 import porto.data.api.RequestType;
+import porto.data.api.ShipModel;
 import porto.data.api.dao.ParkingSpaceDAO;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.PlanetDAO;
 import porto.data.api.dao.RequestDAO;
+import porto.data.api.dao.ShipModelDAO;
 import porto.data.api.dao.StarshipDAO;
 import porto.data.dao.ParkingSpaceDAOImpl;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.dao.PlanetDAOImpl;
 import porto.data.dao.RequestDAOImpl;
+import porto.data.dao.ShipModelDAOImpl;
 import porto.data.dao.StarshipDAOImpl;
 import porto.data.utils.DAOException;
 
@@ -38,6 +41,7 @@ public final class Model {
     private final RequestDAO requestDAO;
     private final PlanetDAO planetDAO;
     private final ParkingSpaceDAO parkingSpaceDAO;
+    private final ShipModelDAO shipModelDAO;
     private Optional<Person> loggedUser = Optional.empty();
     private Optional<Starship> selectedStarship = Optional.empty();
 
@@ -48,6 +52,7 @@ public final class Model {
         this.requestDAO = new RequestDAOImpl(connection);
         this.planetDAO = new PlanetDAOImpl(connection);
         this.parkingSpaceDAO = new ParkingSpaceDAOImpl(connection);
+        this.shipModelDAO = new ShipModelDAOImpl(connection);
     }
 
     public boolean login(String username, String password) {
@@ -251,5 +256,38 @@ public final class Model {
 
     public List<Person> getPersonOfStarship() {
         return parkingSpaceDAO.getAllPeopleIn();
+    }
+
+    public Set<ShipModel> getAllShipModels() {
+        try {
+            return shipModelDAO.getAll();
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving all ship models", e);
+        }
+    }
+
+    public void registerStarship(String plateNumber, String shipName, String shipModelCode, String captainCUI) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        Objects.requireNonNull(shipName, "Ship name cannot be null");
+        Objects.requireNonNull(shipModelCode, "Ship model code cannot be null");
+        Objects.requireNonNull(captainCUI, "Captain CUI cannot be null");
+
+        if (plateNumber.isBlank() || shipName.isBlank() || shipModelCode.isBlank() || captainCUI.isBlank()) {
+            throw new IllegalArgumentException("All fields must be filled");
+        }
+        try {
+            starshipDAO.addStarship(plateNumber, shipName, shipModelCode, captainCUI);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error registering starship", e);
+        }
+    }
+
+    public boolean isStarshipRegistered(String plateNumber) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        try {
+            return starshipDAO.fromPlate(plateNumber).isPresent();
+        } catch (DAOException e) {
+            throw new RuntimeException("Error checking if starship is registered", e);
+        }
     }
 }
