@@ -23,7 +23,7 @@ public class RequestSelectionPannel extends JPanel {
         this.view = view;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createTitledBorder("Seleziona la nave da gestire"));
+        this.setBorder(BorderFactory.createTitledBorder("Seleziona la richiesta da gestire"));
         this.setAlignmentX(CENTER_ALIGNMENT);
         this.setSize(500, 300);
 
