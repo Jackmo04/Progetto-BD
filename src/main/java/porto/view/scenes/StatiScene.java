@@ -8,6 +8,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -115,34 +116,30 @@ public class StatiScene extends JPanel {
         registerButton.addActionListener(e -> {
             String dobStart = dobInput.getText().trim();
             String dobFinal = dobFinalInput.getText().trim();
-            Timestamp tsStart;
-            Timestamp tsEnd;
+            Timestamp timestampStart;
+            Timestamp timestampTo;
             if (dobStart.isEmpty() || dobFinal.isEmpty()) {
                 displayRegisterError("Inserisci le date di inizio e fine analisi!");
                 return;
             }
             try {
-                DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
-                LocalDate formattedDob = LocalDate.parse(dobStart, df);
-                dobStart = Date.valueOf(formattedDob).toString();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                LocalDate formattedDobFinal = LocalDate.parse(dobFinal, df);
-                dobStart = Date.valueOf(formattedDob).toString();
+                java.util.Date parsedDateStart = dateFormat.parse(dobStart);
+                timestampStart = new Timestamp(parsedDateStart.getTime());
 
-                tsStart = Timestamp.valueOf(formattedDob.atStartOfDay());
-                tsEnd = Timestamp.valueOf(formattedDobFinal.atStartOfDay());
+                java.util.Date parsedDateTo = dateFormat.parse(dobStart);
+                timestampTo = new Timestamp(parsedDateTo.getTime());
 
-                if (formattedDob.isAfter(LocalDate.now())) {
-                    displayRegisterError("Data di nascita non può essere futura!");
-                    return;
-                }
             } catch (Exception ex) {
                 displayRegisterError("Formato data di nascita non valido! Usa gg/mm/aaaa");
                 return;
             }
-            String success = this.view.getController().acceptedRejectedPercentage(tsStart, tsEnd);
+            String success = this.view.getController().acceptedRejectedPercentage(timestampStart, timestampTo);
             System.out.println(success);
             if (success == null || success.isBlank()) {
+                result.setText("Errore durante il calcolo delle percentuali!");
+                result.setVisible(true);
                 displayRegisterError("Errore durante il calcolo delle percentuali!");
                 return;
             }
