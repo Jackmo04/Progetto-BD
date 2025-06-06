@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 
+import porto.data.api.FlightPurpose;
 import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
 import porto.data.api.Person;
@@ -377,7 +378,7 @@ public final class Controller {
     }
 
     public boolean isArrested(String cui) {
-    Objects.requireNonNull(cui, "CUI cannot be null");
+        Objects.requireNonNull(cui, "CUI cannot be null");
         try {
             return this.model.isArrested(cui);
         } catch (DAOException e) {
@@ -387,7 +388,7 @@ public final class Controller {
     }
 
     public void removeCrewMemberFromSelectedShip(String cui) {
-    Objects.requireNonNull(cui, "CUI cannot be null");
+        Objects.requireNonNull(cui, "CUI cannot be null");
         if (this.model.getSelectedStarship() == null) {
             throw new IllegalStateException("No starship is selected");
         }
@@ -431,6 +432,19 @@ public final class Controller {
 
     public List<Person> getStarshipeEquipe(String plate) {
         return this.model.getStarshipEquipe(plate);
+    }
+
+    public String[] getPurposeChoices() {
+        try {
+            return this.model.getAllFlightPurposes()
+                .stream()
+                .map(FlightPurpose::name)
+                .sorted(Comparator.naturalOrder())
+                .toArray(String[]::new);
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving purpose choices", e);
+            return new String[0];
+        }
     }
 
 }

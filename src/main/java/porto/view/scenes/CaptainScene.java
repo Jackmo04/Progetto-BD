@@ -19,6 +19,7 @@ import porto.data.api.ParkingSpace;
 import porto.view.View;
 import porto.view.utils.CrewAddDialog;
 import porto.view.utils.CrewViewerDialog;
+import porto.view.utils.NewRequestDialog;
 import porto.view.utils.RequestViewerDialog;
 
 public class CaptainScene extends JPanel {
@@ -146,7 +147,10 @@ public class CaptainScene extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE
                 );
             } else {
-                // TODO: Implement request station access
+                new NewRequestDialog(this.view, 
+                    "Richiesta di atterraggio sulla stazione", 
+                    true
+                ).setVisible(true);
             }
         });
         requestsPanel.add(requestAccessButton);
@@ -169,7 +173,10 @@ public class CaptainScene extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE
                 );
             } else {
-                // TODO: Implement request station departure
+                new NewRequestDialog(this.view, 
+                    "Richiesta di decollo dalla stazione", 
+                    false
+                ).setVisible(true);
             }
         });
         requestsPanel.add(requestDepartureButton);

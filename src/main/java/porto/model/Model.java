@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import porto.data.api.FlightPurpose;
 import porto.data.api.Ideology;
 import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
@@ -21,6 +22,7 @@ import porto.data.api.PersonRole;
 import porto.data.api.RequestType;
 import porto.data.api.ShipModel;
 import porto.data.api.dao.CellDAO;
+import porto.data.api.dao.FlightPurposeDAO;
 import porto.data.api.dao.ParkingSpaceDAO;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.PlanetDAO;
@@ -28,6 +30,7 @@ import porto.data.api.dao.RequestDAO;
 import porto.data.api.dao.ShipModelDAO;
 import porto.data.api.dao.StarshipDAO;
 import porto.data.dao.CellDAOImpl;
+import porto.data.dao.FlightPurposeDAOImpl;
 import porto.data.dao.ParkingSpaceDAOImpl;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.dao.PlanetDAOImpl;
@@ -45,6 +48,7 @@ public final class Model {
     private final ParkingSpaceDAO parkingSpaceDAO;
     private final ShipModelDAO shipModelDAO;
     private final CellDAO cellDAO;
+    private final FlightPurposeDAO flightPurposeDAO;
     private Optional<Person> loggedUser = Optional.empty();
     private Optional<Starship> selectedStarship = Optional.empty();
 
@@ -57,6 +61,7 @@ public final class Model {
         this.parkingSpaceDAO = new ParkingSpaceDAOImpl(connection);
         this.shipModelDAO = new ShipModelDAOImpl(connection);
         this.cellDAO = new CellDAOImpl(connection);
+        this.flightPurposeDAO = new FlightPurposeDAOImpl(connection);
     }
 
     public boolean login(String username, String password) {
@@ -365,5 +370,13 @@ public final class Model {
 
     public List<Person> getStarshipEquipe(String plate) {
         return personDAO.getEquipeOfStarship(plate);
+    }
+
+    public Set<FlightPurpose> getAllFlightPurposes() {
+        try {
+            return flightPurposeDAO.getAll();
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving all flight purposes", e);
+        }
     }
 }
