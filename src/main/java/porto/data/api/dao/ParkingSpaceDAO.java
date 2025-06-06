@@ -47,5 +47,5 @@ public interface ParkingSpaceDAO {
      */
     int clearCache();
 
-    public List<Person> getAllPeopleIn() throws DAOException ;
+    List<Person> getAllPeopleOnStation() throws DAOException ;
 }

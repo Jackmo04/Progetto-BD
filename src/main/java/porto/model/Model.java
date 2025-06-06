@@ -254,8 +254,8 @@ public final class Model {
         }
     }
 
-    public List<Person> getPersonOfStarship() {
-        return parkingSpaceDAO.getAllPeopleIn();
+    public List<Person> getPeopleOnStation() {
+        return parkingSpaceDAO.getAllPeopleOnStation();
     }
 
     public Set<ShipModel> getAllShipModels() {
@@ -288,6 +288,39 @@ public final class Model {
             return starshipDAO.fromPlate(plateNumber).isPresent();
         } catch (DAOException e) {
             throw new RuntimeException("Error checking if starship is registered", e);
+        }
+    }
+
+    public List<Person> getCrewMembersOfShip(String plateNumber) {
+    Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        try {
+            return personDAO.getEquipeOfStarship(plateNumber);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving crew members of ship with plate number: " + plateNumber, e);
+        }
+    }
+
+    public boolean isValidCrewMemberCUI(String cui) {
+        Objects.requireNonNull(cui, "CUI cannot be null");
+        try {
+            return personDAO.getFromCUI(cui)
+                .filter(p -> p.role() == PersonRole.CREW_MEMBER)
+                .isPresent();
+        } catch (DAOException e) {
+            throw new RuntimeException("Error checking if crew member CUI is valid: " + cui, e);
+        }
+    }
+
+    public void addCrewMemberToShip(String plateNumber, String cui) {
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        Objects.requireNonNull(cui, "CUI cannot be null");
+        try {
+            if (!isValidCrewMemberCUI(cui)) {
+                throw new IllegalArgumentException("Invalid crew member CUI: " + cui);
+            }
+            starshipDAO.addCrewMember(plateNumber, cui);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error adding crew member to ship", e);
         }
     }
 }

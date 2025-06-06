@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 
 import porto.data.api.ParkingSpace;
 import porto.view.View;
+import porto.view.utils.CrewAddDialog;
 import porto.view.utils.RequestViewerDialog;
 
 public class CaptainScene extends JPanel {
@@ -82,19 +83,28 @@ public class CaptainScene extends JPanel {
         mainPanel.add(lastRequestButton);
         mainPanel.add(Box.createVerticalStrut(20));
 
-        // C2 - Add/Remove a crew member
+        // C2 - Add a crew member
+        final JButton crewAddButton = new JButton("Aggiungi membri all'equipaggio");
+        crewAddButton.setFont(new Font(FONT, Font.BOLD, 16));
+        crewAddButton.setAlignmentX(CENTER_ALIGNMENT);
+        crewAddButton.addActionListener(e -> {
+            new CrewAddDialog(view, "Aggiunta membri equipaggio").setVisible(true);
+        });
+        mainPanel.add(crewAddButton);
+        mainPanel.add(Box.createVerticalStrut(20));
+
+        // C3 - Remove a crew member
+
+        // C4 - View crew members
         // TODO
 
-        // C3 - View crew members
+        // C5 - Request station access
         // TODO
 
-        // C4 - Request station access
+        // C6 - Request station departure
         // TODO
 
-        // C5 - Request station departure
-        // TODO
-
-        // C6 - View all requests
+        // C7 - View all requests
         // TODO
 
         final JButton backButton = new JButton("Torna indietro");

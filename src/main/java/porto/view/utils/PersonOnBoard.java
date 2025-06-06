@@ -29,7 +29,7 @@ public class PersonOnBoard extends JPanel {
         this.setBorder(BorderFactory.createTitledBorder("Seleziona la persona da gestire"));
         this.setAlignmentX(CENTER_ALIGNMENT);
         this.setSize(500, 300);
-        final List<Person> people = this.view.getController().getPersonOfStarship();
+        final List<Person> people = this.view.getController().getPeopleOnStation();
 
         final JTextField totalPeople = new JTextField("Numero di perone totali:" + view.getController().seeNumberPeople());
         totalPeople.setEditable(false);

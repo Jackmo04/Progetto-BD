@@ -108,7 +108,7 @@ public class ParkingSpaceDAOImpl implements ParkingSpaceDAO {
      * {@inheritDoc}
      */
     @Override
-    public List<Person> getAllPeopleIn() throws DAOException {
+    public List<Person> getAllPeopleOnStation() throws DAOException {
         List<Person> allPeople = new ArrayList<>();
         try (
             var statement = DAOUtils.prepare(connection, Queries.ALL_PEOPLE_IN);
