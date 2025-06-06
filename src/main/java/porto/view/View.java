@@ -15,7 +15,9 @@ import porto.view.scenes.CaptainScene;
 import porto.view.scenes.CrewScene;
 import porto.view.scenes.JudgeScene;
 import porto.view.scenes.WelcomeScene;
+import porto.view.utils.EquipeShip;
 import porto.view.utils.PersonOnBoard;
+import porto.view.utils.StarshipOnBoard;
 import porto.view.scenes.LoginScene;
 import porto.view.scenes.RegisterScene;
 
@@ -45,7 +47,7 @@ public final class View {
         final var initHeight = (int) (screenSize.height * FRAME_SIZE_FACTOR);
         this.mainFrame.setSize(new Dimension(initWidth, initHeight));
         this.mainFrame.setMinimumSize(new Dimension(800, 600));
-        
+
         this.cardLayout = new CardLayout();
         this.mainPanel = new JPanel(cardLayout);
         this.mainFrame.setContentPane(this.mainPanel);
@@ -56,13 +58,12 @@ public final class View {
         this.mainFrame.setVisible(true);
 
         this.mainFrame.addWindowListener(
-            new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    onClose.run();
-                    System.exit(0);
-                }
-            }
-        );
+                new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        onClose.run();
+                        System.exit(0);
+                    }
+                });
     }
 
     public JFrame getMainFrame() {
@@ -74,13 +75,12 @@ public final class View {
             return this.controller.get();
         } else {
             throw new IllegalStateException(
-                """
-                The View's Controller is undefined, did you remember to call
-                `setController` before starting the application?
-                Remeber that `View` needs a reference to the controller in order
-                to notify it of button clicks and other changes.
-                """
-            );
+                    """
+                            The View's Controller is undefined, did you remember to call
+                            `setController` before starting the application?
+                            Remeber that `View` needs a reference to the controller in order
+                            to notify it of button clicks and other changes.
+                            """);
         }
     }
 
@@ -125,13 +125,23 @@ public final class View {
         this.cardLayout.show(this.mainPanel, SN_ADMIN);
     }
 
-        public void goToJudgeScene(int requestCode) {
-        this.mainPanel.add(new JudgeScene(this , requestCode), SN_CAPTAIN);
+    public void goToJudgeScene(int requestCode) {
+        this.mainPanel.add(new JudgeScene(this, requestCode), SN_CAPTAIN);
         this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
     }
 
-            public void goToEquipeScene() {
+    public void goStarshipEquipe() {
         this.mainPanel.add(new PersonOnBoard(this), SN_CAPTAIN);
+        this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
+    }
+
+    public void goToEquipeScene(String plate) {
+        this.mainPanel.add(new EquipeShip(this, plate), SN_CAPTAIN);
+        this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
+    }
+
+    public void goToShipScene() {
+        this.mainPanel.add(new StarshipOnBoard(this), SN_CAPTAIN);
         this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
     }
 
@@ -141,8 +151,7 @@ public final class View {
             loginScene.displayLoginFail(message);
         } else {
             throw new IllegalStateException(
-                "Cannot display login error, current scene is not a login scene."
-            );
+                    "Cannot display login error, current scene is not a login scene.");
         }
     }
 
@@ -152,8 +161,7 @@ public final class View {
             registerScene.displayRegisterError(string);
         } else {
             throw new IllegalStateException(
-                "Cannot display register error, current scene is not a register scene."
-            );
+                    "Cannot display register error, current scene is not a register scene.");
         }
     }
 

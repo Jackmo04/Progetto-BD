@@ -358,4 +358,12 @@ public final class Model {
             throw new RuntimeException("Error retrieving requests of starship with plate number: " + plateNumber, e);
         }
     }
+
+    public List<Starship> getStarshipOnBoard() {
+        return parkingSpaceDAO.getAllStarshipIn();
+    }
+
+    public List<Person> getStarshipEquipe(String plate) {
+        return personDAO.getEquipeOfStarship(plate);
+    }
 }

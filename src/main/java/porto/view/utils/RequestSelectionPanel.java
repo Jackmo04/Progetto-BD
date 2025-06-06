@@ -72,12 +72,19 @@ public class RequestSelectionPanel extends JPanel {
         manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
 
         final JButton peopleOfShip = new JButton("Persone In Porto");
-        peopleOfShip.setEnabled(true);
         peopleOfShip.setFont(new Font(FONT, Font.BOLD, 16));
         peopleOfShip.setToolTipText("Seleziona una richiesta per gestirla");
         peopleOfShip.setAlignmentX(CENTER_ALIGNMENT);
         peopleOfShip.addActionListener(e -> {
-            this.view.goToEquipeScene();
+            this.view.goStarshipEquipe();
+        });
+
+        final JButton shipOnBoard = new JButton("Navi In Porto");
+        shipOnBoard.setFont(new Font(FONT, Font.BOLD, 16));
+        shipOnBoard.setToolTipText("Seleziona una richiesta per gestirla");
+        shipOnBoard.setAlignmentX(CENTER_ALIGNMENT);
+        shipOnBoard.addActionListener(e -> {
+            this.view.goToShipScene();
         });
 
         manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
@@ -85,6 +92,9 @@ public class RequestSelectionPanel extends JPanel {
 
         peopleOfShip.setAlignmentX(CENTER_ALIGNMENT);
         this.add(peopleOfShip);
+
+        shipOnBoard.setAlignmentX(CENTER_ALIGNMENT);
+        this.add(shipOnBoard);
 
         this.add(Box.createVerticalStrut(20));
     }

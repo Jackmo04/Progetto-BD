@@ -35,8 +35,8 @@
 ----------------------------------------------------------------
 
 # Admin
-[M]{??} S4 -- Visualizzare il posteggio di una nave
-[M]{??} C3 -- Visualizzare tutti i membri dell'equipaggio di una nave
+[F]{MA} S4 -- Visualizzare il posteggio di una nave
+[F]{MA} C3 -- Visualizzare tutti i membri dell'equipaggio di una nave
 [M]{??} C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
 
 [F]{MA} A1 -- Visualizzare tutte le richieste pendenti

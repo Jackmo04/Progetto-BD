@@ -153,7 +153,7 @@ public final class Controller {
                 break;
 
             case ADMIN:
-                this.view.goToAdminScene();
+                this.view.goToEquipeScene(plateNumber);
                 break;
 
             default:
@@ -421,6 +421,14 @@ public final class Controller {
     public boolean hasPendingRequest() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'hasPendingRequest'");
+    }
+
+    public List<Starship> getStarshipOnBoard() {
+        return this.model.getStarshipOnBoard();
+    }
+
+    public List<Person> getStarshipeEquipe(String plate) {
+        return this.model.getStarshipEquipe(plate);
     }
 
 }
