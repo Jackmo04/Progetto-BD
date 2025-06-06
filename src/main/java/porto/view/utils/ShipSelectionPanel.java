@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import porto.data.api.PersonRole;
 import porto.data.api.Starship;
 import porto.view.View;
 
@@ -106,6 +107,8 @@ public class ShipSelectionPanel extends JPanel {
         buttonPanel.add(manageShipButton);
         buttonPanel.add(Box.createHorizontalGlue());
         this.add(Box.createVerticalStrut(20));
+
+        createShipButton.setVisible(!(this.view.getController().getLoggedUser().role() == PersonRole.CREW_MEMBER));
     }
 
     public void refreshShips() {

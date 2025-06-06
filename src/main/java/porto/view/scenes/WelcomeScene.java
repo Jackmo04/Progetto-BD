@@ -39,6 +39,7 @@ public class WelcomeScene extends JPanel {
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         final JButton logoutButton = new JButton("Logout");
+        logoutButton.setFont(new Font(FONT, Font.BOLD, 16));
         logoutButton.addActionListener(e -> {
             this.view.getController().logout();
         });

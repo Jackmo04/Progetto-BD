@@ -66,20 +66,21 @@ public class ShipCreationDialog extends JDialog {
 
         final JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.add(Box.createVerticalStrut(30));
 
         // Plate number field
         final JLabel plate = cf.createFieldLabel("Targa* (8 car.)");
         contentPanel.add(plate);
         final JTextField plateInput = cf.createFieldInput(8, focusListener);
         contentPanel.add(plateInput);
-        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(Box.createVerticalStrut(20));
 
         // Name field
         final JLabel name = cf.createFieldLabel("Nome* (max 20 car.)");
         contentPanel.add(name);
         final JTextField nameInput = cf.createFieldInput(20, focusListener);
         contentPanel.add(nameInput);
-        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(Box.createVerticalStrut(20));
 
         // Model field
         final JLabel model = cf.createFieldLabel("Modello*");
@@ -87,7 +88,7 @@ public class ShipCreationDialog extends JDialog {
         final String[] models = this.view.getController().getModelChoices();
         final JComboBox<String> modelInput = cf.createSelectionBox(models);
         contentPanel.add(modelInput);
-        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(Box.createVerticalStrut(50));
 
         // Register button
         final JButton registerButton = new JButton("Registra astronave");
