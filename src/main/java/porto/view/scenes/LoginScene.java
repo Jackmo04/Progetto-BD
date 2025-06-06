@@ -3,6 +3,7 @@ package porto.view.scenes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -39,7 +40,7 @@ public class LoginScene extends JPanel {
 
         final JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(40, 20, 20, 20));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(40, 20, 20, 50));
         mainPanel.setOpaque(false);
         backgroundPanel.add(mainPanel, BorderLayout.CENTER);
 
@@ -50,11 +51,16 @@ public class LoginScene extends JPanel {
         mainPanel.add(title);
         mainPanel.add(Box.createVerticalStrut(20));
 
+        final JPanel intermediate = new JPanel();
+        intermediate.setOpaque(false);
+        intermediate.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        mainPanel.add(intermediate);
+
         final JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setOpaque(true);
         formPanel.setBackground(new Color(14, 14, 14));
-        mainPanel.add(formPanel);
+        intermediate.add(formPanel);
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         formPanel.setMaximumSize(new Dimension(400, 500));
 
@@ -160,6 +166,7 @@ public class LoginScene extends JPanel {
             this.view.getController().userClickedRegisterOnLogin();
         });
         formPanel.add(registerButton);
+        formPanel.add(Box.createVerticalStrut(20));
         
     }
 
