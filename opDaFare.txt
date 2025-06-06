@@ -28,8 +28,8 @@
 	[F]{MO} C2 -- Aggiungere membri all’equipaggio di una nave
 	[F]{MO} C3 -- Rimuovere membri all’equipaggio di una nave
 	[F]{MO} C4 -- Visualizzare tutti i membri dell'equipaggio di una propria nave
-	[M]{MO} C5 -- Richiedere accesso al porto
-	[M]{MO} C6 -- Richiedere uscita dal porto
+	[F]{MO} C5 -- Richiedere accesso al porto
+	[F]{MO} C6 -- Richiedere uscita dal porto
 	[F]{MO} C7 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
 	
 ----------------------------------------------------------------
