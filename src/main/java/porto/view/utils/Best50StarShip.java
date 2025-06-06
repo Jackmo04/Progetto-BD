@@ -3,7 +3,10 @@ package porto.view.utils;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,29 +21,30 @@ import javax.swing.table.DefaultTableModel;
 import porto.data.api.Starship;
 import porto.view.View;
 
-public class StarshipOnBoard extends JPanel {
+public class Best50StarShip extends JPanel {
 
     private static final String FONT = "Roboto";
     private final View view;
 
-    public StarshipOnBoard(View view) {
+    public Best50StarShip(View view) {
         this.view = view;
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createTitledBorder("Seleziona la nave da gestire"));
+        this.setBorder(BorderFactory.createTitledBorder("Migliori 50 navi da trasporto"));
         this.setAlignmentX(CENTER_ALIGNMENT);
 
-        final List<Starship> ships = this.view.getController().getStarshipOnBoard();
+        final Map<Starship,Integer> ships = this.view.getController().best50TrasporteStarships();
         DefaultTableModel tableModel = new DefaultTableModel(
-                ships.stream()
+                ships.entrySet().stream()
                         .map(ship -> new Object[] {
-                                ship.plateNumber(),
-                                ship.name(),
-                                ship.model().name(),
-                                ship.capitan().name() + " " + ship.capitan().surname()
+                            ship.getValue(),
+                                ship.getKey().plateNumber(),
+                                ship.getKey().name(),
+                                ship.getKey().model().name(),
+                                ship.getKey().capitan().name() + " " + ship.getKey().capitan().surname()
                         })
                         .toArray(Object[][]::new),
-                new String[] { "Targa", "Nome", "Modello", "Capitano" }) {
+                new String[] { "Posizione","Targa", "Nome", "Modello", "Capitano" }) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -55,20 +59,6 @@ public class StarshipOnBoard extends JPanel {
         this.add(new JScrollPane(shipTable));
         this.add(Box.createVerticalStrut(20));
 
-       /* final JButton manageShipButton = new JButton("Vedi Equipaggio nave");
-        manageShipButton.setEnabled(false);
-        manageShipButton.setFont(new Font(FONT, Font.BOLD, 16));
-        manageShipButton.setToolTipText("Seleziona una nave per gestirla");
-        manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
-        manageShipButton.addActionListener(e -> {
-            int selectedRow = shipTable.getSelectedRow();
-            if (selectedRow >= 0) {
-                String plateNumber = (String) shipTable.getValueAt(selectedRow, 0);
-                this.view.getController().manageShip(plateNumber);
-            } else {
-                throw new IllegalStateException("No ship selected for management");
-            }
-        });*/
 
         final JButton manageShipButton = new JButton("Gestisci nave selezionata");
         manageShipButton.setEnabled(false);

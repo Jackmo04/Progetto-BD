@@ -86,6 +86,15 @@ public class RequestSelectionPanel extends JPanel {
         shipOnBoard.addActionListener(e -> {
             this.view.goToShipScene();
         });
+        
+        
+        final JButton statistic = new JButton("Statistiche");
+        statistic.setFont(new Font(FONT, Font.BOLD, 16));
+        //statistic.setToolTipText("Seleziona una richiesta per gestirla");
+        statistic.setAlignmentX(CENTER_ALIGNMENT);
+        statistic.addActionListener(e -> {
+            this.view.goToStatisticScene();
+        });
 
         manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
         this.add(manageShipButton);
@@ -95,6 +104,9 @@ public class RequestSelectionPanel extends JPanel {
 
         shipOnBoard.setAlignmentX(CENTER_ALIGNMENT);
         this.add(shipOnBoard);
+
+        statistic.setAlignmentX(CENTER_ALIGNMENT);
+        this.add(statistic);
 
         this.add(Box.createVerticalStrut(20));
     }

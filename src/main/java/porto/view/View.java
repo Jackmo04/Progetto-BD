@@ -17,11 +17,13 @@ import porto.view.scenes.CaptainScene;
 import porto.view.scenes.CrewScene;
 import porto.view.scenes.JudgeScene;
 import porto.view.scenes.WelcomeScene;
+import porto.view.utils.Best50StarShip;
 import porto.view.utils.EquipeShip;
 import porto.view.utils.PersonOnBoard;
 import porto.view.utils.StarshipOnBoard;
 import porto.view.scenes.LoginScene;
 import porto.view.scenes.RegisterScene;
+import porto.view.scenes.StatiScene;
 
 public final class View {
 
@@ -145,6 +147,21 @@ public final class View {
 
     public void goToShipScene() {
         this.mainPanel.add(new StarshipOnBoard(this), SN_CAPTAIN);
+        this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
+    }
+
+    public void goToBestShipScene() {
+        this.mainPanel.add(new Best50StarShip(this), SN_CAPTAIN);
+        this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
+    }
+
+    public void goToStatisticScene() {
+        this.mainPanel.add(new StatiScene(this), SN_CAPTAIN);
+        this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
+    }
+
+    public void goToBest50ShipScene() {
+        this.mainPanel.add(new Best50StarShip(this), SN_CAPTAIN);
         this.cardLayout.show(this.mainPanel, SN_CAPTAIN);
     }
 

@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 import porto.data.api.FlightPurpose;
 import porto.data.api.Ideology;
 import porto.data.api.ParkingArea;
@@ -323,8 +325,8 @@ public final class Model {
         Objects.requireNonNull(cui, "CUI cannot be null");
         try {
             return personDAO.getFromCUI(cui)
-                .filter(p -> p.role() == PersonRole.CREW_MEMBER)
-                .isPresent();
+                    .filter(p -> p.role() == PersonRole.CREW_MEMBER)
+                    .isPresent();
         } catch (DAOException e) {
             throw new RuntimeException("Error checking if crew member CUI is valid: " + cui, e);
         }
@@ -376,6 +378,15 @@ public final class Model {
 
     public List<Starship> getStarshipOnBoard() {
         return parkingSpaceDAO.getAllStarshipIn();
+    }
+
+    public Map<Starship, Integer> getBestStarshipeTrasport(String plate) {
+        return starshipDAO.get50TransportedMost();
+    }
+
+    public ImmutablePair<Double, Double> rejectAcceptedPertage(Timestamp start, Timestamp to) {
+        Objects.requireNonNull(start, "Start timestamp cannot be null");
+        return requestDAO.acceptedAndRejectedPercentages(start, to);
     }
 
     public List<Person> getStarshipEquipe(String plate) {

@@ -157,7 +157,8 @@ public final class Controller {
                 break;
 
             case ADMIN:
-                this.view.goToEquipeScene(plateNumber);
+               // this.view.goToAdminScene();    
+               this.view.goToEquipeScene(plateNumber);
                 break;
 
             default:
@@ -433,9 +434,20 @@ public final class Controller {
         return this.model.getStarshipOnBoard();
     }
 
-    public List<Person> getStarshipeEquipe(String plate) {
-        return this.model.getStarshipEquipe(plate);
+        public List<Person> getStarshipeEquipe(String plate) {
+        return this.model.getCrewMembersOfShip(plate);
     }
+
+    public String rejectAceptedRequestPertage(Timestamp start , Timestamp to) {
+        var result =  this.model.rejectAcceptedPertage(start, to);
+
+        return "Richieste accettate:" + result.getLeft() + "%,\n Richieste rifiutate:" + result.getRight() + "%";
+    }
+
+    public Map<Starship,Integer> getBestStarshipeTrasport(String plate) {
+        return this.model.getBestStarshipeTrasport(plate);
+    }
+
 
     public String[] getPurposeChoices() {
         try {
