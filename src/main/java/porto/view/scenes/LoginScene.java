@@ -1,5 +1,6 @@
 package porto.view.scenes;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,32 +19,48 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import porto.view.View;
+import porto.view.utils.BGJPanel;
 
 public class LoginScene extends JPanel {
 
     private static final String FONT = "Roboto";
+    private static final Color FONT_COLOR = Color.WHITE;
 
     private final View view;
     private final JLabel errorLabel;
 
     public LoginScene(View view) {
-        this.view = view;        
+        this.view = view;
+        this.setLayout(new BorderLayout());
+
+        final JPanel backgroundPanel = new BGJPanel(ClassLoader.getSystemResource("images/ds.jpg"));
+        backgroundPanel.setLayout(new BorderLayout());
+        this.add(backgroundPanel, BorderLayout.CENTER);
 
         final JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(50, 20, 20, 20));
-        this.add(mainPanel);
+        mainPanel.setOpaque(false);
+        backgroundPanel.add(mainPanel, BorderLayout.CENTER);
 
-        final JLabel title = new JLabel("Login", JLabel.CENTER);
+        final JLabel title = new JLabel("Stazione spaziale Morte Nera", JLabel.CENTER);
         title.setAlignmentX(CENTER_ALIGNMENT);
         title.setFont(new Font(FONT, Font.BOLD, 50));
+        title.setForeground(FONT_COLOR);
         mainPanel.add(title);
+        mainPanel.add(Box.createVerticalStrut(10));
 
-        mainPanel.add(Box.createVerticalStrut(30));
+        final JLabel subtitle = new JLabel("Login", JLabel.CENTER);
+        subtitle.setAlignmentX(CENTER_ALIGNMENT);
+        subtitle.setFont(new Font(FONT, Font.BOLD, 30));
+        subtitle.setForeground(FONT_COLOR);
+        mainPanel.add(subtitle);
+        mainPanel.add(Box.createVerticalStrut(20));
 
         final JLabel usernameLabel = new JLabel("CUI / Username", JLabel.CENTER);
         usernameLabel.setAlignmentX(CENTER_ALIGNMENT);
         usernameLabel.setFont(new Font(FONT, Font.PLAIN, 20));
+        usernameLabel.setForeground(FONT_COLOR);
         mainPanel.add(usernameLabel);
 
         final JTextField usernameInput = new JTextField(20);
@@ -62,6 +79,7 @@ public class LoginScene extends JPanel {
         final JLabel passwordLabel = new JLabel("Password", JLabel.CENTER);
         passwordLabel.setAlignmentX(CENTER_ALIGNMENT);
         passwordLabel.setFont(new Font(FONT, Font.PLAIN, 20));
+        passwordLabel.setForeground(FONT_COLOR);
         mainPanel.add(passwordLabel);
 
         final JPasswordField passwordInput = new JPasswordField(20);
@@ -121,6 +139,7 @@ public class LoginScene extends JPanel {
         final JLabel registerLabel = new JLabel("Non hai un account?", SwingConstants.CENTER);
         registerLabel.setAlignmentX(CENTER_ALIGNMENT);
         registerLabel.setFont(new Font(FONT, Font.PLAIN, 16));
+        registerLabel.setForeground(FONT_COLOR);
         mainPanel.add(registerLabel);
         mainPanel.add(Box.createVerticalStrut(10));
 
