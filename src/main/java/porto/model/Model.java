@@ -2,6 +2,7 @@ package porto.model;
 
 import java.sql.Timestamp;
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -13,6 +14,7 @@ import porto.data.api.FlightPurpose;
 import porto.data.api.Ideology;
 import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
+import porto.data.api.Payload;
 import porto.data.api.Person;
 import porto.data.api.Planet;
 import porto.data.api.Request;
@@ -24,6 +26,7 @@ import porto.data.api.ShipModel;
 import porto.data.api.dao.CellDAO;
 import porto.data.api.dao.FlightPurposeDAO;
 import porto.data.api.dao.ParkingSpaceDAO;
+import porto.data.api.dao.PayloadDAO;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.PlanetDAO;
 import porto.data.api.dao.RequestDAO;
@@ -32,6 +35,7 @@ import porto.data.api.dao.StarshipDAO;
 import porto.data.dao.CellDAOImpl;
 import porto.data.dao.FlightPurposeDAOImpl;
 import porto.data.dao.ParkingSpaceDAOImpl;
+import porto.data.dao.PayloadDAOImpl;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.dao.PlanetDAOImpl;
 import porto.data.dao.RequestDAOImpl;
@@ -49,6 +53,7 @@ public final class Model {
     private final ShipModelDAO shipModelDAO;
     private final CellDAO cellDAO;
     private final FlightPurposeDAO flightPurposeDAO;
+    private final PayloadDAO payloadDAO;
     private Optional<Person> loggedUser = Optional.empty();
     private Optional<Starship> selectedStarship = Optional.empty();
 
@@ -62,6 +67,7 @@ public final class Model {
         this.shipModelDAO = new ShipModelDAOImpl(connection);
         this.cellDAO = new CellDAOImpl(connection);
         this.flightPurposeDAO = new FlightPurposeDAOImpl(connection);
+        this.payloadDAO = new PayloadDAOImpl(connection);
     }
 
     public boolean login(String username, String password) {
@@ -377,6 +383,15 @@ public final class Model {
             return flightPurposeDAO.getAll();
         } catch (DAOException e) {
             throw new RuntimeException("Error retrieving all flight purposes", e);
+        }
+    }
+
+    public Set<Payload> getPayloadsOfRequest(int codRichiesta) {
+    Objects.requireNonNull(codRichiesta, "Request code cannot be null");
+        try {
+            return payloadDAO.getOfRequest(codRichiesta);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving payloads of request with code: " + codRichiesta, e);
         }
     }
 }

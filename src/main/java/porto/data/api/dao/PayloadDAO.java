@@ -1,5 +1,8 @@
 package porto.data.api.dao;
 
+import java.util.Set;
+
+import porto.data.api.Payload;
 import porto.data.api.PayloadType;
 import porto.data.utils.DAOException;
 
@@ -13,4 +16,6 @@ public interface PayloadDAO {
      * @throws DAOException if an error occurs while adding the payload
      */
     void add(PayloadType type, int quantity, int codRequest) throws DAOException;
+
+    Set<Payload> getOfRequest(int codRichiesta);
 }

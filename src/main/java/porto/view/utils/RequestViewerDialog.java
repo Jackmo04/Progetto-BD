@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -42,13 +44,18 @@ public class RequestViewerDialog extends JDialog {
                     req.purpose().name(),
                     req.departurePlanet().name(),
                     req.destinationPlanet().name(),
-                    view.getController().getRequestManagedBy(req).map(Person::fullName).orElse("N/A")
+                    view.getController().getRequestManagedBy(req).map(Person::fullName).orElse("N/A"),
+                    view.getController().getPayloadsOfRequest(req)
+                        .stream()
+                        .map(payload -> payload.type().name() + " (" + payload.quantity() + ")")
+                        .reduce((a, b) -> a + ", " + b)
+                        .orElse("N/A")
                 })
                 .toArray(Object[][]::new),
             new String[]{
                 "Codice", "Tipo", "Data/Ora", "Descrizione", "Costo", "Esito",
                 "Data/Ora Gestione", "Scopo", "Provenienza",
-                "Destinazione", "Gestita da"
+                "Destinazione", "Gestita da", "Carichi [Tipo (Quantità)]"
             }
         );
         requestsTable.getColumnModel().getColumn(0).setPreferredWidth(50);
@@ -62,6 +69,7 @@ public class RequestViewerDialog extends JDialog {
         requestsTable.getColumnModel().getColumn(8).setPreferredWidth(100);
         requestsTable.getColumnModel().getColumn(9).setPreferredWidth(100);
         requestsTable.getColumnModel().getColumn(10).setPreferredWidth(150);
+        requestsTable.getColumnModel().getColumn(11).setPreferredWidth(200);
 
         this.add(new JScrollPane(requestsTable));
         requestsPanel.add(requestsTable.getTableHeader());

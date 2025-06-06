@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import porto.data.api.FlightPurpose;
 import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
+import porto.data.api.Payload;
 import porto.data.api.Person;
 import porto.data.api.PersonRole;
 import porto.data.api.Planet;
@@ -444,6 +445,19 @@ public final class Controller {
         } catch (DAOException e) {
             LOGGER.error("Error retrieving purpose choices", e);
             return new String[0];
+        }
+    }
+
+    public List<Payload> getPayloadsOfRequest(Request req) {
+        Objects.requireNonNull(req, "Request cannot be null");
+        try {
+            return this.model.getPayloadsOfRequest(req.codRichiesta())
+                .stream()
+                .sorted(Comparator.comparing(p -> p.type().name()))
+                .toList();
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving payloads of request: {}", req, e);
+            throw new RuntimeException("Error retrieving payloads", e);
         }
     }
 

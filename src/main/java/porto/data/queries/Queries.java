@@ -296,4 +296,11 @@ public final class Queries {
                 WHERE p.NumCella = c.NumCella
                 AND p.CUI = ?;
             """;
+    
+    public static final String GET_PAYLOADS_OF_REQUEST = """
+                SELECT c.*, t.*
+                FROM Carichi c, tipologie_carico t
+                WHERE c.Tipologia = t.CodTipoCarico
+                AND c.CodRichiesta = ?;
+            """;
 }
