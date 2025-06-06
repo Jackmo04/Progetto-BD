@@ -5,10 +5,8 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -53,7 +51,7 @@ public class RequestViewerDialog extends JDialog {
                 })
                 .toArray(Object[][]::new),
             new String[]{
-                "Codice", "Tipo", "Data/Ora", "Descrizione", "Costo", "Esito",
+                "Codice", "Tipo", "Data/Ora", "Descrizione", "Costo", "Stato",
                 "Data/Ora Gestione", "Scopo", "Provenienza",
                 "Destinazione", "Gestita da", "Carichi [Tipo (Quantità)]"
             }

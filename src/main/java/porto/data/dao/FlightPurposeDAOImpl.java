@@ -2,6 +2,7 @@ package porto.data.dao;
 
 import java.sql.Connection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import porto.data.FlightPurposeImpl;
@@ -56,6 +57,13 @@ public class FlightPurposeDAOImpl implements FlightPurposeDAO {
         } catch (Exception e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public Optional<FlightPurpose> getFromNameInCache(String purpose) {
+        return cache.stream()
+            .filter(fp -> fp.name().equalsIgnoreCase(purpose))
+            .findFirst();
     }
 
 }

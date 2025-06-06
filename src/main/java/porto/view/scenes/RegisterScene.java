@@ -145,7 +145,7 @@ public class RegisterScene extends JPanel {
         // Planet of birth
         final JLabel planetLabel = cf.createFieldLabel("Pianeta di nascita*");
         mainPanel.add(planetLabel);
-        final String[] planets = this.view.getController().getPlanetChoices();
+        final String[] planets = this.view.getController().getPlanetChoices().toArray(new String[0]);
         final JComboBox<String> planetInput = cf.createSelectionBox(planets);
         mainPanel.add(planetInput);
         mainPanel.add(Box.createVerticalStrut(10));        

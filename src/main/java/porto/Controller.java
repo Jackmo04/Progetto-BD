@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 
@@ -14,6 +15,7 @@ import porto.data.api.FlightPurpose;
 import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
 import porto.data.api.Payload;
+import porto.data.api.PayloadType;
 import porto.data.api.Person;
 import porto.data.api.PersonRole;
 import porto.data.api.Planet;
@@ -90,16 +92,16 @@ public final class Controller {
         return this.model.getSelectedStarship();
     }
 
-    public String[] getPlanetChoices() {
+    public List<String> getPlanetChoices() {
         try {
             return this.model.getAllPlanets()
                     .stream()
                     .map(Planet::name)
                     .sorted(Comparator.naturalOrder())
-                    .toArray(String[]::new);
+                    .collect(Collectors.toList());
         } catch (DAOException e) {
             LOGGER.error("Error retrieving planets names", e);
-            return new String[0];
+            return List.of();
         }
     }
 
@@ -458,6 +460,64 @@ public final class Controller {
         } catch (DAOException e) {
             LOGGER.error("Error retrieving payloads of request: {}", req, e);
             throw new RuntimeException("Error retrieving payloads", e);
+        }
+    }
+
+    public List<String> getPayloadTypeChoices() {
+        try {
+            return this.model.getAllPayloadTypes()
+                .stream()
+                .map(PayloadType::name)
+                .sorted(Comparator.naturalOrder())
+                .collect(Collectors.toList());
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving payload type choices", e);
+            return List.of();
+        }
+    }
+
+    public PayloadType getpayloadTypeFromName(String typeName) {
+        Objects.requireNonNull(typeName, "Payload type name cannot be null");
+        try {
+            return this.model.getPayloadTypeFromName(typeName)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid payload type name: " + typeName));
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving payload type from name: {}", typeName, e);
+            throw new RuntimeException("Error retrieving payload type", e);
+        }
+    }
+
+    public void sendRequest(String description, String purpose, String planet, List<Payload> payloads, boolean isAccessRequest) {
+        Objects.requireNonNull(description, "Description cannot be null");
+        Objects.requireNonNull(purpose, "Purpose cannot be null");
+        Objects.requireNonNull(planet, "Planet cannot be null");
+        Objects.requireNonNull(payloads, "Payloads cannot be null");
+        if (this.model.getSelectedStarship() == null) {
+            throw new IllegalStateException("No starship is selected");
+        }
+
+        try {
+            if (isAccessRequest) {
+                this.model.addEntryRequest(
+                    this.model.getSelectedStarship().plateNumber(),
+                    description, 
+                    purpose, 
+                    planet, 
+                    payloads.stream().collect(Collectors.toSet())
+                );
+            } else {
+                this.model.addExitRequest(
+                    this.model.getSelectedStarship().plateNumber(),
+                    description, 
+                    purpose, 
+                    planet, 
+                    payloads.stream().collect(Collectors.toSet())
+                );
+            }
+            
+            LOGGER.info("Request sent successfully for starship: {}", this.model.getSelectedStarship().plateNumber());
+        } catch (DAOException e) {
+            LOGGER.error("Error sending request for starship: {}", this.model.getSelectedStarship().plateNumber(), e);
         }
     }
 

@@ -1,5 +1,6 @@
 package porto.data.api.dao;
 
+import java.util.Optional;
 import java.util.Set;
 
 import porto.data.api.PayloadType;
@@ -20,4 +21,6 @@ public interface PayloadTypeDAO {
      * @return the number of entries cleared from the cache
      */
     int clearCache();
+
+    Optional<PayloadType> getFromNameInCache(String typeName);
 }

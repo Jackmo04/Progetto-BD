@@ -2,6 +2,7 @@ package porto.data.dao;
 
 import java.sql.Connection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import porto.data.PayloadTypeImpl;
@@ -63,5 +64,15 @@ public class PayloadTypeDAOImpl implements PayloadTypeDAO {
         int size = cache.size();
         cache.clear();
         return size;
+    }
+
+    @Override
+    public Optional<PayloadType> getFromNameInCache(String typeName) {
+        if (typeName == null || typeName.isBlank()) {
+            throw new IllegalArgumentException("Type name cannot be null or empty");
+        }
+        return cache.stream()
+            .filter(p -> p.name().equalsIgnoreCase(typeName))
+            .findFirst();
     }
 }

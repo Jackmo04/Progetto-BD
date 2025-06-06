@@ -1,5 +1,6 @@
 package porto.data.api.dao;
 
+import java.util.Optional;
 import java.util.Set;
 
 import porto.data.api.FlightPurpose;
@@ -19,5 +20,7 @@ public interface FlightPurposeDAO {
      * @throws DAOException if an error occurs while accessing the database
      */
     Set<FlightPurpose> getAll() throws DAOException;
+
+    Optional<FlightPurpose> getFromNameInCache(String purpose);
 
 }

@@ -2,7 +2,6 @@ package porto.model;
 
 import java.sql.Timestamp;
 import java.sql.Connection;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -15,6 +14,7 @@ import porto.data.api.Ideology;
 import porto.data.api.ParkingArea;
 import porto.data.api.ParkingSpace;
 import porto.data.api.Payload;
+import porto.data.api.PayloadType;
 import porto.data.api.Person;
 import porto.data.api.Planet;
 import porto.data.api.Request;
@@ -27,6 +27,7 @@ import porto.data.api.dao.CellDAO;
 import porto.data.api.dao.FlightPurposeDAO;
 import porto.data.api.dao.ParkingSpaceDAO;
 import porto.data.api.dao.PayloadDAO;
+import porto.data.api.dao.PayloadTypeDAO;
 import porto.data.api.dao.PersonDAO;
 import porto.data.api.dao.PlanetDAO;
 import porto.data.api.dao.RequestDAO;
@@ -36,6 +37,7 @@ import porto.data.dao.CellDAOImpl;
 import porto.data.dao.FlightPurposeDAOImpl;
 import porto.data.dao.ParkingSpaceDAOImpl;
 import porto.data.dao.PayloadDAOImpl;
+import porto.data.dao.PayloadTypeDAOImpl;
 import porto.data.dao.PersonDAOImpl;
 import porto.data.dao.PlanetDAOImpl;
 import porto.data.dao.RequestDAOImpl;
@@ -54,6 +56,7 @@ public final class Model {
     private final CellDAO cellDAO;
     private final FlightPurposeDAO flightPurposeDAO;
     private final PayloadDAO payloadDAO;
+    private final PayloadTypeDAO payloadTypeDAO;
     private Optional<Person> loggedUser = Optional.empty();
     private Optional<Starship> selectedStarship = Optional.empty();
 
@@ -68,6 +71,7 @@ public final class Model {
         this.cellDAO = new CellDAOImpl(connection);
         this.flightPurposeDAO = new FlightPurposeDAOImpl(connection);
         this.payloadDAO = new PayloadDAOImpl(connection);
+        this.payloadTypeDAO = new PayloadTypeDAOImpl(connection);
     }
 
     public boolean login(String username, String password) {
@@ -307,7 +311,7 @@ public final class Model {
     }
 
     public List<Person> getCrewMembersOfShip(String plateNumber) {
-    Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
         try {
             return personDAO.getEquipeOfStarship(plateNumber);
         } catch (DAOException e) {
@@ -362,7 +366,7 @@ public final class Model {
     }
 
     public List<Request> getRequestsOfStarship(String plateNumber) {
-    Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        Objects.requireNonNull(plateNumber, "Plate number cannot be null");
         try {
             return requestDAO.starshipRequestHistory(plateNumber);
         } catch (DAOException e) {
@@ -387,11 +391,50 @@ public final class Model {
     }
 
     public Set<Payload> getPayloadsOfRequest(int codRichiesta) {
-    Objects.requireNonNull(codRichiesta, "Request code cannot be null");
+        Objects.requireNonNull(codRichiesta, "Request code cannot be null");
         try {
             return payloadDAO.getOfRequest(codRichiesta);
         } catch (DAOException e) {
             throw new RuntimeException("Error retrieving payloads of request with code: " + codRichiesta, e);
         }
+    }
+
+    public Set<PayloadType> getAllPayloadTypes() {
+        try {
+            return payloadTypeDAO.getAll();
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving all payload types", e);
+        }
+    }
+
+    public Optional<PayloadType> getPayloadTypeFromName(String typeName) {
+        Objects.requireNonNull(typeName, "Payload type name cannot be null");
+        try {
+            return payloadTypeDAO.getFromNameInCache(typeName);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving payload type from name: " + typeName, e);
+        }
+    }
+
+    public void addEntryRequest(String plateNumber, String description, String purpose, String planet,
+            Set<Payload> payloads) {
+        var ship = starshipDAO.fromPlate(plateNumber)
+                .orElseThrow(() -> new IllegalArgumentException("No starship found with plate number: " + plateNumber));
+        var purposeObj = flightPurposeDAO.getFromNameInCache(purpose)
+                .orElseThrow(() -> new IllegalArgumentException("No flight purpose found with name: " + purpose));
+        var planetObj = planetDAO.getFromName(planet)
+                .orElseThrow(() -> new IllegalArgumentException("No planet found with name: " + planet));
+        requestDAO.addEntryRequest(description, purposeObj, ship, planetObj, payloads);
+    }
+
+    public void addExitRequest(String plateNumber, String description, String purpose, String planet,
+            Set<Payload> payloads) {
+        var ship = starshipDAO.fromPlate(plateNumber)
+                .orElseThrow(() -> new IllegalArgumentException("No starship found with plate number: " + plateNumber));
+        var purposeObj = flightPurposeDAO.getFromNameInCache(purpose)
+                .orElseThrow(() -> new IllegalArgumentException("No flight purpose found with name: " + purpose));
+        var planetObj = planetDAO.getFromName(planet)
+                .orElseThrow(() -> new IllegalArgumentException("No planet found with name: " + planet));
+        requestDAO.addExitRequest(description, purposeObj, ship, planetObj, payloads);
     }
 }

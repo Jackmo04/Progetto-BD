@@ -143,7 +143,7 @@ public class CaptainScene extends JPanel {
             } else if (this.view.getController().hasPendingRequest()) {
                 JOptionPane.showMessageDialog(this, 
                     "La nave ha già effettuato una richiesta. Attendere la risposta della stazione.",
-                    "Richiesta di accesso alla stazione",
+                    "Richiesta di atterraggio sulla stazione",
                     JOptionPane.INFORMATION_MESSAGE
                 );
             } else {
@@ -169,7 +169,7 @@ public class CaptainScene extends JPanel {
             } else if (this.view.getController().hasPendingRequest()) {
                 JOptionPane.showMessageDialog(this, 
                     "La nave ha già effettuato una richiesta. Attendere la risposta della stazione.",
-                    "Richiesta di partenza dalla stazione",
+                    "Richiesta di decollo dalla stazione",
                     JOptionPane.INFORMATION_MESSAGE
                 );
             } else {
