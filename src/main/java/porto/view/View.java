@@ -7,6 +7,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Objects;
 import java.util.Optional;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import porto.Controller;
@@ -41,6 +43,7 @@ public final class View {
         this.controller = Optional.empty();
         this.mainFrame = new JFrame("Porto Morte Nera");
         this.mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.mainFrame.setIconImage(new ImageIcon(ClassLoader.getSystemResource("images/icon.png")).getImage());
 
         var screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         final var initWidth = (int) (screenSize.width * FRAME_SIZE_FACTOR);

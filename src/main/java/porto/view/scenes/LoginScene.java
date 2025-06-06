@@ -39,7 +39,7 @@ public class LoginScene extends JPanel {
 
         final JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(50, 20, 20, 20));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(40, 20, 20, 20));
         mainPanel.setOpaque(false);
         backgroundPanel.add(mainPanel, BorderLayout.CENTER);
 
@@ -48,25 +48,33 @@ public class LoginScene extends JPanel {
         title.setFont(new Font(FONT, Font.BOLD, 50));
         title.setForeground(FONT_COLOR);
         mainPanel.add(title);
-        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(Box.createVerticalStrut(20));
+
+        final JPanel formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setOpaque(true);
+        formPanel.setBackground(new Color(14, 14, 14));
+        mainPanel.add(formPanel);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        formPanel.setMaximumSize(new Dimension(400, 500));
 
         final JLabel subtitle = new JLabel("Login", JLabel.CENTER);
         subtitle.setAlignmentX(CENTER_ALIGNMENT);
-        subtitle.setFont(new Font(FONT, Font.BOLD, 30));
+        subtitle.setFont(new Font(FONT, Font.BOLD, 32));
         subtitle.setForeground(FONT_COLOR);
-        mainPanel.add(subtitle);
-        mainPanel.add(Box.createVerticalStrut(20));
+        formPanel.add(subtitle);
+        formPanel.add(Box.createVerticalStrut(20));
 
         final JLabel usernameLabel = new JLabel("CUI / Username", JLabel.CENTER);
         usernameLabel.setAlignmentX(CENTER_ALIGNMENT);
         usernameLabel.setFont(new Font(FONT, Font.PLAIN, 20));
         usernameLabel.setForeground(FONT_COLOR);
-        mainPanel.add(usernameLabel);
+        formPanel.add(usernameLabel);
 
         final JTextField usernameInput = new JTextField(20);
         usernameInput.setFont(new Font(FONT, Font.PLAIN, 20));
         usernameInput.setMaximumSize(new Dimension(300, 40));
-        mainPanel.add(usernameInput);
+        formPanel.add(usernameInput);
         usernameInput.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -74,19 +82,19 @@ public class LoginScene extends JPanel {
             }
         });
 
-        mainPanel.add(Box.createVerticalStrut(20));
+        formPanel.add(Box.createVerticalStrut(20));
 
         final JLabel passwordLabel = new JLabel("Password", JLabel.CENTER);
         passwordLabel.setAlignmentX(CENTER_ALIGNMENT);
         passwordLabel.setFont(new Font(FONT, Font.PLAIN, 20));
         passwordLabel.setForeground(FONT_COLOR);
-        mainPanel.add(passwordLabel);
+        formPanel.add(passwordLabel);
 
         final JPasswordField passwordInput = new JPasswordField(20);
         passwordInput.setEchoChar('*');
         passwordInput.setFont(new Font(FONT, Font.PLAIN, 20));
         passwordInput.setMaximumSize(new Dimension(300, 40));
-        mainPanel.add(passwordInput);
+        formPanel.add(passwordInput);
         passwordInput.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -94,7 +102,7 @@ public class LoginScene extends JPanel {
             }
         });
 
-        mainPanel.add(Box.createVerticalStrut(30));
+        formPanel.add(Box.createVerticalStrut(30));
 
         this.errorLabel = new JLabel("", SwingConstants.CENTER);
         this.errorLabel.setFont(new Font(FONT, Font.PLAIN, 16));
@@ -128,20 +136,20 @@ public class LoginScene extends JPanel {
                 passwordInput.setText("");
             }
         });
-        mainPanel.add(loginButton);
+        formPanel.add(loginButton);
 
-        mainPanel.add(Box.createVerticalStrut(20));
+        formPanel.add(Box.createVerticalStrut(20));
 
-        mainPanel.add(this.errorLabel);
+        formPanel.add(this.errorLabel);
 
-        mainPanel.add(Box.createVerticalStrut(30));
+        formPanel.add(Box.createVerticalStrut(30));
 
         final JLabel registerLabel = new JLabel("Non hai un account?", SwingConstants.CENTER);
         registerLabel.setAlignmentX(CENTER_ALIGNMENT);
         registerLabel.setFont(new Font(FONT, Font.PLAIN, 16));
         registerLabel.setForeground(FONT_COLOR);
-        mainPanel.add(registerLabel);
-        mainPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(registerLabel);
+        formPanel.add(Box.createVerticalStrut(10));
 
         final JButton registerButton = new JButton("Registrati");
         registerButton.setAlignmentX(CENTER_ALIGNMENT);
@@ -151,7 +159,7 @@ public class LoginScene extends JPanel {
             this.errorLabel.setVisible(false);
             this.view.getController().userClickedRegisterOnLogin();
         });
-        mainPanel.add(registerButton);
+        formPanel.add(registerButton);
         
     }
 
