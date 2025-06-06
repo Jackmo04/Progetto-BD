@@ -349,4 +349,13 @@ public final class Model {
             throw new RuntimeException("Error removing crew member from ship", e);
         }
     }
+
+    public List<Request> getRequestsOfStarship(String plateNumber) {
+    Objects.requireNonNull(plateNumber, "Plate number cannot be null");
+        try {
+            return requestDAO.starshipRequestHistory(plateNumber);
+        } catch (DAOException e) {
+            throw new RuntimeException("Error retrieving requests of starship with plate number: " + plateNumber, e);
+        }
+    }
 }

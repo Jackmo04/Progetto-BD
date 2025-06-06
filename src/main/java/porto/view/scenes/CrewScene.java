@@ -1,6 +1,8 @@
 package porto.view.scenes;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -43,8 +45,15 @@ public class CrewScene extends JPanel {
         mainPanel.add(title);
         mainPanel.add(Box.createVerticalStrut(30));
 
+        final JPanel parkingPanel = new JPanel();
+        parkingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        parkingPanel.setBorder(BorderFactory.createTitledBorder("Gestione posteggio"));
+        parkingPanel.setAlignmentX(CENTER_ALIGNMENT);
+        parkingPanel.setMaximumSize(new Dimension(400, 100));
+        mainPanel.add(parkingPanel);
+
         // S4 - Show parking space of the starship
-        final JButton parkingButton = new JButton("Visualizza posteggio");
+        final JButton parkingButton = new JButton("Visualizza");
         parkingButton.setFont(new Font(FONT, Font.BOLD, 16));
         parkingButton.setAlignmentX(CENTER_ALIGNMENT);
         parkingButton.addActionListener(e -> {
@@ -55,11 +64,18 @@ public class CrewScene extends JPanel {
                 JOptionPane.INFORMATION_MESSAGE
             );
         });
-        mainPanel.add(parkingButton);
+        parkingPanel.add(parkingButton);
         mainPanel.add(Box.createVerticalStrut(20));
 
+        final JPanel requestsPanel = new JPanel();
+        requestsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        requestsPanel.setBorder(BorderFactory.createTitledBorder("Gestione richieste"));
+        requestsPanel.setAlignmentX(CENTER_ALIGNMENT);
+        requestsPanel.setMaximumSize(new Dimension(400, 100));
+        mainPanel.add(requestsPanel);
+
         // S5 - Show last request of the starship
-        final JButton lastRequestButton = new JButton("Visualizza ultima richiesta effettuata");
+        final JButton lastRequestButton = new JButton("Visualizza ultima");
         lastRequestButton.setFont(new Font(FONT, Font.BOLD, 16));
         lastRequestButton.setAlignmentX(CENTER_ALIGNMENT);
         lastRequestButton.addActionListener(e -> {
@@ -73,12 +89,11 @@ public class CrewScene extends JPanel {
             } else {
                 new RequestViewerDialog(this.view, 
                     "Ultima richiesta di " + this.view.getController().getSelectedStarship().plateNumber(),
-                    lastRequest.stream().toList(),
-                    false
+                    lastRequest.stream().toList()
                 ).setVisible(true);
             }
         });
-        mainPanel.add(lastRequestButton);
+        requestsPanel.add(lastRequestButton);
         mainPanel.add(Box.createVerticalStrut(20));
 
         final JButton backButton = new JButton("Torna indietro");

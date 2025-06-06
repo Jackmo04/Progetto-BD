@@ -403,4 +403,24 @@ public final class Controller {
         }
     }
 
+    public List<Request> getRequestsOfSelectedStarship() {
+        if (this.model.getSelectedStarship() == null) {
+            throw new IllegalStateException("No starship is selected");
+        }
+        try {
+            return this.model.getRequestsOfStarship(this.model.getSelectedStarship().plateNumber())
+                .stream()
+                .sorted(Comparator.comparing(Request::codRichiesta))
+                .toList();
+        } catch (DAOException e) {
+            LOGGER.error("Error retrieving requests of selected starship", e);
+            throw new RuntimeException("Error retrieving requests", e);
+        }
+    }
+
+    public boolean hasPendingRequest() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'hasPendingRequest'");
+    }
+
 }

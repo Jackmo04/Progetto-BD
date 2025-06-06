@@ -48,8 +48,15 @@ public class CaptainScene extends JPanel {
         mainPanel.add(title);
         mainPanel.add(Box.createVerticalStrut(30));
 
+        final JPanel parkingPanel = new JPanel();
+        parkingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        parkingPanel.setBorder(BorderFactory.createTitledBorder("Gestione posteggio"));
+        parkingPanel.setAlignmentX(CENTER_ALIGNMENT);
+        parkingPanel.setMaximumSize(new Dimension(400, 100));
+        mainPanel.add(parkingPanel);
+
         // S4 - Show parking space of the starship
-        final JButton parkingButton = new JButton("Visualizza posteggio");
+        final JButton parkingButton = new JButton("Visualizza");
         parkingButton.setFont(new Font(FONT, Font.BOLD, 16));
         parkingButton.setAlignmentX(CENTER_ALIGNMENT);
         parkingButton.addActionListener(e -> {
@@ -60,34 +67,11 @@ public class CaptainScene extends JPanel {
                 JOptionPane.INFORMATION_MESSAGE
             );
         });
-        mainPanel.add(parkingButton);
-        mainPanel.add(Box.createVerticalStrut(20));
-
-        // S5 - Show last request of the starship
-        final JButton lastRequestButton = new JButton("Visualizza ultima richiesta effettuata");
-        lastRequestButton.setFont(new Font(FONT, Font.BOLD, 16));
-        lastRequestButton.setAlignmentX(CENTER_ALIGNMENT);
-        lastRequestButton.addActionListener(e -> {
-            var lastRequest = this.view.getController().getLastRequestOfSelectedStarship();
-            if (lastRequest.isEmpty()) {
-                JOptionPane.showMessageDialog(this, 
-                    "La nave non ha effettuato richieste",
-                    "Ultima richiesta di " + this.view.getController().getSelectedStarship().plateNumber(),
-                    JOptionPane.INFORMATION_MESSAGE
-                );
-            } else {
-                new RequestViewerDialog(this.view, 
-                    "Ultima richiesta di " + this.view.getController().getSelectedStarship().plateNumber(),
-                    lastRequest.stream().toList(),
-                    false
-                ).setVisible(true);
-            }
-        });
-        mainPanel.add(lastRequestButton);
+        parkingPanel.add(parkingButton);
         mainPanel.add(Box.createVerticalStrut(20));
 
         final JPanel crewPanel = new JPanel();
-        crewPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        crewPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         crewPanel.setBorder(BorderFactory.createTitledBorder("Gestione equipaggio"));
         crewPanel.setAlignmentX(CENTER_ALIGNMENT);
         crewPanel.setMaximumSize(new Dimension(400, 100));
@@ -109,7 +93,6 @@ public class CaptainScene extends JPanel {
             }
         });
         crewPanel.add(crewViewButton);
-        // crewPanel.add(Box.createHorizontalStrut(20));
 
         // C2 - Add a crew member
         final JButton crewAddButton = new JButton("Aggiungi");
@@ -119,7 +102,6 @@ public class CaptainScene extends JPanel {
             new CrewAddDialog(view, "Aggiunta membri equipaggio").setVisible(true);
         });
         crewPanel.add(crewAddButton);
-        // crewPanel.add(Box.createHorizontalStrut(20));
 
         // C3 - Remove a crew member
         final JButton crewRemoveButton = new JButton("Rimuovi");
@@ -138,17 +120,91 @@ public class CaptainScene extends JPanel {
         });
         crewPanel.add(crewRemoveButton);
         mainPanel.add(Box.createVerticalStrut(20));
-        mainPanel.add(Box.createVerticalGlue());
 
+        final JPanel requestsPanel = new JPanel();
+        requestsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        requestsPanel.setBorder(BorderFactory.createTitledBorder("Gestione richieste"));
+        requestsPanel.setAlignmentX(CENTER_ALIGNMENT);
+        requestsPanel.setMaximumSize(new Dimension(400, 150));
+        mainPanel.add(requestsPanel);
 
         // C5 - Request station access
-        // TODO
+        final JButton requestAccessButton = new JButton("Richiedi accesso");
+        requestAccessButton.setFont(new Font(FONT, Font.BOLD, 16));
+        requestAccessButton.setAlignmentX(CENTER_ALIGNMENT);
+        requestAccessButton.addActionListener(e -> {
+            if (this.view.getController().hasPendingRequest()) {
+                JOptionPane.showMessageDialog(this, 
+                    "La nave ha già effettuato una richiesta. Attendere la risposta della stazione.",
+                    "Richiesta di accesso alla stazione",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                // TODO: Implement request station access
+            }
+        });
+        requestsPanel.add(requestAccessButton);
 
         // C6 - Request station departure
-        // TODO
+        final JButton requestDepartureButton = new JButton("Richiedi partenza");
+        requestDepartureButton.setFont(new Font(FONT, Font.BOLD, 16));
+        requestDepartureButton.setAlignmentX(CENTER_ALIGNMENT);
+        requestDepartureButton.addActionListener(e -> {
+            if (this.view.getController().hasPendingRequest()) {
+                JOptionPane.showMessageDialog(this, 
+                    "La nave ha già effettuato una richiesta. Attendere la risposta della stazione.",
+                    "Richiesta di partenza dalla stazione",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                // TODO: Implement request station departure
+            }
+        });
+        requestsPanel.add(requestDepartureButton);
+
+        // S5 - Show last request of the starship
+        final JButton lastRequestButton = new JButton("Visualizza ultima");
+        lastRequestButton.setFont(new Font(FONT, Font.BOLD, 16));
+        lastRequestButton.setAlignmentX(CENTER_ALIGNMENT);
+        lastRequestButton.addActionListener(e -> {
+            var lastRequest = this.view.getController().getLastRequestOfSelectedStarship();
+            if (lastRequest.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "La nave non ha effettuato richieste",
+                    "Ultima richiesta di " + this.view.getController().getSelectedStarship().plateNumber(),
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                new RequestViewerDialog(this.view, 
+                    "Ultima richiesta di " + this.view.getController().getSelectedStarship().plateNumber(),
+                    lastRequest.stream().toList()
+                ).setVisible(true);
+            }
+        });
+        requestsPanel.add(lastRequestButton);
 
         // C7 - View all requests
-        // TODO
+        final JButton requestsViewButton = new JButton("Visualizza tutte");
+        requestsViewButton.setFont(new Font(FONT, Font.BOLD, 16));
+        requestsViewButton.setAlignmentX(CENTER_ALIGNMENT);
+        requestsViewButton.addActionListener(e -> {
+            var requests = this.view.getController().getRequestsOfSelectedStarship();
+            if (requests.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "La nave non ha effettuato richieste",
+                    "Visualizzazione richieste di " + this.view.getController().getSelectedStarship().plateNumber(),
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            } else {
+                new RequestViewerDialog(this.view, 
+                    "Visualizzazione richieste di " + this.view.getController().getSelectedStarship().plateNumber(),
+                    requests
+                ).setVisible(true);
+            }
+        });
+        requestsPanel.add(requestsViewButton);
+        mainPanel.add(Box.createVerticalStrut(20));
+
 
         final JButton backButton = new JButton("Torna indietro");
         backButton.setFont(new Font(FONT, Font.BOLD, 16));

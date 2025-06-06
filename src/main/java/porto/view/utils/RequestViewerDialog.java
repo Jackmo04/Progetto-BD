@@ -17,7 +17,7 @@ import porto.view.View;
 
 public class RequestViewerDialog extends JDialog {
 
-    public RequestViewerDialog(View view, String title, List<Request> requests, boolean selectable) {
+    public RequestViewerDialog(View view, String title, List<Request> requests) {
         super(view.getMainFrame(), title, ModalityType.APPLICATION_MODAL);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setSize(800, 500);
