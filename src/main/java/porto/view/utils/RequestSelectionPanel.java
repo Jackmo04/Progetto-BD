@@ -41,7 +41,7 @@ public class RequestSelectionPanel extends JPanel {
                                 req.destinationPlanet().name()
                         })
                         .toArray(Object[][]::new),
-                new String[] { "CodRichiesta", "tipo", "Descrizione", "Data Richiesta", "Astronave",
+                new String[] { "CodRichiesta", "Tipo", "Descrizione", "Data Richiesta", "Astronave","Targa Astronave",
                         "Pianeta Provenienza",
                         "Pianeta Destinazione" });
         requestTable.setFont(new Font(FONT, Font.PLAIN, 16));

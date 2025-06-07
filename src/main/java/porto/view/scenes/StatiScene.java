@@ -7,7 +7,9 @@ import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -59,18 +61,19 @@ public class StatiScene extends JPanel {
         SwingUtilities.invokeLater(() -> scrollPane.getVerticalScrollBar().setValue(0));
         this.add(scrollPane, BorderLayout.CENTER);
 
-        final JLabel title = new JLabel("Registrazione", JLabel.CENTER);
+        final JLabel title = new JLabel("Statistiche Morte Nera", JLabel.CENTER);
         title.setAlignmentX(CENTER_ALIGNMENT);
         title.setFont(new Font(FONT, Font.BOLD, 30));
         mainPanel.add(title);
         mainPanel.add(Box.createVerticalStrut(30));
 
-        // CUI input
+
         final JLabel cuiLabel = cf.createFieldLabel("Migliori 50 navi che hanno trasportato di piu");
         mainPanel.add(cuiLabel);
         mainPanel.add(Box.createVerticalStrut(10));
 
-        final JButton bestNavi = new JButton("50 Navi Che Hanno Trasportato di piu");
+        final JButton bestNavi = new JButton("50 Best Starship");
+        bestNavi.setToolTipText("Clicca per vedere le 50 navi che hanno trasportato di piu");
         bestNavi.setAlignmentX(CENTER_ALIGNMENT);
         bestNavi.setFont(new Font(FONT, Font.BOLD, 20));
         bestNavi.setMaximumSize(new Dimension(300, 40));
@@ -86,18 +89,18 @@ public class StatiScene extends JPanel {
 
 
         // Best 50 Starship
-        final JLabel dobStartLabel = cf.createFieldLabel("Data Inizio Analisi gg/mm/aaaa");
+        final JLabel dobStartLabel = cf.createFieldLabel("Data Inizio Analisi (gg/mm/aaaa hh:mm:ss)");
         mainPanel.add(dobStartLabel);
         final JTextField dobInput = cf.createFieldInput(10, focusListener);
-        dobInput.setToolTipText("Formato: gg/mm/aaaa");
+        dobInput.setToolTipText("Formato: gg/mm/aaaa HH:mm:ss");
         mainPanel.add(dobInput);
         mainPanel.add(Box.createVerticalStrut(20));
 
 
-        final JLabel dobFinalLabel = cf.createFieldLabel("Data Inizio Analisi gg/mm/aaaa");
+        final JLabel dobFinalLabel = cf.createFieldLabel("Data Fine Analisi (gg/mm/aaaa hh:mm:ss)");
         mainPanel.add(dobFinalLabel);
         final JTextField dobFinalInput = cf.createFieldInput(10, focusListener);
-        dobFinalInput.setToolTipText("Formato: gg/mm/aaaa");
+        dobFinalInput.setToolTipText("Formato: gg/mm/aaaa HH:mm:ss");
         mainPanel.add(dobFinalInput);
         mainPanel.add(Box.createVerticalStrut(20));
 
@@ -105,30 +108,33 @@ public class StatiScene extends JPanel {
         final JLabel result = cf.createFieldLabel("");
 
         // Register button
-        final JButton registerButton = new JButton("Calcola Percentuale Accettate e Rifiutate");
+        final JButton registerButton = new JButton("Calcola Percentuali");
         registerButton.setAlignmentX(CENTER_ALIGNMENT);
         registerButton.setFont(new Font(FONT, Font.BOLD, 20));
         registerButton.setMaximumSize(new Dimension(300, 40));
         registerButton.addActionListener(e -> {
-            String dobStart = dobInput.getText().trim();
-            String dobFinal = dobFinalInput.getText().trim();
+            String startDate = dobInput.getText().trim();
+            String finalDate = dobFinalInput.getText().trim();
+           
             Timestamp timestampStart;
             Timestamp timestampTo;
-            if (dobStart.isEmpty() || dobFinal.isEmpty()) {
+            if (startDate.isEmpty() || finalDate.isEmpty()) {
                 displayRegisterError("Inserisci le date di inizio e fine analisi!");
                 return;
             }
             try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-                java.util.Date parsedDateStart = dateFormat.parse(dobStart);
-                timestampStart = new Timestamp(parsedDateStart.getTime());
+                LocalDateTime formattedStart = LocalDateTime.parse(startDate, dateFormat);
+                LocalDateTime formattedFinal = LocalDateTime.parse(finalDate, dateFormat);
 
-                java.util.Date parsedDateTo = dateFormat.parse(dobStart);
-                timestampTo = new Timestamp(parsedDateTo.getTime());
+                // Convert LocalDateTime to Timestamp
+                timestampStart = Timestamp.valueOf(formattedStart);
+
+                timestampTo = Timestamp.valueOf(formattedFinal);
 
             } catch (Exception ex) {
-                displayRegisterError("Formato data di nascita non valido! Usa gg/mm/aaaa");
+                displayRegisterError("Formato data di nascita non valido! Usa gg/mm/aaaa HH:mm:ss");
                 return;
             }
             String success = this.view.getController().acceptedRejectedPercentage(timestampStart, timestampTo);

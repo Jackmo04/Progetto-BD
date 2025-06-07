@@ -43,7 +43,7 @@ public class PersonOnBoard extends JPanel {
                                 pers.CUI(),
                                 pers.fullName(),
                                 pers.ideology().toString(),
-                                pers.isWanted().toString(),
+                                pers.isWanted()? "Si" : "No",
                                 pers.birthPlanet().name()
                         })
                         .toArray(Object[][]::new),

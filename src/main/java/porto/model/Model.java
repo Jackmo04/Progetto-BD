@@ -258,7 +258,7 @@ public final class Model {
 
     public String acceptedRejectedPercentage(Timestamp start, Timestamp to) {
         var percetage = requestDAO.acceptedAndRejectedPercentages(start, to);
-        return "Dal:" + start.toString() + " Al:" + to.toString() + " Accettate:" + percetage.getLeft() + " Rifiutate"
+        return "Dal:" + start.toString() + " Al:" + to.toString() + "\n Accettate:" + percetage.getLeft() + " Rifiutate:"
                 + percetage.getRight();
     }
 

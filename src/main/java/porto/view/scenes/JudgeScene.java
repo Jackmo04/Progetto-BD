@@ -43,8 +43,8 @@ public class JudgeScene extends JPanel {
         this.add(returButtom , BorderLayout.SOUTH);
 
         // Area selection
-        final JLabel ideologyLabel = cf.createFieldLabel("Area*");
-        boxLayout.add(ideologyLabel);
+        final JLabel ideologyLabel = cf.createFieldLabel("Scegli Area Attracco");
+        
         final String[] freeArea = this.view.getController().getAllFreeArea().stream().map(t -> t.name()).distinct()
                 .toArray(String[]::new);
         final JComboBox<String> ideologyInput = cf.createSelectionBox(freeArea);
@@ -80,6 +80,8 @@ public class JudgeScene extends JPanel {
         });
         boxLayout.add(buttonAccept);
         boxLayout.add(buttonReject);
+        boxLayout.add(Box.createVerticalStrut(20));
+        boxLayout.add(ideologyLabel);
         boxLayout.add(ideologyInput);
 
         // Set the title label
