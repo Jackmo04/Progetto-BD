@@ -29,18 +29,18 @@ public class Best50StarShip extends JPanel {
         this.setBorder(BorderFactory.createTitledBorder("Migliori 50 navi da trasporto"));
         this.setAlignmentX(CENTER_ALIGNMENT);
 
-        final Map<Starship,Integer> ships = this.view.getController().best50TrasporteStarships();
+        final Map<Starship, Integer> ships = this.view.getController().best50TrasporteStarships();
         DefaultTableModel tableModel = new DefaultTableModel(
                 ships.entrySet().stream()
                         .map(ship -> new Object[] {
-                            ship.getValue(),
+                                ship.getValue(),
                                 ship.getKey().plateNumber(),
                                 ship.getKey().name(),
                                 ship.getKey().model().name(),
                                 ship.getKey().capitan().name() + " " + ship.getKey().capitan().surname()
                         })
                         .toArray(Object[][]::new),
-                new String[] { "Posizione","Targa", "Nome", "Modello", "Capitano" }) {
+                new String[] { "Quantità Carico", "Targa", "Nome", "Modello", "Capitano" }) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -54,7 +54,6 @@ public class Best50StarShip extends JPanel {
         shipTable.setColumnSelectionAllowed(false);
         this.add(new JScrollPane(shipTable));
         this.add(Box.createVerticalStrut(20));
-
 
         final JButton manageShipButton = new JButton("Gestisci nave selezionata");
         manageShipButton.setEnabled(false);
@@ -76,11 +75,13 @@ public class Best50StarShip extends JPanel {
             }
         });
         manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
-        /*buttonPanel.add(refreshButton);
-        buttonPanel.add(Box.createHorizontalStrut(20));
-        buttonPanel.add(manageShipButton);
-        buttonPanel.add(Box.createHorizontalGlue())*/
-        
+        /*
+         * buttonPanel.add(refreshButton);
+         * buttonPanel.add(Box.createHorizontalStrut(20));
+         * buttonPanel.add(manageShipButton);
+         * buttonPanel.add(Box.createHorizontalGlue())
+         */
+
         shipTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 manageShipButton.setEnabled(shipTable.getSelectedRow() >= 0);

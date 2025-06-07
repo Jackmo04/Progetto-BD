@@ -6,12 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -90,7 +86,7 @@ public class StatiScene extends JPanel {
 
 
         // Best 50 Starship
-        final JLabel dobStartLabel = cf.createFieldLabel("Data Inizio Analisi");
+        final JLabel dobStartLabel = cf.createFieldLabel("Data Inizio Analisi gg/mm/aaaa");
         mainPanel.add(dobStartLabel);
         final JTextField dobInput = cf.createFieldInput(10, focusListener);
         dobInput.setToolTipText("Formato: gg/mm/aaaa");
@@ -98,7 +94,7 @@ public class StatiScene extends JPanel {
         mainPanel.add(Box.createVerticalStrut(20));
 
 
-        final JLabel dobFinalLabel = cf.createFieldLabel("Data Inizio Analisi");
+        final JLabel dobFinalLabel = cf.createFieldLabel("Data Inizio Analisi gg/mm/aaaa");
         mainPanel.add(dobFinalLabel);
         final JTextField dobFinalInput = cf.createFieldInput(10, focusListener);
         dobFinalInput.setToolTipText("Formato: gg/mm/aaaa");
