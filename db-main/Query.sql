@@ -3,14 +3,13 @@ USE PortoMorteNera;
 -- _____________________________________________
 /*
 	S1 -- Creare un nuovo account persona registrando tutti i propri dati nell’applicazione.
-    {Person} [MATTIA] Fatto
 */
 INSERT INTO PERSONE (CUI, Username,Password , Nome, Cognome, Razza, DataNascita, Ideologia, Ruolo, PianetaNascita) VALUES
 ('PROVA', 'L.Skywalker', '' , 'Luke', 'Skywalker', 'Umano', '1951-09-25', 'Neutrale', 'Astronauta', 'TATO002');
 
 /* Java [->Persona]
-INSERT INTO PERSONE (CUI, Username, Password , Nome, Cognome, Razza, DataNascita, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
-(?, ?, ?, ?, ?, ?, ?, ?, ?,?);
+INSERT INTO PERSONE (CUI, Username, Password, Nome, Cognome, Razza, DataNascita, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
+(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 */
 
 -- _____________________________________________
@@ -76,7 +75,7 @@ ORDER BY r.DataOra DESC
 LIMIT 1;
 
 /* Java [Optional<Richiesta>]
-SELECT r.CodRichiesta
+SELECT r.*
 FROM richieste r, astronavi n
 WHERE r.TargaAstronave = n.Targa
 AND n.Targa = ?
@@ -86,37 +85,8 @@ LIMIT 1;
 
 -- _____________________________________________
 /*
-	S6 -- Visualizzare le informazioni dettagliate di una richiesta. (Da eliminare?)
-    {Request} [Mattia] fatta
-*/
-SELECT DISTINCT r.CodRichiesta, r.EntrataUscita, r.DataOra, r.Descrizione, r.CostoTotale, r.Esito, r.TargaAstronave, tv.Nome AS TipologiaViaggio,
-	pnt1.Nome AS PianetaDestinazione, pnt2.Nome AS PianetaDestinazione, SUM(DISTINCT c.Quantita) AS QuantitaTotCarico
-FROM richieste r, persone p, tipologie_viaggio tv, pianeti pnt1, pianeti pnt2, carichi c
-WHERE pnt1.CodPianeta = r.PianetaDestinazione
-AND pnt2.CodPianeta = r.PianetaProvenienza
-AND r.Scopo = tv.CodTipoViaggio
-AND r.CodRichiesta = c.CodRichiesta
-AND r.CodRichiesta = 1
-GROUP BY 1-10;
-
-/* Java [Optional<Request>]
-SELECT r.*
-FROM richeste
-WHERE CodRichiesta = ?;
-*/
-
--- _____________________________________________
-/*
 	C1 -- Registrare la propria nave all'applicazione.
     {Starship} [Matteo] Fatto
-*/
--- Visualizz. scelta modello {ShipModel} [Matteo] Fatto
-SELECT CodModello, Nome
-FROM Modelli;
-
-/* Java [List<Modello>]
-SELECT CodModello, Nome
-FROM Modelli;
 */
 
 INSERT INTO ASTRONAVI (Targa, Nome, CodModello, CUICapitano) VALUES
@@ -129,10 +99,9 @@ INSERT INTO ASTRONAVI (Targa, Nome, CodModello, CUICapitano) VALUES
 
 -- _____________________________________________
 /*
-	C2 -- Aggiungere o rimuovere membri all’equipaggio di una nave
+	C2 -- Aggiungere membri all’equipaggio di una nave
     {Starship} [Matteo] Fatto
 */
--- Aggiungere
 INSERT INTO equipaggi (TargaAstronave, CUIAstronauta) VALUES
 ('XWING002', 'STRMTR0000003');
 
@@ -141,7 +110,10 @@ INSERT INTO equipaggi (TargaAstronave, CUIAstronauta) VALUES
 (?, ?);
 */
 
--- Rimuovere {Starship} [Matteo] Fatto
+/*
+	C3 -- Rimuovere membri all’equipaggio di una nave
+    {Starship} [Matteo] Fatto
+*/
 DELETE FROM equipaggi e
 WHERE e.TargaAstronave = 'XWING002'
 AND e.CUIAstronauta = 'STRMTR0000003';
@@ -152,9 +124,11 @@ WHERE e.TargaAstronave = ?
 AND e.CUIAstronauta = ?;
 */
 
+
+
 -- _____________________________________________
 /*
-	C3 -- Visualizzare tutti i dati dei membri dell'equipaggio di una propria nave
+	C4 -- Visualizzare tutti i dati dei membri dell'equipaggio di una propria nave
     {Person} [Mattia] Fatto
 */
 SELECT p.CUI
@@ -172,10 +146,9 @@ AND e.TargaAstronave = ?;
 
 -- _____________________________________________
 /*
-	C4 -- Richiedere accesso al porto
+	C5 -- Richiedere accesso al porto
     {Request} [Matteo] Fatto
 */
--- !! SELEZIONI SCOPO E PIANETI [Matteo] Fatto
 
 INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, Scopo, PianetaProvenienza, PianetaDestinazione) VALUES
 ('E', 'PippoPluto2', 0, 'TIEF0005', 3, 'NABO004', 'DTHSTR0');
@@ -194,15 +167,15 @@ INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, 
 ('E', ?, 0, ?, ?, ?, 'DTHSTR0');
 
 INSERT INTO Carichi (Tipologia, Quantita, CodRichiesta) VALUES
-(?, ?, (SELECT CodRichiesta FROM Ultima_richiesta));
+(?, ?, ?);
 
 UPDATE richieste
-SET CostoTotale = (SELECT Costo FROM Costo_ultima_richiesta)
-WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
+SET CostoTotale = ?
+WHERE CodRichiesta = ?;
 */
 -- _____________________________________________
 /*
-	C5 -- Richiedere uscita dal porto
+	C6 -- Richiedere uscita dal porto
     {Request} [Matteo] Fatto
 */
 -- Inseriamo la richiesta
@@ -223,16 +196,16 @@ INSERT INTO Richieste (EntrataUscita, Descrizione, CostoTotale, TargaAstronave, 
 ('U', ?, 0, ?, ?, 'DTHSTR0', ?);
 
 INSERT INTO Carichi (Tipologia, Quantita, CodRichiesta) VALUES
-(?, ?, (SELECT CodRichiesta FROM Ultima_richiesta));
+(?, ?, ?);
 
 UPDATE richieste
-SET CostoTotale = (SELECT Costo FROM Costo_ultima_richiesta)
-WHERE CodRichiesta = (SELECT CodRichiesta FROM Ultima_richiesta);
+SET CostoTotale = ?
+WHERE CodRichiesta = ?;
 */
 
 -- _____________________________________________
 /*
-	C6 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
+	C7 -- Visualizzare lo storico completo delle richieste effettuate da una astronave.
     {Request} [Mattia] Fatto
 */
 SELECT DISTINCT r.CodRichiesta
@@ -241,15 +214,14 @@ WHERE r.TargaAstronave = n.Targa
 AND n.Targa = 'MFALC001';
 
 /* Java [List<Richiesta>]
-SELECT DISTINCT r.CodRichiesta
-FROM richieste r, astronavi n
-WHERE r.TargaAstronave = n.Targa
-AND n.Targa = ?;
+SELECT DISTINCT r.*
+FROM richieste r
+WHERE r.TargaAstronave = ?;
 */
 
 -- _____________________________________________
 /*
-	C7 -- Visualizzare il costo di una richiesta di accesso o uscita.
+	C8 -- Visualizzare il costo di una richiesta di accesso o uscita.
     {Request} [?] Eliminare?
 */
 

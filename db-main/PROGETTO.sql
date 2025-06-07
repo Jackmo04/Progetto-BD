@@ -291,23 +291,6 @@ CREATE VIEW RICHIESTE_RIFIUTATE AS
 	SELECT *
 	FROM Richieste
 	WHERE Esito = 'R';
-    
-CREATE OR REPLACE VIEW ULTIMA_RICHIESTA AS
-	SELECT r.CodRichiesta
-	FROM richieste r
-	ORDER BY r.CodRichiesta DESC
-	LIMIT 1;
-        
-/* Calcolo del costo dell'ultima richiesta */
-CREATE OR REPLACE VIEW COSTO_ULTIMA_RICHIESTA AS
-	SELECT SUM((c.Quantita * tc.CostoUnitario) + dp.Prezzo) AS costo
-	FROM richieste r, carichi c, tipologie_carico tc, astronavi ast, modelli m, dimensioni_prezzi dp
-	WHERE r.CodRichiesta = c.CodRichiesta
-	AND c.Tipologia = tc.CodTipoCarico
-	AND r.TargaAstronave = ast.Targa
-	AND ast.CodModello = m.CodModello
-	AND m.DimensioneArea = dp.Superficie
-	AND r.CodRichiesta = (SELECT CodRichiesta FROM ULTIMA_RICHIESTA);
 
 -- Insertions Section
 -- _____________ 
@@ -395,11 +378,11 @@ INSERT INTO TIPOLOGIE_VIAGGIO (Nome) VALUES
 ('Trasporto merci'),
 ('Missione diplomatica'),
 ('Pattugliamento imperiale'),
-('Trasporto prigionieri'),
+('Trasporto passeggeri'),
 ('Esplorazione');
 
 INSERT INTO TIPOLOGIE_CARICO (Nome, Descrizione, CostoUnitario) VALUES
-('Spezie', 'Carico di spezie', 500.00),
+('Persone', 'Prigionieri, turisti, ecc.', 500.00),
 ('Armi', 'Armi imperiali', 1200.00),
 ('Dati', 'Informazioni classificate', 2000.00),
 ('Droidi', 'Componenti per droidi', 150.00),
