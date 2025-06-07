@@ -37,10 +37,12 @@ public class StarshipOnBoard extends JPanel {
                                 ship.plateNumber(),
                                 ship.name(),
                                 ship.model().name(),
-                                ship.capitan().name() + " " + ship.capitan().surname()
+                                ship.capitan().name() + " " + ship.capitan().surname(),
+                                this.view.getController().getParkingSpace(ship.plateNumber()).get().spaceNumber(),
+                                this.view.getController().getParkingSpace(ship.plateNumber()).get().parkingArea().name()
                         })
                         .toArray(Object[][]::new),
-                new String[] { "Targa", "Nome", "Modello", "Capitano" }) {
+                new String[] { "Targa", "Nome", "Modello", "Capitano", "Posteggio", "Area" }) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -54,21 +56,6 @@ public class StarshipOnBoard extends JPanel {
         shipTable.setColumnSelectionAllowed(false);
         this.add(new JScrollPane(shipTable));
         this.add(Box.createVerticalStrut(20));
-
-       /* final JButton manageShipButton = new JButton("Vedi Equipaggio nave");
-        manageShipButton.setEnabled(false);
-        manageShipButton.setFont(new Font(FONT, Font.BOLD, 16));
-        manageShipButton.setToolTipText("Seleziona una nave per gestirla");
-        manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
-        manageShipButton.addActionListener(e -> {
-            int selectedRow = shipTable.getSelectedRow();
-            if (selectedRow >= 0) {
-                String plateNumber = (String) shipTable.getValueAt(selectedRow, 0);
-                this.view.getController().manageShip(plateNumber);
-            } else {
-                throw new IllegalStateException("No ship selected for management");
-            }
-        });*/
 
         final JButton manageShipButton = new JButton("Gestisci nave selezionata");
         manageShipButton.setEnabled(false);
@@ -90,11 +77,13 @@ public class StarshipOnBoard extends JPanel {
             }
         });
         manageShipButton.setAlignmentX(CENTER_ALIGNMENT);
-        /*buttonPanel.add(refreshButton);
-        buttonPanel.add(Box.createHorizontalStrut(20));
-        buttonPanel.add(manageShipButton);
-        buttonPanel.add(Box.createHorizontalGlue())*/
-        
+        /*
+         * buttonPanel.add(refreshButton);
+         * buttonPanel.add(Box.createHorizontalStrut(20));
+         * buttonPanel.add(manageShipButton);
+         * buttonPanel.add(Box.createHorizontalGlue())
+         */
+
         shipTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 manageShipButton.setEnabled(shipTable.getSelectedRow() >= 0);
