@@ -43,12 +43,12 @@ public class JudgeScene extends JPanel {
         this.add(returButtom , BorderLayout.SOUTH);
 
         // Area selection
-        final JLabel ideologyLabel = cf.createFieldLabel("Scegli Area Attracco");
+        final JLabel parkingLabel = cf.createFieldLabel("Scegli Area Attracco");
         
         final String[] freeArea = this.view.getController().getAllFreeArea().stream().map(t -> t.name()).distinct()
                 .toArray(String[]::new);
-        final JComboBox<String> ideologyInput = cf.createSelectionBox(freeArea);
-        ideologyInput.addItem("Nessuna");
+        final JComboBox<String> parkingInput = cf.createSelectionBox(freeArea);
+        parkingInput.addItem("Nessuna");
         
         boxLayout.add(Box.createVerticalStrut(20));
 
@@ -57,10 +57,10 @@ public class JudgeScene extends JPanel {
             public void actionPerformed(java.awt.event.ActionEvent e) {
 
                 Optional<Integer> selectedArea;
-                if (ideologyInput.getToolTipText() == "Nessuna") {
+                if (parkingInput.getToolTipText() == "Nessuna") {
                     selectedArea = Optional.empty();
                 } else {
-                    selectedArea = Optional.of(ideologyInput.getSelectedIndex());
+                    selectedArea = Optional.of(parkingInput.getSelectedIndex());
                 }
                 view.getController().judgePendentRequest(numberRequest, true,
                         selectedArea);
@@ -81,8 +81,8 @@ public class JudgeScene extends JPanel {
         boxLayout.add(buttonAccept);
         boxLayout.add(buttonReject);
         boxLayout.add(Box.createVerticalStrut(20));
-        boxLayout.add(ideologyLabel);
-        boxLayout.add(ideologyInput);
+        boxLayout.add(parkingLabel);
+        boxLayout.add(parkingInput);
 
         // Set the title label
         JLabel titleLabel = new JLabel("Giudica Richiesta di Porto", JLabel.CENTER);
