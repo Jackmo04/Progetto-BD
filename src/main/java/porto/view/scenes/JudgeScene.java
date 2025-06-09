@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import porto.data.api.RequestType;
 import porto.view.View;
 import porto.view.utils.JComponentsFactory;
 
@@ -67,6 +68,7 @@ public class JudgeScene extends JPanel {
                 view.goToAdminScene();
 
             }
+
         });
 
         buttonReject = cf.createButton("Rifiuta", new ActionListener() {
@@ -88,5 +90,14 @@ public class JudgeScene extends JPanel {
         JLabel titleLabel = new JLabel("Giudica Richiesta di Porto", JLabel.CENTER);
         titleLabel.setFont(new java.awt.Font(FONT, java.awt.Font.BOLD, 24));
         this.add(titleLabel, BorderLayout.NORTH);
+
+        if ( view.getController().getAllPendentRequest().stream().filter(t -> t.codRichiesta() == numberRequest)
+                .findFirst().get().type() == RequestType.EXIT) {
+            parkingLabel.setEnabled(false);
+            parkingInput.setEnabled(false);
+        } else {
+            parkingLabel.setEnabled(true);
+            parkingInput.setEnabled(true);
+        }
     }
 }
