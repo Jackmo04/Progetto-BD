@@ -79,7 +79,12 @@ public final class Model {
     public boolean login(String username, String password) {
         Objects.requireNonNull(username, "Username cannot be null");
         Objects.requireNonNull(password, "Password cannot be null");
-        this.loggedUser = personDAO.loginAndGetUser(username, password);
+        var user = personDAO.loginAndGetUser(username, password);
+        if (user.isPresent() && !isArrested(user.get().CUI())) {
+            this.loggedUser = user;
+        } else {
+            this.loggedUser = Optional.empty();
+        }
         return this.loggedUser.isPresent();
     }
 

@@ -32,7 +32,7 @@ CREATE TABLE ASTRONAVI (
      CodArea INT DEFAULT NULL,
      NumeroPosto INT DEFAULT NULL,
      CodModello CHAR(6) NOT NULL,
-     CUICapitano CHAR(20) NOT NULL,
+     CUICapitano CHAR(13) NOT NULL,
      CONSTRAINT ID_ASTRONAVI_ID PRIMARY KEY (Targa),
      CONSTRAINT UNIQ_POSTEGGIO UNIQUE (CodArea, NumeroPosto));
 
@@ -75,7 +75,7 @@ CREATE TABLE PERSONE (
      Ideologia ENUM('Ribelle', 'Imperiale', 'Neutrale') NOT NULL DEFAULT 'Neutrale',
      Ruolo ENUM('Astronauta', 'Capitano', 'Admin') NOT NULL DEFAULT 'Astronauta',
      NumCella INT DEFAULT NULL,
-     PianetaNascita CHAR(20) NOT NULL,
+     PianetaNascita CHAR(10) NOT NULL,
      CONSTRAINT ID_PERSONE_ID PRIMARY KEY (CUI),
      CONSTRAINT SID_PERSONE_ID UNIQUE (Username));
 

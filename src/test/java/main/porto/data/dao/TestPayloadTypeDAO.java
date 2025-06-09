@@ -56,7 +56,7 @@ public class TestPayloadTypeDAO {
 
         var actual = DAO.getAll();
         var expected = Set.of(
-            new PayloadTypeImpl(1, "Spezie", "Carico di spezie", 500.00),
+            new PayloadTypeImpl(1, "Persone", "Prigionieri, turisti, ecc.", 500.00),
             new PayloadTypeImpl(2, "Armi", "Armi imperiali", 1200.00),
             new PayloadTypeImpl(3, "Dati", "Informazioni classificate", 2000.00),
             new PayloadTypeImpl(4, "Droidi", "Componenti per droidi", 150.00),
