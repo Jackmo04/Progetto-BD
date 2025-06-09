@@ -13,14 +13,13 @@
 Se si ha Java per desktop installato:
 - Fare doppio clic sul file `./PortoMorteNera.jar`
 
-Altrimenti:
-- Da terminale digitare `java -jar .\PortoMorteNera.jar`
+Altrimenti, eseguire da terminale:
+- Windows: `java -jar .\PortoMorteNera.jar`
+- Linux/Mac: `java -jar ./PortoMorteNera.jar`
 
-Se non dovesse funzionare, digitare su terminale:
-- Windows:
-    `.\gradlew.bat run`
-- Linux/Mac:
-    `./gradlew run`
+In caso di problemi, ricompilare il progetto eseguendo da terminale:
+- Windows: `.\gradlew.bat clean run`
+- Linux/Mac: `./gradlew clean run`
 
 ## Utilizzo applicazione
 Una volta avviata l'applicazione è necessario effettuare il login.
