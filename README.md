@@ -4,7 +4,7 @@
 ## Requisiti:
 - Java 21+
 - MySQL 8.0+
-- Scaricare i file `PortoMorteNera.sql` e `PortoMorteNera.jar` nei Release GitHub
+- Scaricare i file `PortoMorteNera.sql` e `PortoMorteNera.jar` dal più recente [Release](https://github.com/Jackmo04/Progetto-BD/releases)
 
 ## Creazione del database MySQL in locale:
 - Avviare lo script `PortoMorteNera.sql` su una connessione localhost di MySQL
