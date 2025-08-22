@@ -66,7 +66,7 @@ CREATE TABLE MODELLI (
 CREATE TABLE PERSONE (
      CUI CHAR(13) NOT NULL CHECK (CHAR_LENGTH(CUI) = 13),
      Username VARCHAR(20) NOT NULL CHECK (CHAR_LENGTH(Username) > 0),
-     Password VARCHAR(20) NOT NULL CHECK (CHAR_LENGTH(Password) > 0),
+     Password CHAR(64) NOT NULL CHECK (CHAR_LENGTH(Password) > 0),
      Nome VARCHAR(25) NOT NULL CHECK (CHAR_LENGTH(Nome) > 0),
      Cognome VARCHAR(25) NOT NULL CHECK (CHAR_LENGTH(Cognome) > 0),
      Razza VARCHAR(20) NOT NULL,
@@ -332,19 +332,19 @@ INSERT INTO CELLE (NumCella, Capienza) VALUES
 (5, 7);
 
 INSERT INTO PERSONE (CUI, Username, Password, Nome, Cognome, Razza, DataNascita, Ricercato, Ideologia, Ruolo, NumCella, PianetaNascita) VALUES
-('SKWLKE510925T', 'L.Skywalker', '12345', 'Luke', 'Skywalker', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'TATO002'),
-('SLOHAN420713C', 'H.Solo', 'pippo', 'Han', 'Solo', 'Umano', '1942-07-13', FALSE, 'Neutrale', 'Capitano', NULL, 'CORU001'),
-('RGNLLA510925A', 'L.Organa', '12345', 'Leia', 'Organa', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', 4, 'ALDE005'),
-('SKWNKN410419T', 'D.Vader', 'pippo', 'Anakin', 'Skywalker', 'Umano', '1941-04-19', FALSE, 'Imperiale', 'Capitano', NULL, 'TATO002'),
-('PLPSHV201204N', 'E.Palpatine', 'admin', 'Sheev', 'Palpatine', 'Umano', '1920-12-04', FALSE, 'Imperiale', 'Admin', NULL, 'NABO004'),
-('CHWBCC000101K', 'Chewie', '12345', 'Chewbacca', 'unknow', 'Wookiee', '1900-01-01', TRUE, 'Ribelle', 'Astronauta', NULL, 'KASH006'),
-('KNBOBI370825C', 'O.Kenobi', '12345', 'Obi-Wan', 'Kenobi', 'Umano', '1937-08-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'CORU001'),
-('MULDRT600322D', 'D.Maul', 'pippo', 'Darth', 'Maul', 'Zabrak', '1960-03-22', FALSE, 'Imperiale', 'Capitano', NULL, 'DANT010'),
-('TRKMFF220306M', 'M.Tarkin', 'admin', 'Moff', 'Tarkin', 'Umano', '1922-03-06', FALSE, 'Imperiale', 'Admin', NULL, 'MUST007'),
-('STRMTR0000000', 'Trooper0', '12345', 'Stormtrooper', '00000', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
-('STRMTR0000001', 'Trooper1', '12345', 'Stormtrooper', '00001', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
-('STRMTR0000002', 'Trooper2', '12345', 'Stormtrooper', '00002', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
-('STRMTR0000003', 'Trooper3', '12345', 'Stormtrooper', '00003', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0');
+('SKWLKE510925T', 'L.Skywalker', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'Luke', 'Skywalker', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'TATO002'),
+('SLOHAN420713C', 'H.Solo', 'a2242ead55c94c3deb7cf2340bfef9d5bcaca22dfe66e646745ee4371c633fc8', 'Han', 'Solo', 'Umano', '1942-07-13', FALSE, 'Neutrale', 'Capitano', NULL, 'CORU001'),
+('RGNLLA510925A', 'L.Organa', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'Leia', 'Organa', 'Umano', '1951-09-25', TRUE, 'Ribelle', 'Astronauta', 4, 'ALDE005'),
+('SKWNKN410419T', 'D.Vader', 'a2242ead55c94c3deb7cf2340bfef9d5bcaca22dfe66e646745ee4371c633fc8', 'Anakin', 'Skywalker', 'Umano', '1941-04-19', FALSE, 'Imperiale', 'Capitano', NULL, 'TATO002'),
+('PLPSHV201204N', 'E.Palpatine', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Sheev', 'Palpatine', 'Umano', '1920-12-04', FALSE, 'Imperiale', 'Admin', NULL, 'NABO004'),
+('CHWBCC000101K', 'Chewie', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'Chewbacca', 'unknow', 'Wookiee', '1900-01-01', TRUE, 'Ribelle', 'Astronauta', NULL, 'KASH006'),
+('KNBOBI370825C', 'O.Kenobi', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'Obi-Wan', 'Kenobi', 'Umano', '1937-08-25', TRUE, 'Ribelle', 'Astronauta', NULL, 'CORU001'),
+('MULDRT600322D', 'D.Maul', 'a2242ead55c94c3deb7cf2340bfef9d5bcaca22dfe66e646745ee4371c633fc8', 'Darth', 'Maul', 'Zabrak', '1960-03-22', FALSE, 'Imperiale', 'Capitano', NULL, 'DANT010'),
+('TRKMFF220306M', 'M.Tarkin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Moff', 'Tarkin', 'Umano', '1922-03-06', FALSE, 'Imperiale', 'Admin', NULL, 'MUST007'),
+('STRMTR0000000', 'Trooper0', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'Stormtrooper', '00000', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
+('STRMTR0000001', 'Trooper1', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'Stormtrooper', '00001', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
+('STRMTR0000002', 'Trooper2', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'Stormtrooper', '00002', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0'),
+('STRMTR0000003', 'Trooper3', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'Stormtrooper', '00003', 'Clone', '2000-01-01', FALSE, 'Imperiale', 'Astronauta', NULL, 'DTHSTR0');
 
 INSERT INTO AREE_ATTRACCO (Nome) VALUES
 ('Alpha'),

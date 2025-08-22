@@ -1,5 +1,8 @@
 package porto.data.dao;
 
+import com.google.common.hash.Hashing;
+
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -79,13 +82,19 @@ public class PersonDAOImpl implements PersonDAO {
      * {@inheritDoc}
      */
     @Override
-    public void addPerson(String CUI, String username, String password, String name, String surname, String race,
-            String borndate, boolean wanted,
-            Ideology ideology, PersonRole role, Planet bornPlanet) throws DAOException {
+    public void addPerson(
+        String CUI, String username, String password, String name, String surname, String race,
+        String borndate, boolean wanted, Ideology ideology, PersonRole role, Planet bornPlanet
+    ) throws DAOException {
+        var passwordhash = Hashing.sha256()
+            .hashString(password, StandardCharsets.UTF_8)
+            .toString();
         try (
-                var statement = DAOUtils.prepare(connection, Queries.ADD_PERSON, CUI, username, password,
-                        name, surname, race, borndate, wanted ? 1 : 0,
-                        ideology.toString(), role.toString(), bornPlanet.codPlanet());) {
+            var statement = DAOUtils.prepare(connection, Queries.ADD_PERSON, 
+                CUI, username, passwordhash, name, surname, race, borndate, wanted ? 1 : 0,
+                ideology.toString(), role.toString(), bornPlanet.codPlanet()
+            );
+        ) {
             statement.executeUpdate();
         } catch (Exception e) {
             throw new DAOException(e);
@@ -97,8 +106,11 @@ public class PersonDAOImpl implements PersonDAO {
      */
     @Override
     public Optional<Person> loginAndGetUser(String cuiUsername, String password) throws DAOException {
+        var passwordhash = Hashing.sha256()
+            .hashString(password, StandardCharsets.UTF_8)
+            .toString();
         try (
-            var statement = DAOUtils.prepare(connection, Queries.ACCESS_DB_REQUEST, cuiUsername, password);
+            var statement = DAOUtils.prepare(connection, Queries.ACCESS_DB_REQUEST, cuiUsername, passwordhash);
             var resultSet = statement.executeQuery();
         ) {
             if (resultSet.next()) {
